@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Pixel Project | Прокат настольных игр</title>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <style>
+        :root {
+            --bg-primary: #1e2538;
+            --bg-secondary: #151c2c;
+            --bg-card: #2c334a;
+            --bg-input: #2a2f40;
+            --bg-chat: #1a1e2c;
+            --border-color: #ffaa66;
+            --text-color: #FFFFFF;
+            --text-secondary: #aaa;
+            --btn-bg: #5e4a3a;
+            --btn-shadow: #2a1e14;
+            --card-shadow: #121624;
+            --font-size-multiplier: 1;
+        }
+        .theme-light {
+            --bg-primary: #f0e6d3;
+            --bg-secondary: #e8dcc8;
+            --bg-card: #fff8ee;
+            --bg-input: #ffffff;
+            --bg-chat: #f5efe0;
+            --border-color: #8B5E3C;
+            --text-color: #3a2a1a;
+            --text-secondary: #6a5a4a;
+            --btn-bg: #8B5E3C;
+            --btn-shadow: #5a3a1e;
+            --card-shadow: #c0b090;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; user-select:none; }
+        body { font-family:'Courier New','VT323','Fira Code',monospace; overflow-x:hidden; min-height:100vh; background:#1a2a4a; font-size:calc(1rem * var(--font-size-multiplier)); }
+        .sky { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-2; background:linear-gradient(180deg, #6CB4EE 0%, #89C4F4 25%, #A8D4F8 50%, #C5E4FC 75%, #D4E8F8 100%); overflow:hidden; }
+        .container { max-width:1300px; margin:20px auto; position:relative; z-index:20; background:var(--bg-primary); border-radius:28px; border:2px solid var(--border-color); box-shadow:0 25px 45px rgba(0,0,0,0.5); padding:20px; }
+        .top-bar { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-bottom:20px; gap:15px; }
+        .site-title h1 { font-size:1.8rem; letter-spacing:2px; color:var(--text-color); }
+        .user-panel-right { display:flex; align-items:center; gap:10px; background:var(--bg-secondary); padding:6px 14px; border-radius:50px; border:1px solid var(--border-color); flex-wrap:wrap; }
+        .user-name { font-weight:bold; font-size:0.9rem; color:var(--text-color); cursor:pointer; }
+        .user-rank { background:var(--bg-card); padding:4px 10px; border-radius:50px; font-size:0.75rem; color:var(--text-color); }
+        .cart-btn-top { background:var(--btn-bg); border:none; font-family:inherit; font-size:1.1rem; padding:5px 8px; color:#FFF; cursor:pointer; box-shadow:2px 2px 0 var(--btn-shadow); border-radius:10px; position:relative; }
+        .cart-count { position:absolute; top:-6px; right:-6px; background:#f44; color:#fff; font-size:0.6rem; padding:2px 5px; border-radius:10px; font-weight:bold; min-width:18px; text-align:center; }
+        .settings-btn { background:var(--btn-bg); border:none; font-family:inherit; font-size:1.1rem; padding:5px 8px; color:#FFF; cursor:pointer; box-shadow:2px 2px 0 var(--btn-shadow); border-radius:10px; }
+        .logout-small-btn { background:var(--btn-bg); border:none; font-family:inherit; font-size:0.65rem; font-weight:bold; padding:4px 10px; color:#FFF; cursor:pointer; box-shadow:2px 2px 0 var(--btn-shadow); border-radius:10px; }
+        .nav-horizontal { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:12px; margin-bottom:25px; padding-bottom:15px; border-bottom:2px solid var(--border-color); }
+        .nav-btn { background:var(--btn-bg); border:none; font-family:inherit; font-size:0.8rem; font-weight:bold; padding:8px 16px; color:#FFF; text-transform:uppercase; cursor:pointer; box-shadow:3px 3px 0 var(--btn-shadow); border-radius:12px; letter-spacing:1px; position:relative; }
+        .nav-btn:active { transform:translate(2px,2px); box-shadow:1px 1px 0 var(--btn-shadow); }
+        .nav-btn .chat-dot { position:absolute; top:4px; right:8px; width:10px; height:10px; background:#f44; border-radius:50%; animation:pulse 1.5s infinite; }
+        @keyframes pulse { 0%,100%{transform:scale(1);opacity:1;} 50%{transform:scale(1.5);opacity:0.6;} }
+        .pixel-btn { background:var(--btn-bg); border:none; font-family:inherit; font-size:0.75rem; font-weight:bold; padding:6px 12px; margin:4px; color:#FFF; text-transform:uppercase; cursor:pointer; box-shadow:3px 3px 0 var(--btn-shadow); border-radius:10px; }
+        .pixel-btn:active { transform:translate(2px,2px); box-shadow:1px 1px 0 var(--btn-shadow); }
+        .pixel-btn:disabled { opacity:0.5; transform:none; cursor:not-allowed; }
+        .delete-btn { background:#7a3a2a; }
+        .stock-btn { background:#3a6a4a; }
+        .danger-btn { background:#8a2a2a; }
+        .success-btn { background:#2a6a3a; }
+        .page { display:none; }
+        .active-page { display:block; animation:pageFade 0.2s steps(5); }
+        @keyframes pageFade { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+        h2,h3 { font-family:'Courier New',monospace; text-shadow:3px 3px 0 #0a0e1a; color:var(--text-color); letter-spacing:2px; }
+        .grid-cards { display:flex; flex-wrap:wrap; gap:24px; margin-top:20px; justify-content:center; }
+        .card { background:var(--bg-card); border:2px solid var(--border-color); padding:16px; width:230px; border-radius:18px; box-shadow:6px 6px 0 var(--card-shadow); color:var(--text-color); position:relative; }
+        .card.out-of-stock { opacity:0.6; border-color:#8a6a4a; }
+        .stock-badge { position:absolute; top:8px; right:8px; background:#aa4a2a; color:#fff; font-size:0.7rem; padding:3px 8px; border-radius:20px; }
+        .price-with-discount { font-size:0.85rem; color:var(--border-color); }
+        .old-price { text-decoration:line-through; font-size:0.7rem; opacity:0.7; color:var(--text-secondary); }
+        .card-img { width:60px; height:60px; object-fit:cover; border-radius:10px; margin:5px auto; display:block; cursor:pointer; }
+        .card-img:hover { transform:scale(1.1); box-shadow:0 0 12px var(--border-color); }
+        .card-emoji { font-size:2rem; }
+        .chat-window { background:var(--bg-chat); border:2px solid var(--border-color); border-radius:18px; height:280px; overflow-y:auto; padding:14px; margin:20px 0; color:var(--text-color); }
+        .chat-window.admin-chat { height:200px; }
+        .admin-reply-area { display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
+        .admin-reply-area textarea { flex:1; min-width:200px; }
+        .chat-msg { margin-bottom:8px; padding:6px 10px; border-radius:10px; background:var(--bg-card); }
+        .chat-msg .msg-sender { font-size:0.7rem; color:var(--border-color); font-weight:bold; margin-bottom:2px; }
+        .chat-msg .msg-text { color:var(--text-color); }
+        .calendar-nav { display:flex; justify-content:center; align-items:center; gap:15px; margin-bottom:15px; }
+        .calendar-nav button { background:var(--btn-bg); border:none; font-family:inherit; font-size:1rem; font-weight:bold; padding:8px 16px; color:#FFF; cursor:pointer; box-shadow:3px 3px 0 var(--btn-shadow); border-radius:10px; }
+        .calendar-nav .month-label { font-size:1.3rem; font-weight:bold; color:var(--border-color); min-width:200px; text-align:center; }
+        .calendar-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; background:var(--bg-secondary); padding:15px; border-radius:18px; border:2px solid var(--border-color); }
+        .calendar-day-header { text-align:center; font-weight:bold; color:var(--border-color); padding:6px; font-size:0.8rem; background:var(--bg-card); border-radius:8px; }
+        .calendar-day { text-align:center; padding:10px 4px; border-radius:10px; font-size:0.85rem; font-weight:bold; cursor:pointer; min-height:50px; display:flex; flex-direction:column; justify-content:center; align-items:center; border:2px solid transparent; background:var(--bg-card); color:var(--text-color); }
+        .calendar-day:hover { border-color:var(--border-color); }
+        .calendar-day.empty { background:transparent; cursor:default; }
+        .calendar-day.past { background:var(--bg-chat); color:#666; cursor:default; }
+        .calendar-day.today { background:var(--border-color); color:#121624; border-color:#fff; }
+        .calendar-day.free { background:#2a7a3a; border-color:#4aff6a; }
+        .calendar-day.booked { background:#5a4a2a; border-color:#fa4; cursor:default; }
+        .calendar-day.confirmed { background:#8a2a2a; border-color:#f44; cursor:default; }
+        .calendar-day .day-num { font-size:1.1rem; }
+        .calendar-day .day-user { font-size:0.6rem; margin-top:2px; opacity:0.9; }
+        .confirm-day-btn { background:#aa2a2a; border:none; color:#fff; font-size:0.55rem; padding:2px 5px; border-radius:8px; cursor:pointer; margin-top:3px; }
+        .cart-item { display:flex; justify-content:space-between; align-items:center; background:var(--bg-card); border:2px solid var(--border-color); padding:14px; margin:10px 0; border-radius:14px; box-shadow:4px 4px 0 var(--card-shadow); flex-wrap:wrap; gap:10px; }
+        .cart-item-info { display:flex; align-items:center; gap:12px; flex:1; min-width:200px; }
+        .cart-item-icon { font-size:2rem; width:50px; height:50px; object-fit:cover; border-radius:8px; cursor:pointer; }
+        .cart-item-name { font-weight:bold; }
+        .cart-item-price { color:var(--border-color); font-weight:bold; }
+        .cart-remove-btn { background:#7a2a2a; border:none; color:#fff; font-family:inherit; padding:5px 10px; cursor:pointer; border-radius:8px; }
+        .cart-total { background:var(--bg-secondary); border:2px solid var(--border-color); padding:16px; margin-top:20px; border-radius:14px; text-align:right; font-weight:bold; }
+        .cart-total .total-price { color:var(--border-color); font-size:1.4rem; }
+        .pay-btn { background:#2a7a3a; border:none; font-family:inherit; font-size:1rem; font-weight:bold; padding:12px 30px; color:#FFF; cursor:pointer; box-shadow:4px 4px 0 #1a4a2a; border-radius:14px; margin-top:10px; }
+        .empty-cart { text-align:center; padding:40px; color:var(--text-secondary); }
+        .settings-modal,.avatar-modal,.image-modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:200; display:flex; justify-content:center; align-items:center; }
+        .settings-card,.avatar-card { background:var(--bg-primary); border:3px solid var(--border-color); border-radius:28px; padding:30px; width:400px; max-width:90%; box-shadow:10px 10px 0 #0a0e1a; color:var(--text-color); }
+        .settings-row { display:flex; justify-content:space-between; align-items:center; margin:15px 0; flex-wrap:wrap; gap:10px; }
+        .settings-close,.avatar-close,.image-close { position:absolute; top:15px; right:20px; cursor:pointer; font-size:28px; color:var(--border-color); z-index:10; }
+        .font-size-btns { display:flex; gap:6px; }
+        .font-size-btns button { min-width:40px; background:var(--btn-bg); border:none; color:#FFF; padding:6px; cursor:pointer; border-radius:8px; font-family:inherit; }
+        .font-size-btns button.active { background:var(--border-color); color:#121624; }
+        .image-modal img { max-width:90vw; max-height:85vh; object-fit:contain; border-radius:16px; border:3px solid var(--border-color); }
+        .avatar-selector { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin:15px 0; }
+        .avatar-option { font-size:2.5rem; padding:10px; border:3px solid transparent; border-radius:16px; cursor:pointer; background:var(--bg-card); }
+        .avatar-option:hover { border-color:var(--border-color); }
+        .avatar-option.selected { border-color:var(--border-color); background:var(--border-color); }
+        .profile-wrapper { display:flex; flex-wrap:wrap; gap:30px; margin-top:20px; }
+        .profile-left { flex:1; min-width:280px; }
+        .profile-right { flex:0.8; min-width:300px; }
+        .profile-container { text-align:center; background:var(--bg-secondary); border-radius:22px; padding:20px; }
+        .profile-avatar { font-size:80px; margin-bottom:10px; cursor:pointer; }
+        .profile-avatar:hover { transform:scale(1.1); }
+        .change-avatar-hint { font-size:0.65rem; color:var(--text-secondary); margin-bottom:15px; }
+        .profile-stats { text-align:left; margin-top:20px; }
+        .profile-stats p { margin:10px 0; }
+        .progress-bar-container { background:#2a2f40; border-radius:20px; height:12px; overflow:hidden; margin:10px 0; }
+        .progress-bar { height:100%; background:var(--border-color); width:0%; border-radius:20px; transition:width 0.3s; }
+        .ranks-table { width:100%; border-collapse:collapse; background:var(--bg-secondary); border-radius:16px; overflow:hidden; }
+        .ranks-table th,.ranks-table td { border:1px solid var(--border-color); padding:8px; text-align:center; color:var(--text-color); font-size:0.8rem; }
+        .ranks-table th { background:var(--bg-card); font-weight:bold; }
+        .current-rank-row { background:#3a6a4a; font-weight:bold; }
+        .users-list { background:var(--bg-secondary); border-radius:16px; padding:15px; margin-top:20px; max-height:400px; overflow-y:auto; }
+        .user-item { display:flex; justify-content:space-between; align-items:center; padding:8px; border-bottom:1px solid var(--border-color); flex-wrap:wrap; gap:8px; }
+        textarea,input { background:var(--bg-input); border:2px solid #e08a4a; border-radius:14px; color:var(--text-color); font-family:monospace; padding:10px; width:100%; margin-top:8px; }
+        .auth-modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:100; display:flex; justify-content:center; align-items:center; }
+        .auth-card { background:var(--bg-primary); border:3px solid var(--border-color); border-radius:28px; padding:30px; width:350px; max-width:90%; color:var(--text-color); }
+        .auth-card h2 { text-align:center; }
+        .auth-buttons { display:flex; gap:15px; justify-content:center; margin-top:10px; }
+        .switch-auth { text-align:center; cursor:pointer; color:var(--border-color); margin-top:10px; }
+        .badge { background:#9a7a5a; color:#FFF; padding:5px 12px; display:inline-block; border-radius:12px; }
+        footer { text-align:center; margin-top:30px; font-size:12px; color:var(--text-color); border-top:1px solid #aa7a52; padding-top:20px; }
+        p,label,span,div { color:var(--text-color); }
+        .refresh-bottom { margin-top:30px; text-align:center; }
+        @media(max-width:700px){ .container{padding:15px;margin:10px;} .card{width:100%;max-width:280px;margin:0 auto;} }
+    </style>
+</head>
+<body>
+<div class="sky"></div>
+
+<div id="authModal" class="auth-modal">
+    <div class="auth-card">
+        <div id="loginForm"><h2>🔐 ВХОД</h2><input type="text" id="modalLoginName" placeholder="Номер телефона или логин"><input type="password" id="modalLoginPass" placeholder="Пароль"><div class="auth-buttons"><button id="modalLoginBtn" class="pixel-btn">Войти</button></div><div class="switch-auth" id="switchToRegister">Нет аккаунта? Зарегистрироваться</div></div>
+        <div id="registerForm" style="display:none;"><h2>📝 РЕГИСТРАЦИЯ</h2><input type="tel" id="modalRegPhone" placeholder="Номер телефона"><input type="password" id="modalRegPass" placeholder="Пароль"><div class="auth-buttons"><button id="modalRegisterBtn" class="pixel-btn">Зарегистрироваться</button></div><div class="switch-auth" id="switchToLogin">Уже есть аккаунт? Войти</div></div>
+    </div>
+</div>
+
+<div id="settingsModal" class="settings-modal" style="display:none;"><div class="settings-card"><div class="settings-close" id="closeSettingsModal">✖</div><h2>⚙️ НАСТРОЙКИ</h2><div class="settings-row"><label>🔤 Шрифт:</label><div class="font-size-btns"><button data-size="0.8">A-</button><button data-size="1" class="active">A</button><button data-size="1.3">A+</button></div></div><div class="settings-row"><label>🎨 Тема:</label><select id="themeSelect"><option value="dark">🌙 Тёмная</option><option value="light">☀️ Светлая</option></select></div><div class="settings-row" style="justify-content:center;margin-top:25px;"><button id="deleteAccountBtn" class="pixel-btn danger-btn">🗑️ Удалить аккаунт</button></div></div></div>
+<div id="avatarPickerModal" class="avatar-modal" style="display:none;"><div class="avatar-card"><div class="avatar-close" id="closeAvatarModal">✖</div><h3>🎨 Выберите аватарку</h3><div class="avatar-selector" id="avatarSelector"></div><button id="saveAvatarBtn" class="pixel-btn success-btn" style="margin-top:15px;">✅ Сохранить</button></div></div>
+<div id="imageViewerModal" class="image-modal" style="display:none;"><div class="image-close" id="closeImageViewer">✖</div><img id="imageViewerImg" src="" alt="Фото"></div>
+
+<div id="mainContent" class="container" style="display:none;">
+    <div id="mainTopBar" class="top-bar"><div class="site-title"><h1>◢ PIXEL PROJECT ◣</h1></div><div class="user-panel-right"><span class="user-name" id="profileLinkText">👤 <span id="currentUserName"></span></span><span class="user-rank" id="userRankTop">🏅 Загрузка...</span><button id="cartTopBtn" class="cart-btn-top">🛒<span id="cartCountTop" class="cart-count" style="display:none;">0</span></button><button id="settingsBtn" class="settings-btn">⚙️</button><button id="logoutBtn" class="logout-small-btn">Выйти</button></div></div>
+    <div id="horizontalMenu" class="nav-horizontal">
+        <button class="nav-btn" data-page="home">🏠 Главная</button>
+        <button class="nav-btn" data-page="catalog">📚 Каталог</button>
+        <button class="nav-btn" data-page="rentals">📅 Бронь</button>
+        <button class="nav-btn" data-page="shop">🛒 Магазин</button>
+        <button class="nav-btn" data-page="cart">🛍️ Корзина</button>
+        <button class="nav-btn" data-page="chat">💬 Чат<span id="chatDot" class="chat-dot" style="display:none;"></span></button>
+        <button class="nav-btn" data-page="about">ℹ️ О нас</button>
+        <button class="nav-btn" data-page="contacts">📞 Контакты</button>
+    </div>
+    <div id="home" class="page active-page"><h2>⚡ ИГРАЙ ПОД ОТКРЫТЫМ НЕБОМ ⚡</h2><p style="font-size:1.2rem;margin:15px 0;">🎲 <strong>«Прокат настольных игр»</strong> — Комсомольск-на-Амуре.<br>☁️ Бери настолку, садись за стол, находи компанию в чате<br>💸 Дёшево, уютно, атмосферно.</p><div class="grid-cards"><div class="card">🎲 500+ настолок</div><div class="card">🕹️ от 150₽ / сутки</div><div class="card">👥 Найди друзей</div><div class="card">🏆 VIP-столы</div></div></div>
+    <div id="catalog" class="page"><h2>🎲 КАТАЛОГ</h2><div id="adminCatalogAddBtn" style="margin-bottom:15px;"></div><div id="gamesList" class="grid-cards"></div><div id="refreshCatalogBtnContainer" class="refresh-bottom"></div></div>
+    <div id="rentals" class="page"><h2>📅 БРОНИРОВАНИЕ 2026</h2><p style="margin-bottom:5px;">Суточная бронь.</p><p style="font-size:0.85rem;margin-bottom:15px;"><span style="background:#2a7a3a;padding:2px 8px;border-radius:8px;">🟢 Свободно</span> <span style="background:#5a4a2a;padding:2px 8px;border-radius:8px;">🟠 Бронь</span> <span style="background:#8a2a2a;padding:2px 8px;border-radius:8px;">🔴 Подтв.</span></p><div id="calendarContainer"></div><div id="refreshSlotBtnContainer" class="refresh-bottom"></div></div>
+    <div id="shop" class="page"><h2>🛒 МАГАЗИН</h2><div id="adminShopAddBtn" style="margin-bottom:15px;"></div><div id="storeItems" class="grid-cards"></div><div id="refreshShopBtnContainer" class="refresh-bottom"></div></div>
+    <div id="cart" class="page"><h2>🛍️ КОРЗИНА</h2><div id="cartItemsContainer"></div><div id="cartTotalContainer"></div></div>
+    <div id="chat" class="page"><h2>💬 ОБЩИЙ ЧАТ</h2><div class="chat-window" id="globalChatMessages"></div><input type="text" id="chatUsername" disabled><textarea id="chatMsg" rows="2" placeholder="Сообщение..."></textarea><button id="sendGlobalMsg" class="pixel-btn">Отправить</button><div style="margin-top:20px;"><h3>🛎️ Чат с админом <span id="adminUnreadDot" style="color:#f44;display:none;">🔴</span></h3><div class="chat-window admin-chat" id="adminChatMessages"></div><div id="adminReplyArea"></div></div></div>
+    <div id="about" class="page"><h2>🎮 О НАС</h2><p>Pixel Project — уютный сервис проката настольных игр в Комсомольске-на-Амуре.</p></div>
+    <div id="contacts" class="page"><h2>📍 КОНТАКТЫ</h2><p>🏠 ул. Аллея Труда 12<br>☎️ +7 (4217) 55-35-35</p></div>
+    <footer>☁️ Pixel Project • бронируй стол и играй 🎲</footer>
+</div>
+
+<script>
+// FIREBASE
+const firebaseConfig = {
+    apiKey: "AIzaSyBxYgFJCrVcVTYxGEXkhXUmCENNvVGnRPA",
+    authDomain: "pixel-project-c0e5d.firebaseapp.com",
+    databaseURL: "https://pixel-project-c0e5d-default-rtdb.firebaseio.com",
+    projectId: "pixel-project-c0e5d",
+    storageBucket: "pixel-project-c0e5d.firebasestorage.app",
+    messagingSenderId: "1076126139897",
+    appId: "1:1076126139897:web:7e56a6a40c8efc41a7b028"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// НАСТРОЙКИ
+const DEFAULT_AVATARS = ['🎲','🎮','🧙‍♂️','🐉','🎯','👾','🦊','🐱','🦄','🤖','👻','🎪'];
+let userSettings = JSON.parse(localStorage.getItem('pixel_settings')) || { theme:'dark', fontSize:'1' };
+let userAvatars = JSON.parse(localStorage.getItem('pixel_avatars')) || {};
+let selectedAvatar = null;
+let currentUser = JSON.parse(sessionStorage.getItem('pixel_current_user')) || null;
+
+function getAvatarEmoji(login){return (userAvatars[login]&&userAvatars[login].startsWith('data:image'))?userAvatars[login]:userAvatars[login]||'🎲';}
+function saveAvatars(){localStorage.setItem('pixel_avatars',JSON.stringify(userAvatars));}
+function applySettings(){document.documentElement.style.setProperty('--font-size-multiplier',userSettings.fontSize);document.body.classList.toggle('theme-light',userSettings.theme==='light');const ts=document.getElementById('themeSelect');if(ts)ts.value=userSettings.theme;document.querySelectorAll('.font-size-btns button').forEach(b=>b.classList.remove('active'));const ab=document.querySelector(`.font-size-btns button[data-size="${userSettings.fontSize}"]`);if(ab)ab.classList.add('active');}
+function saveSettings(){localStorage.setItem('pixel_settings',JSON.stringify(userSettings));applySettings();}
+
+const RANKS=[{name:"🍂 Новичок",visitsNeeded:10,discount:1},{name:"🎲 Любитель",visitsNeeded:20,discount:2},{name:"🃏 Игрок",visitsNeeded:30,discount:3},{name:"⭐ Знаток",visitsNeeded:40,discount:4},{name:"🏆 Мастер",visitsNeeded:50,discount:5},{name:"👑 Эксперт",visitsNeeded:60,discount:6},{name:"💎 Профи",visitsNeeded:70,discount:7},{name:"🔥 Ветеран",visitsNeeded:80,discount:8},{name:"🎯 Легенда",visitsNeeded:90,discount:9},{name:"🧙‍♂️ Гроссмейстер",visitsNeeded:100,discount:10},{name:"⚡ Хранитель кубиков",visitsNeeded:110,discount:11},{name:"🌟 Повелитель столов",visitsNeeded:120,discount:12},{name:"🏅 Мастер вселенной",visitsNeeded:130,discount:13},{name:"🎖️ Игрок года",visitsNeeded:140,discount:14},{name:"👑 Король настолок",visitsNeeded:150,discount:15}];
+function getRankInfo(v){let c=RANKS[0],n=null;for(let i=0;i<RANKS.length;i++){if(v>=RANKS[i].visitsNeeded){c=RANKS[i];n=i+1<RANKS.length?RANKS[i+1]:null;}else{if(n===null&&i>0)n=RANKS[i];break;}}return{currentRank:c,nextRank:n};}
+function calculateDiscount(v){let d=0;for(let i=0;i<RANKS.length;i++){if(v>=RANKS[i].visitsNeeded)d=RANKS[i].discount;else break;}return d;}
+
+// ДАННЫЕ ИЗ FIREBASE
+let users=[{login:"Admin",password:"1221",role:"admin",visits:0}];
+let bookings={},games=[],storeProducts=[],globalChatLog=[],adminChatLog=[];
+let userUnreadCounts={},adminHasUnread=false,cart={};
+
+const MONTHS=["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+const DAY_NAMES=["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
+const TODAY=new Date(2026,5,6);let currentMonth=5,currentYear=2026;
+
+// ЗАГРУЗКА ИЗ FIREBASE
+function loadFromFirebase(){
+    db.ref('users').on('value',snap=>{if(snap.val()){users=snap.val();syncCurrentUserFromUsers();}});
+    db.ref('bookings').on('value',snap=>{bookings=snap.val()||{};renderCalendar();});
+    db.ref('games').on('value',snap=>{games=snap.val()||[];renderGames();});
+    db.ref('storeProducts').on('value',snap=>{storeProducts=snap.val()||[];renderStore();});
+    db.ref('globalChat').on('value',snap=>{globalChatLog=snap.val()||[];renderGlobalChat();});
+    db.ref('adminChat').on('value',snap=>{adminChatLog=snap.val()||[];renderAdminChat();});
+    db.ref('userUnreadCounts').on('value',snap=>{userUnreadCounts=snap.val()||{};updateChatDot();updateAdminUnreadDot();});
+    db.ref('adminHasUnread').on('value',snap=>{adminHasUnread=snap.val()||false;updateChatDot();});
+    db.ref('userAvatars').on('value',snap=>{userAvatars=snap.val()||{};saveAvatars();});
+}
+
+// СОХРАНЕНИЕ В FIREBASE
+function saveUsersFB(){db.ref('users').set(users);}
+function saveBookingsFB(){db.ref('bookings').set(bookings);}
+function saveGamesFB(){db.ref('games').set(games);}
+function saveStoreFB(){db.ref('storeProducts').set(storeProducts);}
+function saveGlobalChatFB(){db.ref('globalChat').set(globalChatLog);}
+function saveAdminChatFB(){db.ref('adminChat').set(adminChatLog);}
+function saveUnreadFB(){db.ref('userUnreadCounts').set(userUnreadCounts);db.ref('adminHasUnread').set(adminHasUnread);}
+function saveAvatarsFB(){db.ref('userAvatars').set(userAvatars);}
+
+// ИНИЦИАЛИЗАЦИЯ
+db.ref('users').once('value',snap=>{if(!snap.val()){db.ref('users').set(users);}});
+db.ref('games').once('value',snap=>{if(!snap.val()){const g=[{id:1,name:"Манчкин",pricePerDay:250,img:"🎒",inStock:true},{id:2,name:"Имаджинариум",pricePerDay:300,img:"🎨",inStock:true},{id:3,name:"Колонизаторы",pricePerDay:400,img:"🏝️",inStock:true},{id:4,name:"UNO",pricePerDay:100,img:"🃏",inStock:true}];db.ref('games').set(g);}});
+db.ref('storeProducts').once('value',snap=>{if(!snap.val()){const s=[{id:101,name:"Футболка Pixel",price:1200,img:"👕",inStock:true},{id:102,name:"Кружка 8-bit",price:550,img:"☕",inStock:true}];db.ref('storeProducts').set(s);}});
+
+function syncCurrentUserFromUsers(){if(currentUser){const f=users.find(u=>u.login===currentUser.login);if(f){currentUser.visits=f.visits;currentUser.role=f.role;sessionStorage.setItem('pixel_current_user',JSON.stringify(currentUser));}}}
+function getDisplayRank(){if(!currentUser)return"🏅 Загрузка...";if(currentUser.role==='admin')return"👑 Король настолок";return getRankInfo(currentUser.visits||0).currentRank.name;}
+function addVisitToUser(un){const i=users.findIndex(u=>u.login===un);if(i!==-1){users[i].visits=(users[i].visits||0)+1;saveUsersFB();if(currentUser&&currentUser.login===un){syncCurrentUserFromUsers();}}}
+function removeVisitFromUser(un){if(!currentUser||currentUser.role!=='admin')return;const i=users.findIndex(u=>u.login===un);if(i!==-1&&users[i].visits>0){users[i].visits--;saveUsersFB();if(currentUser.login===un)syncCurrentUserFromUsers();}}
+function getDiscountedPrice(p){if(!currentUser)return p;return Math.floor(p*(100-calculateDiscount(currentUser.visits||0))/100);}
+function getImgHtml(img){return(img&&img.startsWith('data:image'))?`<img src="${img}" class="card-img" onclick="event.stopPropagation();openImageViewer('${img}')">`:`<div class="card-emoji">${img||'📦'}</div>`;}
+
+// КОРЗИНА
+function addToCart(pid){if(!currentUser){alert("Войдите!");return;}cart[pid]=(cart[pid]||0)+1;saveCartLocal();alert("Товар в корзине!");}
+function removeFromCart(pid){if(cart[pid]){delete cart[pid];saveCartLocal();renderCart();}}
+function getCartItems(){const items=[];for(const[pid,qty]of Object.entries(cart)){const p=storeProducts.find(x=>x.id===parseInt(pid));if(p)items.push({...p,quantity:qty});}return items;}
+function getCartTotal(){return getCartItems().reduce((s,i)=>s+getDiscountedPrice(i.price)*i.quantity,0);}
+function getCartCount(){return Object.values(cart).reduce((s,q)=>s+q,0);}
+function saveCartLocal(){localStorage.setItem('pixel_cart',JSON.stringify(cart));updateCartCount();}
+function updateCartCount(){const c=getCartCount(),el=document.getElementById('cartCountTop');if(el){el.style.display=c>0?'inline-block':'none';if(c>0)el.innerText=c;}}
+
+function renderCart(){
+    const c=document.getElementById('cartItemsContainer'),tc=document.getElementById('cartTotalContainer');if(!c||!tc)return;
+    const items=getCartItems(),dp=currentUser?calculateDiscount(currentUser.visits||0):0;
+    if(items.length===0){c.innerHTML='<div class="empty-cart">🛒 Корзина пуста</div>';tc.innerHTML='';return;}
+    c.innerHTML=items.map(i=>{const pr=getDiscountedPrice(i.price),ph=dp>0?`<span class="old-price">${i.price}₽</span> → <span class="price-with-discount">${pr}₽</span>`:`${i.price}₽`;const ih=(i.img&&i.img.startsWith('data:image'))?`<img src="${i.img}" class="cart-item-icon" onclick="openImageViewer('${i.img}')">`:`<span class="cart-item-icon" style="font-size:2rem;">${i.img||'📦'}</span>`;return`<div class="cart-item"><div class="cart-item-info">${ih}<div><div class="cart-item-name">${i.name}</div><div style="color:var(--text-secondary);font-size:0.8rem;">Кол-во:${i.quantity}|${ph}/шт.</div></div></div><div><span class="cart-item-price">${pr*i.quantity}₽</span><button class="cart-remove-btn" data-id="${i.id}">✖</button></div></div>`;}).join('');
+    const total=getCartTotal();tc.innerHTML=`<div class="cart-total">${dp>0?`<div style="font-size:0.8rem;">Скидка:${dp}%</div>`:''}<div>Итого:<span class="total-price">${total}₽</span></div><button id="payCartBtn" class="pay-btn">💳 ОПЛАТИТЬ</button></div>`;
+    document.querySelectorAll('.cart-remove-btn').forEach(b=>b.onclick=()=>removeFromCart(parseInt(b.dataset.id)));
+    document.getElementById('payCartBtn')?.addEventListener('click',()=>{if(confirm(`Оплатить ${total}₽?`)){alert("✅ Заказ оплачен!");cart={};saveCartLocal();renderCart();}});
+}
+
+// ЧАТ
+function updateChatDot(){const dot=document.getElementById('chatDot');if(!dot||!currentUser){if(dot)dot.style.display='none';return;}let hasUnread=false;if(currentUser.role==='admin'){hasUnread=adminHasUnread;}else{hasUnread=(userUnreadCounts[currentUser.login]||0)>0;}dot.style.display=hasUnread?'inline-block':'none';}
+function updateAdminUnreadDot(){const dot=document.getElementById('adminUnreadDot');if(!dot||!currentUser){if(dot)dot.style.display='none';return;}if(currentUser.role==='admin'){dot.style.display='none';}else{dot.style.display=(userUnreadCounts[currentUser.login]||0)>0?'inline':'none';}}
+
+function renderGlobalChat(){const w=document.getElementById('globalChatMessages');if(!w)return;w.innerHTML=globalChatLog.map(m=>`<div class="chat-msg"><div class="msg-sender">👤 ${m.user}</div><div class="msg-text">${m.text}</div></div>`).join('');w.scrollTop=w.scrollHeight;}
+function renderAdminChat(){const w=document.getElementById('adminChatMessages');if(!w)return;if(currentUser&&currentUser.role!=='admin'){userUnreadCounts[currentUser.login]=0;saveUnreadFB();}if(currentUser&&currentUser.role==='admin'){adminHasUnread=false;saveUnreadFB();}w.innerHTML=adminChatLog.map(m=>`<div class="chat-msg"><div class="msg-sender">${m.user==='Admin'?'👑 Админ':'👤 '+m.user}</div><div class="msg-text">${m.text}</div></div>`).join('');w.scrollTop=w.scrollHeight;updateAdminUnreadDot();updateChatDot();}
+
+function sendGlobalMsg(){const n=currentUser?currentUser.login:"Гость",m=document.getElementById('chatMsg')?.value.trim();if(!m)return;globalChatLog.push({user:n,text:m});saveGlobalChatFB();document.getElementById('chatMsg').value='';}
+function sendToAdmin(){const m=document.getElementById('adminMsgText')?.value.trim();if(!m||!currentUser)return;adminChatLog.push({user:currentUser.login,text:m});adminHasUnread=true;saveAdminChatFB();saveUnreadFB();document.getElementById('adminMsgText').value='';}
+function adminReply(){if(!currentUser||currentUser.role!=='admin')return;const m=document.getElementById('adminReplyText')?.value.trim();if(!m)return;adminChatLog.push({user:"Admin",text:m});users.forEach(u=>{if(u.role!=='admin')userUnreadCounts[u.login]=(userUnreadCounts[u.login]||0)+1;});adminHasUnread=false;saveAdminChatFB();saveUnreadFB();document.getElementById('adminReplyText').value='';}
+
+function renderAdminReplyArea(){const area=document.getElementById('adminReplyArea');if(!area)return;if(currentUser&&currentUser.role==='admin'){area.innerHTML=`<div class="admin-reply-area"><textarea id="adminReplyText" rows="2" placeholder="Ответить как админ..."></textarea><button id="adminReplyBtn" class="pixel-btn success-btn">📨 Ответить</button></div>`;document.getElementById('adminReplyBtn')?.addEventListener('click',adminReply);}else if(currentUser){area.innerHTML=`<textarea id="adminMsgText" rows="2" placeholder="Напишите вопрос админу..."></textarea><button id="sendToAdminBtn" class="pixel-btn">📨 Отправить админу</button>`;document.getElementById('sendToAdminBtn')?.addEventListener('click',sendToAdmin);}else{area.innerHTML='<p style="color:var(--text-secondary);">Войдите, чтобы написать админу.</p>';}updateAdminUnreadDot();updateChatDot();}
+
+// КАЛЕНДАРЬ
+function formatDateKey(y,m,d){return`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;}
+function renderCalendar(){
+    const c=document.getElementById('calendarContainer');if(!c)return;const isAdmin=currentUser&&currentUser.role==='admin';
+    const fd=new Date(currentYear,currentMonth,1),ld=new Date(currentYear,currentMonth+1,0),dim=ld.getDate(),sdow=(fd.getDay()+6)%7;
+    let h=`<div class="calendar-nav"><button onclick="changeMonth(-1)">◀</button><span class="month-label">${MONTHS[currentMonth]} ${currentYear}</span><button onclick="changeMonth(1)">▶</button></div><div class="calendar-grid">`;
+    DAY_NAMES.forEach(d=>h+=`<div class="calendar-day-header">${d}</div>`);
+    for(let i=0;i<sdow;i++)h+=`<div class="calendar-day empty"></div>`;
+    for(let day=1;day<=dim;day++){
+        const dk=formatDateKey(currentYear,currentMonth,day),bk=bookings[dk],taken=bk&&typeof bk==='object',confirmed=taken&&bk.confirmed===true,bookedBy=taken?bk.user:null;
+        const cd=new Date(currentYear,currentMonth,day),isPast=cd<TODAY,isToday=cd.getTime()===TODAY.getTime();
+        let cc='calendar-day',ct=`<span class="day-num">${day}</span>`;
+        if(isPast){cc+=' past';}else if(isToday){cc+=' today';if(confirmed&&bookedBy){cc+=' confirmed';ct+=`<span class="day-user">${bookedBy}</span>`;}else if(taken){cc+=' booked';ct+=`<span class="day-user">${bookedBy}</span>`;}else cc+=' free';}else if(confirmed&&bookedBy){cc+=' confirmed';ct+=`<span class="day-user">${bookedBy}</span>`;}else if(taken){cc+=' booked';ct+=`<span class="day-user">${bookedBy}</span>`;}else cc+=' free';
+        if(taken&&isAdmin&&!confirmed&&!isPast&&bookedBy)ct+=`<button class="confirm-day-btn" data-date="${dk}" data-user="${bookedBy}">✅</button>`;
+        h+=`<div class="${cc}" data-date="${dk}">${ct}</div>`;
+    }
+    h+=`</div>`;c.innerHTML=h;
+    c.querySelectorAll('.calendar-day.free').forEach(d=>d.onclick=function(){if(!currentUser){alert("Войдите!");return;}if(confirm(`Забронировать ${this.dataset.date}?`)){bookings[this.dataset.date]={user:currentUser.login,confirmed:false};saveBookingsFB();}});
+    c.querySelectorAll('.confirm-day-btn').forEach(b=>b.onclick=function(e){e.stopPropagation();if(confirm(`Подтвердить явку ${this.dataset.user}?`)){addVisitToUser(this.dataset.user);bookings[this.dataset.date].confirmed=true;saveBookingsFB();}});
+}
+function changeMonth(d){currentMonth+=d;if(currentMonth>11){currentMonth=0;currentYear++;}if(currentMonth<0){currentMonth=11;currentYear--;}if(currentYear<2026||(currentYear===2026&&currentMonth<5)){currentMonth=5;currentYear=2026;}if(currentYear>2026){currentMonth=11;currentYear=2026;}renderCalendar();}
+function resetAllBookings(){if(!currentUser||currentUser.role!=='admin')return;if(confirm('⚠️ Сбросить ВСЕ брони?')){bookings={};saveBookingsFB();}}
+
+// ИГРЫ И МАГАЗИН
+function renderGames(){const c=document.getElementById('gamesList');if(!c)return;const ia=currentUser&&currentUser.role==='admin';c.innerHTML=games.map(g=>{const dp=getDiscountedPrice(g.pricePerDay),dP=currentUser?calculateDiscount(currentUser.visits||0):0;return`<div class="card ${!g.inStock?'out-of-stock':''}">${!g.inStock?'<div class="stock-badge">📦 Нет</div>':''}${getImgHtml(g.img)}<strong>${g.name}</strong><br>${dP>0?`<div><span class="old-price">${g.pricePerDay}₽</span> <span class="price-with-discount">→ ${dp}₽</span><br><small>скидка ${dP}%</small></div>`:`<div>💰 ${g.pricePerDay}₽/сутки</div>`}<button class="pixel-btn rent-btn" data-id="${g.id}" ${!g.inStock?'disabled':''}>Арендовать</button>${ia?`<div class="admin-controls" style="margin-top:8px;"><button class="pixel-btn delete-btn" data-id="${g.id}">🗑️</button><button class="pixel-btn stock-btn" data-id="${g.id}">${g.inStock?'📦 Нет':'✅ Есть'}</button></div>`:''}</div>`;}).join('');document.querySelectorAll('.rent-btn').forEach(b=>b.onclick=()=>alert("Игра в заявке."));if(ia){document.querySelectorAll('.delete-btn').forEach(b=>b.onclick=()=>{if(confirm('Удалить?')){games=games.filter(g=>g.id!==parseInt(b.dataset.id));saveGamesFB();}});document.querySelectorAll('.stock-btn').forEach(b=>b.onclick=()=>{const g=games.find(g=>g.id===parseInt(b.dataset.id));if(g){g.inStock=!g.inStock;saveGamesFB();}});}}
+function renderStore(){const c=document.getElementById('storeItems');if(!c)return;const ia=currentUser&&currentUser.role==='admin';c.innerHTML=storeProducts.map(p=>{const dp=getDiscountedPrice(p.price),dP=currentUser?calculateDiscount(currentUser.visits||0):0;return`<div class="card ${!p.inStock?'out-of-stock':''}">${!p.inStock?'<div class="stock-badge">📦 Нет</div>':''}${getImgHtml(p.img)}<strong>${p.name}</strong><br>${dP>0?`<div><span class="old-price">${p.price}₽</span> <span class="price-with-discount">→ ${dp}₽</span><br><small>скидка ${dP}%</small></div>`:`<div>💰 ${p.price}₽</div>`}<button class="pixel-btn add-to-cart-btn" data-id="${p.id}" ${!p.inStock?'disabled':''}>🛒 В корзину</button>${ia?`<div class="admin-controls" style="margin-top:8px;"><button class="pixel-btn delete-btn" data-id="${p.id}">🗑️</button><button class="pixel-btn stock-btn" data-id="${p.id}">${p.inStock?'📦 Нет':'✅ Есть'}</button></div>`:''}</div>`;}).join('');document.querySelectorAll('.add-to-cart-btn').forEach(b=>b.onclick=()=>addToCart(parseInt(b.dataset.id)));if(ia){document.querySelectorAll('.delete-btn').forEach(b=>b.onclick=()=>{if(confirm('Удалить?')){storeProducts=storeProducts.filter(p=>p.id!==parseInt(b.dataset.id));saveStoreFB();}});document.querySelectorAll('.stock-btn').forEach(b=>b.onclick=()=>{const p=storeProducts.find(p=>p.id===parseInt(b.dataset.id));if(p){p.inStock=!p.inStock;saveStoreFB();}});}}
+
+// АДМИН-КНОПКИ
+function addNewGame(){if(!currentUser||currentUser.role!=='admin')return;const n=prompt("Название");if(!n)return;const p=parseInt(prompt("Цена/сутки",200));if(confirm("Загрузить фото?")){uploadPhoto(d=>{games.push({id:Date.now(),name:n,pricePerDay:p||200,img:d,inStock:true});saveGamesFB();});}else{const e=prompt("Эмодзи","🎲");games.push({id:Date.now(),name:n,pricePerDay:p||200,img:e||"🎲",inStock:true});saveGamesFB();}}
+function addNewProduct(){if(!currentUser||currentUser.role!=='admin')return;const n=prompt("Название");if(!n)return;const p=parseInt(prompt("Цена",500));if(confirm("Загрузить фото?")){uploadPhoto(d=>{storeProducts.push({id:Date.now(),name:n,price:p||500,img:d,inStock:true});saveStoreFB();});}else{const e=prompt("Эмодзи","🧢");storeProducts.push({id:Date.now(),name:n,price:p||500,img:e||"🧢",inStock:true});saveStoreFB();}}
+function updateAdminButtons(){const ia=currentUser&&currentUser.role==='admin';document.getElementById('adminCatalogAddBtn').innerHTML=ia?'<button id="addGameBtn" class="pixel-btn">➕ Добавить игру</button>':'';document.getElementById('adminShopAddBtn').innerHTML=ia?'<button id="addProductBtn" class="pixel-btn">➕ Добавить товар</button>':'';if(ia){document.getElementById('addGameBtn')?.addEventListener('click',addNewGame);document.getElementById('addProductBtn')?.addEventListener('click',addNewProduct);}}
+
+// ФОТО
+function uploadPhoto(cb){const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=(e)=>{const f=e.target.files[0];if(f){const r=new FileReader();r.onload=(ev)=>cb(ev.target.result);r.readAsDataURL(f);}};i.click();}
+function openImageViewer(src){document.getElementById('imageViewerImg').src=src;document.getElementById('imageViewerModal').style.display='flex';}
+function closeImageViewer(){document.getElementById('imageViewerModal').style.display='none';}
+
+// АВАТАРКИ
+function openAvatarPicker(){if(!currentUser)return;selectedAvatar=getAvatarEmoji(currentUser.login);const sel=document.getElementById('avatarSelector');sel.innerHTML='';DEFAULT_AVATARS.forEach(a=>{const d=document.createElement('div');d.className='avatar-option';d.textContent=a;if(a===selectedAvatar&&!selectedAvatar.startsWith('data:image'))d.classList.add('selected');d.onclick=()=>{sel.querySelectorAll('.avatar-option').forEach(x=>x.classList.remove('selected'));d.classList.add('selected');selectedAvatar=a;};sel.appendChild(d);});const up=document.createElement('div');up.className='avatar-option';up.textContent='📷';up.onclick=()=>{const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=(e)=>{const f=e.target.files[0];if(f){const r=new FileReader();r.onload=(ev)=>{selectedAvatar=ev.target.result;sel.querySelectorAll('.avatar-option').forEach(x=>x.classList.remove('selected'));up.classList.add('selected');};r.readAsDataURL(f);}};inp.click();};if(selectedAvatar&&selectedAvatar.startsWith('data:image'))up.classList.add('selected');sel.appendChild(up);document.getElementById('avatarPickerModal').style.display='flex';}
+function closeAvatarPicker(){document.getElementById('avatarPickerModal').style.display='none';}
+function saveAvatar(){if(!currentUser||!selectedAvatar)return;userAvatars[currentUser.login]=selectedAvatar;saveAvatarsFB();closeAvatarPicker();loadProfileData();}
+
+// ПРОФИЛЬ
+function updateTopBar(){if(!currentUser)return;document.getElementById('currentUserName').innerText=currentUser.role==='admin'?'Admin':currentUser.login;document.getElementById('userRankTop').innerHTML=getDisplayRank();}
+function loadProfileData(){
+    if(!currentUser)return;syncCurrentUserFromUsers();const visits=currentUser.visits||0,discount=calculateDiscount(visits),{currentRank,nextRank}=getRankInfo(visits);
+    const pp=document.getElementById('profilePage');if(!pp||!pp.classList.contains('active-page'))return;
+    document.getElementById('profileUserName').innerText=currentUser.role==='admin'?'Admin':currentUser.login;
+    document.getElementById('profileVisits').innerText=visits;document.getElementById('profileDiscount').innerText=discount;
+    const pad=document.getElementById('profileAvatarDisplay');if(pad){const av=getAvatarEmoji(currentUser.login);pad.innerHTML=(av&&av.startsWith('data:image'))?`<img src="${av}" style="width:80px;height:80px;object-fit:cover;border-radius:16px;">`:av||'🎲';}
+    let ppv=0,nrt='';if(currentUser.role==='admin'){ppv=100;nrt='👑 Администратор';}else if(nextRank){const n=nextRank.visitsNeeded-(currentRank.visitsNeeded||0),a=visits-(currentRank.visitsNeeded||0);ppv=n>0?(a/n)*100:100;nrt=`Следующее:${nextRank.name}(нужно ${nextRank.visitsNeeded-visits}пос.)`;}else{ppv=100;nrt='🎉 Максимальное звание!';}
+    document.getElementById('profileProgressBar').style.width=ppv+'%';document.getElementById('profileNextRankInfo').innerHTML=nrt;
+    const tb=document.getElementById('ranksTableBody');if(tb){tb.innerHTML='';RANKS.forEach(r=>{const row=document.createElement('tr');if(currentUser.role!=='admin'&&currentRank&&currentRank.name===r.name)row.className='current-rank-row';row.innerHTML=`<td>${r.name}</td><td>${r.visitsNeeded}</td><td>${r.discount}%</td>`;tb.appendChild(row);});}
+    const isAdmin=currentUser.role==='admin';document.getElementById('adminPanelInProfile').style.display=isAdmin?'block':'none';
+    if(isAdmin){const au=users.filter(u=>u.role!=='admin').map(u=>({login:u.login,visits:u.visits||0}));const uld=document.getElementById('usersBookingsList');if(uld){uld.innerHTML=au.length===0?'<p>Нет пользователей.</p>':au.map(u=>`<div class="user-item"><span>📱${u.login}</span><span>👣${u.visits}пос.</span><button class="pixel-btn remove-visit-btn" data-user="${u.login}">➖Снять</button></div>`).join('');document.querySelectorAll('.remove-visit-btn').forEach(b=>b.onclick=()=>{if(confirm(`Снять с ${b.dataset.user}?`)){removeVisitFromUser(b.dataset.user);loadProfileData();}});}document.getElementById('clearBookingsListBtn').onclick=()=>{if(confirm('Очистить брони?')){bookings={};saveBookingsFB();alert('Очищено!');}};}
+}
+
+// НАВИГАЦИЯ
+let isProfileOpen=false;
+function showPageFromHash(){
+    if(isProfileOpen)return;const hash=window.location.hash.substring(1);let pts=['home','catalog','rentals','chat','shop','cart','about','contacts'].includes(hash)?hash:'home';
+    document.getElementById('mainTopBar').style.display='flex';document.querySelectorAll('.page').forEach(p=>p.classList.remove('active-page'));const oldPP=document.getElementById('profilePage');if(oldPP)oldPP.remove();isProfileOpen=false;
+    document.getElementById(pts).classList.add('active-page');
+    if(pts==='catalog')renderGames();if(pts==='shop')renderStore();if(pts==='cart')renderCart();if(pts==='rentals')renderCalendar();if(pts==='chat'){renderGlobalChat();renderAdminChat();renderAdminReplyArea();}
+}
+function setPageHash(pid){if(pid==='profile'){showProfileDirect();return;}if(isProfileOpen){isProfileOpen=false;document.getElementById('mainTopBar').style.display='flex';const pp=document.getElementById('profilePage');if(pp)pp.remove();}window.location.hash=pid;showPageFromHash();}
+function showProfileDirect(){isProfileOpen=true;document.getElementById('mainTopBar').style.display='none';document.querySelectorAll('.page').forEach(p=>p.classList.remove('active-page'));let pp=document.getElementById('profilePage');if(pp)pp.remove();pp=document.createElement('div');pp.id='profilePage';pp.className='page active-page';pp.innerHTML=`<div style="text-align:center;margin-bottom:20px;"><h1>◢ PIXEL PROJECT ◣</h1><div style="display:flex;justify-content:flex-end;gap:10px;margin-top:10px;"><button id="profileChatBtn" class="pixel-btn">💬 Чат</button><button id="profileExitBtn" class="pixel-btn" style="background:#8a2a2a;">Выйти</button></div></div><div class="profile-wrapper"><div class="profile-left"><div class="profile-container"><div class="profile-avatar" id="profileAvatarDisplay" style="cursor:pointer;">🎲</div><div class="change-avatar-hint">👆 Нажми на аватарку</div><div class="profile-stats"><p>👤 <strong>Имя:</strong> <span id="profileUserName"></span></p><p>👣 <strong>Посещений:</strong> <span id="profileVisits"></span></p><p>🎁 <strong>Скидка:</strong> <span id="profileDiscount"></span>%</p><div class="profile-progress"><p>📈 <strong>Прогресс:</strong></p><div class="progress-bar-container"><div class="progress-bar" id="profileProgressBar"></div></div><p id="profileNextRankInfo" style="margin-top:8px;font-size:0.9rem;"></p></div></div><div id="adminPanelInProfile" style="display:none;"><button id="clearBookingsListBtn" class="pixel-btn" style="background:#8a3a2a;margin-top:15px;">🗑️ Очистить брони</button><h3 style="margin-top:20px;">📋 Пользователи</h3><div id="usersBookingsList" class="users-list"></div></div></div></div><div class="profile-right"><h3>📜 Таблица званий</h3><table class="ranks-table"><thead><tr><th>Звание</th><th>Посещений</th><th>Скидка</th></tr></thead><tbody id="ranksTableBody"></tbody></table></div></div>`;document.getElementById('mainContent').appendChild(pp);document.getElementById('profileExitBtn')?.addEventListener('click',()=>{logout();});document.getElementById('profileChatBtn')?.addEventListener('click',()=>{isProfileOpen=false;document.getElementById('mainTopBar').style.display='flex';pp.remove();setPageHash('chat');});document.getElementById('profileAvatarDisplay')?.addEventListener('click',openAvatarPicker);window.location.hash='profile';loadProfileData();}
+
+// АВТОРИЗАЦИЯ
+function checkAuth(){const m=document.getElementById('authModal'),mc=document.getElementById('mainContent');if(currentUser){m.style.display='none';mc.style.display='block';syncCurrentUserFromUsers();updateTopBar();updateCartCount();updateAdminButtons();showPageFromHash();renderGames();renderStore();renderCalendar();renderGlobalChat();renderAdminChat();renderAdminReplyArea();}else{m.style.display='flex';mc.style.display='none';}}
+function modalLogin(){const l=document.getElementById('modalLoginName').value.trim(),p=document.getElementById('modalLoginPass').value.trim();const u=users.find(x=>x.login===l&&x.password===p);if(!u){alert("Неверный логин/пароль");return;}currentUser={login:u.login,role:u.role,visits:u.visits||0};sessionStorage.setItem('pixel_current_user',JSON.stringify(currentUser));cart=JSON.parse(localStorage.getItem('pixel_cart')||'{}');updateCartCount();checkAuth();alert(`Добро пожаловать, ${u.role==='admin'?'Admin':u.login}!`);}
+function modalRegister(){const ph=document.getElementById('modalRegPhone').value.trim(),pa=document.getElementById('modalRegPass').value.trim();if(!ph||!pa){alert("Заполните поля");return;}if(ph.toLowerCase()==='admin'){alert("Зарезервировано");return;}if(users.find(u=>u.login===ph)){alert("Уже существует");return;}users.push({login:ph,password:pa,role:"guest",visits:0});saveUsersFB();userUnreadCounts[ph]=0;saveUnreadFB();alert("Успешно! Войдите.");document.getElementById('loginForm').style.display='block';document.getElementById('registerForm').style.display='none';document.getElementById('modalLoginName').value=ph;document.getElementById('modalLoginPass').value='';}
+function logout(){currentUser=null;sessionStorage.removeItem('pixel_current_user');isProfileOpen=false;document.getElementById('mainTopBar').style.display='flex';const pp=document.getElementById('profilePage');if(pp)pp.remove();checkAuth();}
+function deleteAccount(){if(!currentUser)return;if(currentUser.role==='admin'){alert("Нельзя удалить админа!");return;}if(confirm("⚠️ Удалить аккаунт?")){if(confirm("⚠️⚠️ Точно?")){users=users.filter(u=>u.login!==currentUser.login);saveUsersFB();Object.keys(bookings).forEach(k=>{if(bookings[k].user===currentUser.login)delete bookings[k];});saveBookingsFB();delete userAvatars[currentUser.login];saveAvatarsFB();delete userUnreadCounts[currentUser.login];saveUnreadFB();cart={};saveCartLocal();currentUser=null;sessionStorage.removeItem('pixel_current_user');closeSettings();checkAuth();alert("Аккаунт удалён.");}}}
+
+// НАСТРОЙКИ
+function openSettings(){document.getElementById('settingsModal').style.display='flex';document.getElementById('themeSelect').value=userSettings.theme;document.querySelectorAll('.font-size-btns button').forEach(b=>b.classList.remove('active'));document.querySelector(`.font-size-btns button[data-size="${userSettings.fontSize}"]`)?.classList.add('active');}
+function closeSettings(){document.getElementById('settingsModal').style.display='none';}
+
+window.onload=()=>{
+    loadFromFirebase();
+    applySettings();checkAuth();
+    document.querySelectorAll('.nav-btn').forEach(b=>b.onclick=()=>{if(isProfileOpen){isProfileOpen=false;document.getElementById('mainTopBar').style.display='flex';const pp=document.getElementById('profilePage');if(pp)pp.remove();}setPageHash(b.dataset.page);});
+    document.getElementById('profileLinkText')?.addEventListener('click',()=>setPageHash('profile'));
+    document.getElementById('logoutBtn')?.addEventListener('click',logout);
+    document.getElementById('cartTopBtn')?.addEventListener('click',()=>setPageHash('cart'));
+    document.getElementById('sendGlobalMsg')?.addEventListener('click',sendGlobalMsg);
+    document.getElementById('modalLoginBtn')?.addEventListener('click',modalLogin);
+    document.getElementById('modalRegisterBtn')?.addEventListener('click',modalRegister);
+    document.getElementById('switchToRegister')?.addEventListener('click',()=>{document.getElementById('loginForm').style.display='none';document.getElementById('registerForm').style.display='block';});
+    document.getElementById('switchToLogin')?.addEventListener('click',()=>{document.getElementById('loginForm').style.display='block';document.getElementById('registerForm').style.display='none';});
+    document.getElementById('settingsBtn')?.addEventListener('click',openSettings);
+    document.getElementById('closeSettingsModal')?.addEventListener('click',closeSettings);
+    document.getElementById('deleteAccountBtn')?.addEventListener('click',deleteAccount);
+    document.getElementById('closeAvatarModal')?.addEventListener('click',closeAvatarPicker);
+    document.getElementById('saveAvatarBtn')?.addEventListener('click',saveAvatar);
+    document.getElementById('closeImageViewer')?.addEventListener('click',closeImageViewer);
+    document.getElementById('imageViewerModal')?.addEventListener('click',function(e){if(e.target===this)closeImageViewer();});
+    document.getElementById('themeSelect')?.addEventListener('change',function(){userSettings.theme=this.value;saveSettings();});
+    document.querySelectorAll('.font-size-btns button').forEach(b=>b.addEventListener('click',function(){userSettings.fontSize=this.dataset.size;saveSettings();}));
+    if(!window.location.hash)setPageHash('home');
+};
+</script>
+</body>
+</html>
