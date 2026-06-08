@@ -51,28 +51,28 @@
         .pixel-btn { background:var(--btn-bg); border:none; font-family:inherit; font-size:calc(0.5rem * var(--font-size-multiplier)); font-weight:bold; padding:8px 12px; margin:4px; color:#FFF; cursor:pointer; box-shadow:4px 4px 0 var(--btn-shadow); border-radius:10px; text-transform:uppercase; }
         .pixel-btn:active { transform:translate(2px,2px); box-shadow:2px 2px 0 var(--btn-shadow); }
         .page { display:none; }
-        .active-page { display:block; animation:pageFade 0.2s steps(5); }
-        @keyframes pageFade { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+        .active-page { display:block; }
         .grid-cards { display:flex; flex-wrap:wrap; gap:24px; margin-top:20px; justify-content:center; }
         .card { background:var(--bg-card); border:3px solid var(--border-color); padding:16px; width:230px; border-radius:18px; box-shadow:6px 6px 0 var(--card-shadow); color:var(--text-color); text-align:center; position:relative; font-size:calc(0.5rem * var(--font-size-multiplier)); }
         .card.out-of-stock { opacity:0.6; border-color:#8a6a4a; }
         .stock-badge { position:absolute; top:8px; right:8px; background:#aa4a2a; color:#fff; font-size:calc(0.45rem * var(--font-size-multiplier)); padding:3px 8px; border-radius:20px; }
-        .calendar-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; background:var(--bg-secondary); padding:15px; border-radius:18px; border:3px solid var(--border-color); }
-        .calendar-day-header { text-align:center; font-weight:bold; color:var(--border-color); padding:6px; font-size:calc(0.55rem * var(--font-size-multiplier)); background:var(--bg-card); border-radius:8px; }
-        .calendar-day { text-align:center; padding:10px 4px; border-radius:10px; font-size:calc(0.55rem * var(--font-size-multiplier)); font-weight:bold; cursor:pointer; min-height:50px; display:flex; flex-direction:column; justify-content:center; align-items:center; border:2px solid transparent; background:var(--bg-card); color:var(--text-color); }
+        .calendar-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; background:var(--bg-secondary); padding:10px; border-radius:18px; border:3px solid var(--border-color); }
+        .calendar-day-header { text-align:center; font-weight:bold; color:var(--border-color); padding:4px 2px; font-size:calc(0.45rem * var(--font-size-multiplier)); background:var(--bg-card); border-radius:6px; }
+        .calendar-day { text-align:center; padding:6px 2px; border-radius:8px; font-size:calc(0.5rem * var(--font-size-multiplier)); font-weight:bold; cursor:pointer; min-height:40px; display:flex; flex-direction:column; justify-content:center; align-items:center; border:2px solid transparent; background:var(--bg-card); color:var(--text-color); overflow:hidden; }
         .calendar-day.free { background:#2a7a3a; border-color:#4aff6a; }
         .calendar-day.booked { background:#5a4a2a; border-color:#fa4; cursor:default; }
         .calendar-day.confirmed { background:#8a2a2a; border-color:#f44; cursor:default; }
         .calendar-day.past { background:var(--bg-chat); color:#666; cursor:default; }
         .calendar-day.today { background:var(--border-color); color:#121624; border-color:#fff; }
+        .calendar-day .day-num { font-size:calc(0.6rem * var(--font-size-multiplier)); }
+        .calendar-day .day-user { font-size:calc(0.3rem * var(--font-size-multiplier)); margin-top:1px; opacity:0.9; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
         .chat-window { background:var(--bg-chat); border:3px solid var(--border-color); border-radius:18px; height:200px; overflow-y:auto; padding:14px; margin:10px 0; color:var(--text-color); font-size:calc(0.45rem * var(--font-size-multiplier)); }
         .chat-msg { margin-bottom:8px; padding:6px 10px; border-radius:10px; background:var(--bg-card); }
         .msg-sender { font-size:calc(0.4rem * var(--font-size-multiplier)); color:var(--border-color); font-weight:bold; }
         textarea,input { background:var(--bg-input); border:3px solid #e08a4a; border-radius:14px; color:var(--text-color); font-family:'Press Start 2P',monospace; font-size:calc(0.45rem * var(--font-size-multiplier)); padding:10px; width:100%; margin-top:8px; }
         .auth-modal,.settings-modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:100; display:flex; justify-content:center; align-items:center; }
-        .auth-card,.settings-card { background:var(--bg-primary); border:3px solid var(--border-color); border-radius:28px; padding:30px; width:380px; max-width:90%; color:var(--text-color); }
+        .auth-card,.settings-card { background:var(--bg-primary); border:3px solid var(--border-color); border-radius:28px; padding:30px; width:420px; max-width:90%; color:var(--text-color); }
         .settings-row { display:flex; justify-content:space-between; align-items:center; margin:15px 0; flex-wrap:wrap; gap:10px; }
-        .settings-row label { font-size:calc(0.5rem * var(--font-size-multiplier)); }
         .font-size-btns { display:flex; gap:6px; }
         .font-size-btns button { min-width:40px; background:var(--btn-bg); border:none; color:#FFF; padding:6px; cursor:pointer; border-radius:8px; font-family:inherit; font-size:calc(0.5rem * var(--font-size-multiplier)); }
         .font-size-btns button.active { background:var(--border-color); color:#121624; }
@@ -86,7 +86,6 @@
         .profile-avatar { font-size:80px; margin-bottom:10px; cursor:pointer; }
         .profile-avatar:hover { transform:scale(1.1); }
         .profile-stats { text-align:left; margin-top:20px; font-size:calc(0.5rem * var(--font-size-multiplier)); }
-        .profile-stats p { margin:10px 0; color:var(--text-color); }
         .progress-bar-container { background:#2a2f40; border-radius:20px; height:12px; overflow:hidden; margin:10px 0; }
         .progress-bar { height:100%; background:var(--border-color); width:0%; border-radius:20px; }
         .ranks-table { width:100%; border-collapse:collapse; background:var(--bg-secondary); border-radius:16px; overflow:hidden; font-size:calc(0.45rem * var(--font-size-multiplier)); }
@@ -99,7 +98,6 @@
         .pay-btn { background:#2a7a3a; border:none; font-family:inherit; font-size:calc(0.55rem * var(--font-size-multiplier)); font-weight:bold; padding:12px 30px; color:#FFF; cursor:pointer; box-shadow:4px 4px 0 #1a4a2a; border-radius:14px; margin-top:10px; }
         .avatar-modal,.admin-chat-modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:300; display:flex; justify-content:center; align-items:center; }
         .avatar-card,.admin-chat-card { background:var(--bg-primary); border:3px solid var(--border-color); border-radius:28px; padding:25px; width:500px; max-width:90%; color:var(--text-color); }
-        .avatar-card h3,.admin-chat-card h3 { font-size:calc(0.7rem * var(--font-size-multiplier)); }
         .avatar-selector { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin:15px 0; }
         .avatar-option { font-size:2.5rem; padding:10px; border:3px solid transparent; border-radius:16px; cursor:pointer; background:var(--bg-card); }
         .avatar-option:hover { border-color:var(--border-color); }
@@ -109,6 +107,9 @@
         .refresh-bottom { margin-top:25px; text-align:center; }
         footer { text-align:center; margin-top:30px; font-size:calc(0.4rem * var(--font-size-multiplier)); color:var(--text-color); border-top:2px solid #aa7a52; padding-top:20px; }
         p { font-size:calc(0.5rem * var(--font-size-multiplier)); line-height:2; }
+        .verify-code-area { display:none; }
+        .verify-code-area.active { display:block; }
+        .danger-btn { background:#8a2a2a !important; }
     </style>
 </head>
 <body>
@@ -116,8 +117,16 @@
 
 <div id="authModal" class="auth-modal">
     <div class="auth-card">
-        <div id="loginForm"><h2>🔐 ВХОД</h2><input type="text" id="modalLoginName" placeholder="НОМЕР ИЛИ Admin"><input type="password" id="modalLoginPass" placeholder="ПАРОЛЬ"><div class="auth-buttons"><button id="modalLoginBtn" class="pixel-btn">ВОЙТИ</button></div><div class="switch-auth" id="switchToRegister">НЕТ АККАУНТА? РЕГИСТРАЦИЯ</div></div>
-        <div id="registerForm" style="display:none;"><h2>📝 РЕГИСТРАЦИЯ</h2><input type="tel" id="modalRegPhone" placeholder="НОМЕР ТЕЛЕФОНА"><input type="password" id="modalRegPass" placeholder="ПАРОЛЬ"><div class="auth-buttons"><button id="modalRegisterBtn" class="pixel-btn">ЗАРЕГИСТРИРОВАТЬСЯ</button></div><div class="switch-auth" id="switchToLogin">УЖЕ ЕСТЬ АККАУНТ? ВОЙТИ</div></div>
+        <div id="loginForm"><h2>🔐 ВХОД</h2><input type="text" id="modalLoginName" placeholder="НОМЕР ТЕЛЕФОНА ИЛИ Admin"><input type="password" id="modalLoginPass" placeholder="ПАРОЛЬ"><div class="auth-buttons"><button id="modalLoginBtn" class="pixel-btn">ВОЙТИ</button></div><div class="switch-auth" id="switchToRegister">НЕТ АККАУНТА? РЕГИСТРАЦИЯ</div></div>
+        <div id="registerForm" style="display:none;">
+            <h2>📝 РЕГИСТРАЦИЯ</h2>
+            <input type="tel" id="modalRegPhone" placeholder="НОМЕР ТЕЛЕФОНА (+7...)">
+            <input type="text" id="modalRegLogin" placeholder="ПРИДУМАЙТЕ ЛОГИН">
+            <input type="password" id="modalRegPass" placeholder="ПАРОЛЬ">
+            <div id="verifyCodeArea" class="verify-code-area"><p style="text-align:center;font-size:0.5rem;margin:10px 0;">📲 НА ВАШ НОМЕР ОТПРАВЛЕН КОД</p><input type="text" id="modalRegCode" placeholder="КОД ИЗ СМС"></div>
+            <div class="auth-buttons"><button id="modalRegisterBtn" class="pixel-btn">ПОЛУЧИТЬ КОД</button></div>
+            <div class="switch-auth" id="switchToLogin">УЖЕ ЕСТЬ АККАУНТ? ВОЙТИ</div>
+        </div>
     </div>
 </div>
 
@@ -127,22 +136,15 @@
         <h2>⚙️ НАСТРОЙКИ</h2>
         <div class="settings-row"><label>🔤 ШРИФТ:</label><div class="font-size-btns"><button data-size="0.8">A-</button><button data-size="1" class="active">A</button><button data-size="1.3">A+</button></div></div>
         <div class="settings-row"><label>🎨 ТЕМА:</label><select id="themeSelect" class="pixel-btn" style="font-size:calc(0.5rem * var(--font-size-multiplier));background:var(--btn-bg);color:#FFF;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;"><option value="dark">🌙 ТЁМНАЯ</option><option value="light">☀️ СВЕТЛАЯ</option></select></div>
+        <div class="settings-row" style="justify-content:center;margin-top:25px;"><button id="deleteAccountBtn" class="pixel-btn danger-btn">🗑️ УДАЛИТЬ АККАУНТ</button></div>
     </div>
 </div>
-
-<div id="avatarPickerModal" class="avatar-modal" style="display:none;">
-    <div class="avatar-card"><div style="text-align:right;cursor:pointer;font-size:20px;color:var(--border-color);margin-bottom:5px;" id="closeAvatar">✖</div><h3>🎨 ВЫБЕРИ АВАТАРКУ</h3><div class="avatar-selector" id="avatarSelector"></div><button id="saveAvatarBtn" class="pixel-btn" style="background:#2a6a3a;margin-top:15px;">✅ СОХРАНИТЬ</button></div>
-</div>
-
-<div id="adminChatModal" class="admin-chat-modal" style="display:none;">
-    <div class="admin-chat-card"><div style="text-align:right;cursor:pointer;font-size:20px;color:var(--border-color);margin-bottom:5px;" id="closeAdminChat">✖</div><h3>🛎️ ЧАТ С АДМИНОМ</h3><div class="chat-window" id="adminChatMessages" style="height:250px;"></div><div id="adminReplyArea"></div></div>
-</div>
+<div id="avatarPickerModal" class="avatar-modal" style="display:none;"><div class="avatar-card"><div style="text-align:right;cursor:pointer;font-size:20px;color:var(--border-color);margin-bottom:5px;" id="closeAvatar">✖</div><h3>🎨 ВЫБЕРИ АВАТАРКУ</h3><div class="avatar-selector" id="avatarSelector"></div><button id="saveAvatarBtn" class="pixel-btn" style="background:#2a6a3a;margin-top:15px;">✅ СОХРАНИТЬ</button></div></div>
+<div id="adminChatModal" class="admin-chat-modal" style="display:none;"><div class="admin-chat-card"><div style="text-align:right;cursor:pointer;font-size:20px;color:var(--border-color);margin-bottom:5px;" id="closeAdminChat">✖</div><h3>🛎️ ЧАТ С АДМИНОМ</h3><div class="chat-window" id="adminChatMessages" style="height:250px;"></div><div id="adminReplyArea"></div></div></div>
 
 <div id="mainContent" class="container" style="display:none;">
     <div class="top-bar"><div class="site-title"><h1>◢ PIXEL PROJECT ◣</h1></div><div class="user-panel-right"><span class="user-name" id="profileLinkText">👤 <span id="currentUserName"></span></span><span class="user-rank" id="userRankTop">🏅</span><button id="cartTopBtn" class="cart-btn-top">🛒<span id="cartCountTop" class="cart-count" style="display:none;">0</span></button><button id="settingsBtn" class="settings-btn">⚙️</button><button class="pixel-btn" id="logoutBtn">🚪 ВЫХОД</button></div></div>
-    <div class="nav-horizontal">
-        <button class="nav-btn" data-page="home">🏠 ГЛАВНАЯ</button><button class="nav-btn" data-page="catalog">🎲 КАТАЛОГ</button><button class="nav-btn" data-page="rentals">📅 БРОНЬ</button><button class="nav-btn" data-page="shop">🛒 МАГАЗИН</button><button class="nav-btn" data-page="cart">🛍️ КОРЗИНА</button><button class="nav-btn" data-page="about">ℹ️ О НАС</button><button class="nav-btn" data-page="contacts">📞 КОНТАКТЫ</button>
-    </div>
+    <div class="nav-horizontal"><button class="nav-btn" data-page="home">🏠 ГЛАВНАЯ</button><button class="nav-btn" data-page="catalog">🎲 КАТАЛОГ</button><button class="nav-btn" data-page="rentals">📅 БРОНЬ</button><button class="nav-btn" data-page="shop">🛒 МАГАЗИН</button><button class="nav-btn" data-page="about">ℹ️ О НАС</button><button class="nav-btn" data-page="contacts">📞 КОНТАКТЫ</button></div>
     <div id="home" class="page active-page"><h2>⚡ ИГРАЙ ПОД ОТКРЫТЫМ НЕБОМ ⚡</h2><p style="margin:15px 0;">🎲 ПРОКАТ НАСТОЛЬНЫХ ИГР — КОМСОМОЛЬСК-НА-АМУРЕ<br>☁️ БЕРИ НАСТОЛКУ, САДИСЬ ЗА СТОЛ<br>💸 ДЁШЕВО, УЮТНО, АТМОСФЕРНО</p><div class="grid-cards"><div class="card">🎲 500+ НАСТОЛОК</div><div class="card">🕹️ ОТ 150₽ / СУТКИ</div><div class="card">👥 НАЙДИ ДРУЗЕЙ</div><div class="card">🏆 VIP-СТОЛЫ</div></div></div>
     <div id="catalog" class="page"><h2>🎲 КАТАЛОГ</h2><div id="adminBtns1"></div><div id="gamesList" class="grid-cards"></div></div>
     <div id="rentals" class="page"><h2>📅 БРОНИРОВАНИЕ 2026</h2><p>СУТОЧНАЯ БРОНЬ &nbsp;<span style="background:#2a7a3a;padding:2px 8px;border-radius:8px;">🟢</span> <span style="background:#5a4a2a;padding:2px 8px;border-radius:8px;">🟠</span> <span style="background:#8a2a2a;padding:2px 8px;border-radius:8px;">🔴</span></p><div id="calendarContainer"></div><div class="refresh-bottom"><button id="resetBtn" class="pixel-btn" style="background:#8a2a2a;display:none;">🗑️ СБРОСИТЬ БРОНИ</button></div></div>
@@ -156,10 +158,9 @@
 <script>
 firebase.initializeApp({apiKey:"AIzaSyBxYgFJCrVcVTYxGEXkhXUmCENNvVGnRPA",authDomain:"pixel-project-c0e5d.firebaseapp.com",databaseURL:"https://pixel-project-c0e5d-default-rtdb.firebaseio.com",projectId:"pixel-project-c0e5d",storageBucket:"pixel-project-c0e5d.firebasestorage.app",messagingSenderId:"1076126139897",appId:"1:1076126139897:web:7e56a6a40c8efc41a7b028"});
 var db=firebase.database();
-
 var userSettings=JSON.parse(localStorage.getItem('px_settings')||'{"theme":"dark","fontSize":"1"}');
 var currentUser=JSON.parse(sessionStorage.getItem('px_curr')||'null');
-var users=[{login:"Admin",password:"1221",role:"admin",visits:0}],bookings={},games=[],store=[],globalChat=[],adminChat=[];
+var users=[{login:"Admin",phone:"admin",password:"1221",displayName:"ADMIN",role:"admin",visits:0}],bookings={},games=[],store=[],globalChat=[],adminChat=[];
 var cart=JSON.parse(localStorage.getItem('px_cart')||'{}');
 var userAvatars=JSON.parse(localStorage.getItem('px_avatars')||'{}'),selectedAvatar=null;
 var AVATARS=['🎲','🎮','🧙‍♂️','🐉','🎯','👾','🦊','🐱','🦄','🤖','👻','🎪','🎭','🎨','🃏','👑'];
@@ -168,11 +169,11 @@ var DAYS=["ПН","ВТ","СР","ЧТ","ПТ","СБ","ВС"];
 var TODAY=new Date();TODAY.setHours(0,0,0,0);
 var cm=TODAY.getMonth(),cy=TODAY.getFullYear();
 var RANKS=[{name:"🍂 НОВИЧОК",vn:10,d:1},{name:"🎲 ЛЮБИТЕЛЬ",vn:20,d:2},{name:"🃏 ИГРОК",vn:30,d:3},{name:"⭐ ЗНАТОК",vn:40,d:4},{name:"🏆 МАСТЕР",vn:50,d:5},{name:"👑 ЭКСПЕРТ",vn:60,d:6},{name:"💎 ПРОФИ",vn:70,d:7},{name:"🔥 ВЕТЕРАН",vn:80,d:8},{name:"🎯 ЛЕГЕНДА",vn:90,d:9},{name:"🧙‍♂️ ГРОССМЕЙСТЕР",vn:100,d:10},{name:"⚡ ХРАНИТЕЛЬ",vn:110,d:11},{name:"🌟 ПОВЕЛИТЕЛЬ",vn:120,d:12},{name:"🏅 МАСТЕР ВСЕЛЕННОЙ",vn:130,d:13},{name:"🎖️ ИГРОК ГОДА",vn:140,d:14},{name:"👑 КОРОЛЬ НАСТОЛОК",vn:150,d:15}];
+var regPhone='',regLogin='',regPass='',regCode='',generatedCode='';
 
 function applySettings(){document.documentElement.style.setProperty('--font-size-multiplier',userSettings.fontSize);document.body.classList.toggle('theme-light',userSettings.theme==='light');var ts=document.getElementById('themeSelect');if(ts)ts.value=userSettings.theme;document.querySelectorAll('.font-size-btns button').forEach(function(b){b.classList.remove('active');});var ab=document.querySelector('.font-size-btns button[data-size="'+userSettings.fontSize+'"]');if(ab)ab.classList.add('active');}
 function saveSettings(){localStorage.setItem('px_settings',JSON.stringify(userSettings));applySettings();}
 function openSettings(){document.getElementById('settingsModal').style.display='flex';var ts=document.getElementById('themeSelect');if(ts)ts.value=userSettings.theme;document.querySelectorAll('.font-size-btns button').forEach(function(b){b.classList.remove('active');});var ab=document.querySelector('.font-size-btns button[data-size="'+userSettings.fontSize+'"]');if(ab)ab.classList.add('active');}
-
 function saveDB(k,v){db.ref(k).set(v);}
 function getAvatar(l){return(userAvatars[l]&&userAvatars[l].startsWith('data:image'))?userAvatars[l]:(userAvatars[l]||'🎲');}
 function getRank(v){var c=RANKS[0],n=null;for(var i=0;i<RANKS.length;i++){if(v>=RANKS[i].vn){c=RANKS[i];n=(i+1<RANKS.length)?RANKS[i+1]:null;}else{if(!n&&i>0)n=RANKS[i];break;}}return{c:c,n:n};}
@@ -194,13 +195,61 @@ db.ref('store').on('value',function(s){store=s.val()||[];renderStore();});
 db.ref('globalChat').on('value',function(s){globalChat=s.val()||[];renderChat();});
 db.ref('adminChat').on('value',function(s){adminChat=s.val()||[];renderAdminChat();});
 
+function startReg(){
+    var ph=document.getElementById('modalRegPhone').value.trim();
+    var lg=document.getElementById('modalRegLogin').value.trim();
+    var pa=document.getElementById('modalRegPass').value.trim();
+    if(!ph||!lg||!pa){alert("⚠️ ЗАПОЛНИТЕ ВСЕ ПОЛЯ");return;}
+    if(lg.toLowerCase()==='admin'){alert("⚠️ ЛОГИН ЗАРЕЗЕРВИРОВАН");return;}
+    for(var i=0;i<users.length;i++){if(users[i].phone===ph){alert("⚠️ НОМЕР УЖЕ ЗАРЕГИСТРИРОВАН");return;}}
+    for(var i=0;i<users.length;i++){if(users[i].displayName&&users[i].displayName.toUpperCase()===lg.toUpperCase()){alert("⚠️ ЛОГИН УЖЕ ЗАНЯТ");return;}}
+    regPhone=ph;regLogin=lg.toUpperCase();regPass=pa;
+    generatedCode=String(Math.floor(1000+Math.random()*9000));
+    alert("📲 КОД ОТПРАВЛЕН НА НОМЕР "+ph+"\n\n(ДЕМО-РЕЖИМ)\nКОД: "+generatedCode);
+    document.getElementById('verifyCodeArea').classList.add('active');
+    document.getElementById('modalRegisterBtn').innerText='✅ ПОДТВЕРДИТЬ';
+    document.getElementById('modalRegisterBtn').onclick=finishReg;
+}
+function finishReg(){
+    var userCode=document.getElementById('modalRegCode').value.trim();
+    if(userCode!==generatedCode){alert("❌ НЕВЕРНЫЙ КОД!");return;}
+    users.push({login:regPhone,phone:regPhone,password:regPass,displayName:regLogin,role:"guest",visits:0});
+    saveDB('users',users);
+    alert("✅ РЕГИСТРАЦИЯ УСПЕШНА! ВОЙДИТЕ.");
+    document.getElementById('registerForm').style.display='none';document.getElementById('loginForm').style.display='block';
+    document.getElementById('modalLoginName').value=regPhone;document.getElementById('modalLoginPass').value='';
+    document.getElementById('verifyCodeArea').classList.remove('active');
+    document.getElementById('modalRegisterBtn').innerText='ПОЛУЧИТЬ КОД';document.getElementById('modalRegisterBtn').onclick=startReg;
+    document.getElementById('modalRegPhone').value='';document.getElementById('modalRegLogin').value='';document.getElementById('modalRegPass').value='';document.getElementById('modalRegCode').value='';
+}
+
+function deleteAccount(){
+    if(!currentUser){alert("⚠️ ВОЙДИТЕ СНАЧАЛА");return;}
+    if(currentUser.role==='admin'){alert("⚠️ НЕЛЬЗЯ УДАЛИТЬ АДМИНА");return;}
+    if(confirm("⚠️ ВЫ УВЕРЕНЫ?\n\nВСЕ ВАШИ ДАННЫЕ БУДУТ УДАЛЕНЫ!\n\nЭТО ДЕЙСТВИЕ НЕОБРАТИМО!")){
+        if(confirm("⚠️⚠️ ПОСЛЕДНЕЕ ПОДТВЕРЖДЕНИЕ!\n\nАККАУНТ БУДЕТ УДАЛЁН НАВСЕГДА!")){
+            users=users.filter(function(u){return u.login!==currentUser.login;});
+            saveDB('users',users);
+            var keys=Object.keys(bookings);
+            for(var i=0;i<keys.length;i++){if(bookings[keys[i]].u===currentUser.login)delete bookings[keys[i]];}
+            saveDB('bookings',bookings);
+            delete userAvatars[currentUser.login];localStorage.setItem('px_avatars',JSON.stringify(userAvatars));
+            cart={};localStorage.setItem('px_cart','{}');
+            currentUser=null;sessionStorage.removeItem('px_curr');
+            document.getElementById('settingsModal').style.display='none';
+            checkAuth();
+            alert("✅ АККАУНТ УДАЛЁН");
+        }
+    }
+}
+
 function openAvatarPicker(){if(!currentUser)return;selectedAvatar=getAvatar(currentUser.login);var sel=document.getElementById('avatarSelector');sel.innerHTML='';for(var i=0;i<AVATARS.length;i++){(function(a){var d=document.createElement('div');d.className='avatar-option';d.textContent=a;if(a===selectedAvatar&&!selectedAvatar.startsWith('data:image'))d.classList.add('selected');d.onclick=function(){var all=sel.querySelectorAll('.avatar-option');for(var j=0;j<all.length;j++)all[j].classList.remove('selected');d.classList.add('selected');selectedAvatar=a;};sel.appendChild(d);})(AVATARS[i]);}var up=document.createElement('div');up.className='avatar-option';up.textContent='📷';up.onclick=function(){var inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){selectedAvatar=ev.target.result;var all=sel.querySelectorAll('.avatar-option');for(var j=0;j<all.length;j++)all[j].classList.remove('selected');up.classList.add('selected');};r.readAsDataURL(f);};inp.click();};if(selectedAvatar&&selectedAvatar.startsWith('data:image'))up.classList.add('selected');sel.appendChild(up);document.getElementById('avatarPickerModal').style.display='flex';}
 function closeAvatarPicker(){document.getElementById('avatarPickerModal').style.display='none';}
 function saveAvatar(){if(!currentUser||!selectedAvatar)return;userAvatars[currentUser.login]=selectedAvatar;localStorage.setItem('px_avatars',JSON.stringify(userAvatars));closeAvatarPicker();showProfile();}
 function openAdminChat(){document.getElementById('adminChatModal').style.display='flex';renderAdminChat();renderAdminReplyArea();}
 function closeAdminChat(){document.getElementById('adminChatModal').style.display='none';}
 
-function renderCalendar(){var c=document.getElementById('calendarContainer');if(!c)return;var ia=currentUser&&currentUser.role=='admin';var fd=new Date(cy,cm,1),ld=new Date(cy,cm+1,0),dim=ld.getDate(),sd=(fd.getDay()+6)%7;var h='<div style="display:flex;justify-content:center;gap:15px;margin-bottom:15px;"><button class="pixel-btn" onclick="chM(-1)">◀</button><span style="font-size:calc(0.7rem * var(--font-size-multiplier));font-weight:bold;color:var(--border-color);">'+MONTHS[cm]+' '+cy+'</span><button class="pixel-btn" onclick="chM(1)">▶</button></div><div class="calendar-grid">';for(var i=0;i<7;i++)h+='<div class="calendar-day-header">'+DAYS[i]+'</div>';for(var i=0;i<sd;i++)h+='<div class="calendar-day" style="background:transparent;"></div>';for(var d=1;d<=dim;d++){var dk=fdk(cy,cm,d),bk=bookings[dk],tk=bk&&typeof bk=='object',cf=tk&&bk.cf===true,bu=tk?bk.u:null;var cd2=new Date(cy,cm,d),ip=cd2<TODAY,it=cd2.getTime()==TODAY.getTime();var cc='calendar-day',ct='<span style="font-size:calc(0.6rem * var(--font-size-multiplier));">'+d+'</span>';if(ip)cc+=' past';else if(it){cc+=' today';if(cf&&bu){cc+=' confirmed';ct+='<span style="font-size:calc(0.4rem * var(--font-size-multiplier));">'+bu+'</span>';}else if(tk){cc+=' booked';ct+='<span style="font-size:calc(0.4rem * var(--font-size-multiplier));">'+bu+'</span>';}else cc+=' free';}else if(cf&&bu){cc+=' confirmed';ct+='<span style="font-size:calc(0.4rem * var(--font-size-multiplier));">'+bu+'</span>';}else if(tk){cc+=' booked';ct+='<span style="font-size:calc(0.4rem * var(--font-size-multiplier));">'+bu+'</span>';}else cc+=' free';if(tk&&ia&&!cf&&!ip&&bu)ct+='<button style="background:#aa2a2a;border:none;color:#fff;font-size:0.55rem;padding:2px 5px;border-radius:8px;cursor:pointer;margin-top:3px;" data-dk="'+dk+'" data-bu="'+bu+'" class="cfb">✅</button>';h+='<div class="'+cc+'" data-dk="'+dk+'">'+ct+'</div>';}h+='</div>';c.innerHTML=h;c.querySelectorAll('.calendar-day.free').forEach(function(e){e.onclick=function(){if(!currentUser){alert("🔒 ВОЙДИТЕ!");return;}var dk=this.getAttribute('data-dk');if(confirm('📅 ЗАБРОНИРОВАТЬ '+dk+'?')){bookings[dk]={u:currentUser.login,cf:false};saveDB('bookings',bookings);}};});c.querySelectorAll('.cfb').forEach(function(e){e.onclick=function(ev){ev.stopPropagation();var dk=this.getAttribute('data-dk'),bu=this.getAttribute('data-bu');if(confirm('✅ ПОДТВЕРДИТЬ '+bu+'?')){var idx=-1;for(var j=0;j<users.length;j++){if(users[j].login==bu){idx=j;break;}}if(idx!=-1){users[idx].visits=(users[idx].visits||0)+1;saveDB('users',users);}bookings[dk].cf=true;saveDB('bookings',bookings);}};});document.getElementById('resetBtn').style.display=ia?'inline-block':'none';}
+function renderCalendar(){var c=document.getElementById('calendarContainer');if(!c)return;var ia=currentUser&&currentUser.role=='admin';var fd=new Date(cy,cm,1),ld=new Date(cy,cm+1,0),dim=ld.getDate(),sd=(fd.getDay()+6)%7;var h='<div style="display:flex;justify-content:center;gap:15px;margin-bottom:15px;"><button class="pixel-btn" onclick="chM(-1)">◀</button><span style="font-size:calc(0.7rem * var(--font-size-multiplier));font-weight:bold;color:var(--border-color);">'+MONTHS[cm]+' '+cy+'</span><button class="pixel-btn" onclick="chM(1)">▶</button></div><div class="calendar-grid">';for(var i=0;i<7;i++)h+='<div class="calendar-day-header">'+DAYS[i]+'</div>';for(var i=0;i<sd;i++)h+='<div class="calendar-day" style="background:transparent;border:none;"></div>';for(var d=1;d<=dim;d++){var dk=fdk(cy,cm,d),bk=bookings[dk],tk=bk&&typeof bk=='object',cf=tk&&bk.cf===true,bu=tk?bk.u:null;var cd2=new Date(cy,cm,d),ip=cd2<TODAY,it=cd2.getTime()==TODAY.getTime();var cc='calendar-day';var ct='<span class="day-num">'+d+'</span>';if(ip)cc+=' past';else if(it){cc+=' today';if(cf&&bu){cc+=' confirmed';if(ia)ct+='<span class="day-user">'+bu+'</span>';}else if(tk){cc+=' booked';if(ia)ct+='<span class="day-user">'+bu+'</span>';}else cc+=' free';}else if(cf&&bu){cc+=' confirmed';if(ia)ct+='<span class="day-user">'+bu+'</span>';}else if(tk){cc+=' booked';if(ia)ct+='<span class="day-user">'+bu+'</span>';}else cc+=' free';if(tk&&ia&&!cf&&!ip&&bu)ct+='<button style="background:#aa2a2a;border:none;color:#fff;font-size:0.5rem;padding:2px 4px;border-radius:6px;cursor:pointer;margin-top:2px;" data-dk="'+dk+'" data-bu="'+bu+'" class="cfb">✅</button>';h+='<div class="'+cc+'" data-dk="'+dk+'">'+ct+'</div>';}h+='</div>';c.innerHTML=h;c.querySelectorAll('.calendar-day.free').forEach(function(e){e.onclick=function(){if(!currentUser){alert("🔒 ВОЙДИТЕ!");return;}var dk=this.getAttribute('data-dk');if(confirm('📅 ЗАБРОНИРОВАТЬ '+dk+'?')){bookings[dk]={u:currentUser.login,cf:false};saveDB('bookings',bookings);}};});c.querySelectorAll('.cfb').forEach(function(e){e.onclick=function(ev){ev.stopPropagation();var dk=this.getAttribute('data-dk'),bu=this.getAttribute('data-bu');if(confirm('✅ ПОДТВЕРДИТЬ '+bu+'?')){var idx=-1;for(var j=0;j<users.length;j++){if(users[j].login==bu){idx=j;break;}}if(idx!=-1){users[idx].visits=(users[idx].visits||0)+1;saveDB('users',users);}bookings[dk].cf=true;saveDB('bookings',bookings);}};});document.getElementById('resetBtn').style.display=ia?'inline-block':'none';}
 function chM(d){cm+=d;if(cm>11){cm=0;cy++;}if(cm<0){cm=11;cy--;}var now=new Date();if(cy<2026){cm=now.getMonth();cy=2026;}if(cy==2026&&cm<now.getMonth()){cm=now.getMonth();}renderCalendar();}
 function resetAll(){if(!currentUser||currentUser.role!='admin')return;if(confirm('⚠️ СБРОСИТЬ ВСЕ БРОНИ?')){bookings={};saveDB('bookings',bookings);}}
 
@@ -221,11 +270,11 @@ function updAdmin(){var ia=currentUser&&currentUser.role=='admin';document.getEl
 
 function showPage(p){var all=document.querySelectorAll('.page');for(var i=0;i<all.length;i++)all[i].classList.remove('active-page');var pp=document.getElementById('profilePage');if(pp)pp.remove();var t=document.getElementById(p);if(t)t.classList.add('active-page');if(p=='catalog'){updAdmin();renderGames();}if(p=='shop'){updAdmin();renderStore();}if(p=='cart')renderCart();if(p=='rentals')renderCalendar();}
 
-function showProfile(){var all=document.querySelectorAll('.page');for(var i=0;i<all.length;i++)all[i].classList.remove('active-page');var pp=document.getElementById('profilePage');if(pp)pp.remove();pp=document.createElement('div');pp.id='profilePage';pp.className='page active-page';pp.innerHTML='<div style="text-align:center;margin-bottom:20px;"><h1>◢ PIXEL PROJECT ◣</h1></div><div class="profile-wrapper"><div class="profile-left"><div class="profile-container"><div class="profile-avatar" id="profileAvatarDisplay" title="НАЖМИ ЧТОБЫ СМЕНИТЬ">🎲</div><div style="font-size:0.5rem;color:var(--text-secondary);margin-bottom:15px;">👆 НАЖМИ НА АВАТАРКУ</div><div class="profile-stats"><p>👤 <b>ИМЯ:</b> <span id="profName"></span></p><p>👣 <b>ПОСЕЩЕНИЙ:</b> <span id="profVis"></span></p><p>🎁 <b>СКИДКА:</b> <span id="profDisc"></span>%</p><div class="profile-progress"><p>📈 <b>ПРОГРЕСС:</b></p><div class="progress-bar-container"><div class="progress-bar" id="profBar"></div></div><p id="profNext" style="margin-top:8px;font-size:0.55rem;"></p></div></div></div></div><div class="profile-right"><h3>📜 ТАБЛИЦА ЗВАНИЙ</h3><table class="ranks-table"><thead><tr><th>ЗВАНИЕ</th><th>ПОСЕЩЕНИЙ</th><th>СКИДКА</th></tr></thead><tbody id="ranksBody"></tbody></table><div class="profile-chat-section"><h3>💬 ОБЩИЙ ЧАТ</h3><div class="chat-window" id="globalChatMessages"></div><textarea id="chatMsg" rows="2" placeholder="СООБЩЕНИЕ..."></textarea><button id="sendGlobalMsg" class="pixel-btn">📨 ОТПРАВИТЬ</button></div></div></div>';document.getElementById('mainContent').appendChild(pp);document.getElementById('profileAvatarDisplay').onclick=openAvatarPicker;document.getElementById('sendGlobalMsg').onclick=sendChat;if(currentUser){var v=currentUser.visits||0,d2=disc(v),r=getRank(v);document.getElementById('profName').innerText=currentUser.role=='admin'?'ADMIN':currentUser.login;document.getElementById('profVis').innerText=v;document.getElementById('profDisc').innerText=d2;var pv=0,nt='';if(currentUser.role=='admin'){pv=100;nt='👑 АДМИНИСТРАТОР';}else if(r.n){var nd=r.n.vn-(r.c.vn||0),ac=v-(r.c.vn||0);pv=nd>0?(ac/nd)*100:100;nt='🔼 ДАЛЕЕ: '+r.n.name+' ('+(r.n.vn-v)+' ПОС.)';}else{pv=100;nt='🎉 МАКСИМУМ!';}document.getElementById('profBar').style.width=pv+'%';document.getElementById('profNext').innerHTML=nt;var tb=document.getElementById('ranksBody');if(tb){tb.innerHTML='';RANKS.forEach(function(rk){var row=document.createElement('tr');if(currentUser.role!='admin'&&r.c&&r.c.name==rk.name)row.className='current-rank-row';row.innerHTML='<td>'+rk.name+'</td><td>'+rk.vn+'</td><td>'+rk.d+'%</td>';tb.appendChild(row);});}var pad=document.getElementById('profileAvatarDisplay');if(pad){var av=getAvatar(currentUser.login);if(av&&av.startsWith('data:image'))pad.innerHTML='<img src="'+av+'" style="width:80px;height:80px;object-fit:cover;border-radius:16px;">';else pad.innerHTML=av||'🎲';}}renderChat();}
+function showProfile(){var all=document.querySelectorAll('.page');for(var i=0;i<all.length;i++)all[i].classList.remove('active-page');var pp=document.getElementById('profilePage');if(pp)pp.remove();pp=document.createElement('div');pp.id='profilePage';pp.className='page active-page';pp.innerHTML='<div style="text-align:center;margin-bottom:20px;"><h1>◢ PIXEL PROJECT ◣</h1></div><div class="profile-wrapper"><div class="profile-left"><div class="profile-container"><div class="profile-avatar" id="profileAvatarDisplay" title="НАЖМИ ЧТОБЫ СМЕНИТЬ">🎲</div><div style="font-size:0.5rem;color:var(--text-secondary);margin-bottom:15px;">👆 НАЖМИ НА АВАТАРКУ</div><div class="profile-stats"><p>👤 <b>ЛОГИН:</b> <span id="profName"></span></p><p>👣 <b>ПОСЕЩЕНИЙ:</b> <span id="profVis"></span></p><p>🎁 <b>СКИДКА:</b> <span id="profDisc"></span>%</p><div class="profile-progress"><p>📈 <b>ПРОГРЕСС:</b></p><div class="progress-bar-container"><div class="progress-bar" id="profBar"></div></div><p id="profNext" style="margin-top:8px;font-size:0.55rem;"></p></div></div></div></div><div class="profile-right"><h3>📜 ТАБЛИЦА ЗВАНИЙ</h3><table class="ranks-table"><thead><tr><th>ЗВАНИЕ</th><th>ПОСЕЩЕНИЙ</th><th>СКИДКА</th></tr></thead><tbody id="ranksBody"></tbody></table><div class="profile-chat-section"><h3>💬 ОБЩИЙ ЧАТ</h3><div class="chat-window" id="globalChatMessages"></div><textarea id="chatMsg" rows="2" placeholder="СООБЩЕНИЕ..."></textarea><button id="sendGlobalMsg" class="pixel-btn">📨 ОТПРАВИТЬ</button></div></div></div>';document.getElementById('mainContent').appendChild(pp);document.getElementById('profileAvatarDisplay').onclick=openAvatarPicker;document.getElementById('sendGlobalMsg').onclick=sendChat;if(currentUser){var v=currentUser.visits||0,d2=disc(v),r=getRank(v);var displayName=currentUser.displayName||currentUser.login;document.getElementById('profName').innerText=displayName;document.getElementById('profVis').innerText=v;document.getElementById('profDisc').innerText=d2;var pv=0,nt='';if(currentUser.role=='admin'){pv=100;nt='👑 АДМИНИСТРАТОР';}else if(r.n){var nd=r.n.vn-(r.c.vn||0),ac=v-(r.c.vn||0);pv=nd>0?(ac/nd)*100:100;nt='🔼 ДАЛЕЕ: '+r.n.name+' ('+(r.n.vn-v)+' ПОС.)';}else{pv=100;nt='🎉 МАКСИМУМ!';}document.getElementById('profBar').style.width=pv+'%';document.getElementById('profNext').innerHTML=nt;var tb=document.getElementById('ranksBody');if(tb){tb.innerHTML='';RANKS.forEach(function(rk){var row=document.createElement('tr');if(currentUser.role!='admin'&&r.c&&r.c.name==rk.name)row.className='current-rank-row';row.innerHTML='<td>'+rk.name+'</td><td>'+rk.vn+'</td><td>'+rk.d+'%</td>';tb.appendChild(row);});}var pad=document.getElementById('profileAvatarDisplay');if(pad){var av=getAvatar(currentUser.login);if(av&&av.startsWith('data:image'))pad.innerHTML='<img src="'+av+'" style="width:80px;height:80px;object-fit:cover;border-radius:16px;">';else pad.innerHTML=av||'🎲';}}renderChat();}
 
-function checkAuth(){if(currentUser){document.getElementById('authModal').style.display='none';document.getElementById('mainContent').style.display='block';document.getElementById('currentUserName').innerText=currentUser.role=='admin'?'ADMIN':currentUser.login;document.getElementById('userRankTop').innerHTML=rn();showPage('home');}else{document.getElementById('authModal').style.display='flex';document.getElementById('mainContent').style.display='none';}}
-function login(){var l=document.getElementById('modalLoginName').value.trim(),p=document.getElementById('modalLoginPass').value.trim();var u=null;for(var i=0;i<users.length;i++){if(users[i].login==l&&users[i].password==p){u=users[i];break;}}if(!u){alert("❌ НЕВЕРНЫЙ ЛОГИН ИЛИ ПАРОЛЬ!");return;}currentUser={login:u.login,role:u.role,visits:u.visits||0};sessionStorage.setItem('px_curr',JSON.stringify(currentUser));checkAuth();}
-function reg(){var ph=document.getElementById('modalRegPhone').value.trim(),pa=document.getElementById('modalRegPass').value.trim();if(!ph||!pa){alert("⚠️ ЗАПОЛНИТЕ ПОЛЯ");return;}if(ph.toLowerCase()=='admin'){alert("⚠️ ЗАРЕЗЕРВИРОВАНО");return;}for(var i=0;i<users.length;i++){if(users[i].login==ph){alert("⚠️ УЖЕ СУЩЕСТВУЕТ");return;}}users.push({login:ph,password:pa,role:"guest",visits:0});saveDB('users',users);alert("✅ УСПЕШНО! ВОЙДИТЕ.");document.getElementById('loginForm').style.display='block';document.getElementById('registerForm').style.display='none';document.getElementById('modalLoginName').value=ph;document.getElementById('modalLoginPass').value='';}
+function checkAuth(){if(currentUser){document.getElementById('authModal').style.display='none';document.getElementById('mainContent').style.display='block';var displayName=currentUser.displayName||currentUser.login;document.getElementById('currentUserName').innerText=displayName;document.getElementById('userRankTop').innerHTML=rn();showPage('home');}else{document.getElementById('authModal').style.display='flex';document.getElementById('mainContent').style.display='none';}}
+function login(){var l=document.getElementById('modalLoginName').value.trim(),p=document.getElementById('modalLoginPass').value.trim();var u=null;for(var i=0;i<users.length;i++){if((users[i].login==l||users[i].phone==l)&&users[i].password==p){u=users[i];break;}}if(!u){alert("❌ НЕВЕРНЫЙ ЛОГИН ИЛИ ПАРОЛЬ!");return;}currentUser={login:u.login,phone:u.phone,displayName:u.displayName,role:u.role,visits:u.visits||0};sessionStorage.setItem('px_curr',JSON.stringify(currentUser));checkAuth();}
+function reg(){alert("⚠️ ИСПОЛЬЗУЙТЕ КНОПКУ РЕГИСТРАЦИИ");}
 function logout(){currentUser=null;sessionStorage.removeItem('px_curr');checkAuth();}
 
 applySettings();
@@ -237,14 +286,15 @@ setTimeout(function(){
     document.getElementById('settingsBtn').onclick=openSettings;
     document.getElementById('openAdminChatBtn').onclick=openAdminChat;
     document.getElementById('modalLoginBtn').onclick=login;
-    document.getElementById('modalRegisterBtn').onclick=reg;
+    document.getElementById('modalRegisterBtn').onclick=startReg;
+    document.getElementById('deleteAccountBtn').onclick=deleteAccount;
     document.getElementById('resetBtn').onclick=resetAll;
     document.getElementById('closeAvatar').onclick=closeAvatarPicker;
     document.getElementById('closeAdminChat').onclick=closeAdminChat;
     document.getElementById('closeSettings').onclick=function(){document.getElementById('settingsModal').style.display='none';};
     document.getElementById('saveAvatarBtn').onclick=saveAvatar;
     document.getElementById('switchToRegister').onclick=function(){document.getElementById('loginForm').style.display='none';document.getElementById('registerForm').style.display='block';};
-    document.getElementById('switchToLogin').onclick=function(){document.getElementById('loginForm').style.display='block';document.getElementById('registerForm').style.display='none';};
+    document.getElementById('switchToLogin').onclick=function(){document.getElementById('loginForm').style.display='block';document.getElementById('registerForm').style.display='none';document.getElementById('verifyCodeArea').classList.remove('active');document.getElementById('modalRegisterBtn').innerText='ПОЛУЧИТЬ КОД';document.getElementById('modalRegisterBtn').onclick=startReg;};
     document.getElementById('themeSelect').onchange=function(){userSettings.theme=this.value;saveSettings();};
     document.querySelectorAll('.font-size-btns button').forEach(function(b){b.onclick=function(){userSettings.fontSize=this.getAttribute('data-size');saveSettings();};});
     document.getElementById('adminChatModal').onclick=function(e){if(e.target===this)closeAdminChat();};
