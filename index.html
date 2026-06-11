@@ -139,11 +139,8 @@
 </div>
 
 <script>
-// FIREBASE
 firebase.initializeApp({apiKey:"AIzaSyDwEsUN9--Gf7r5drvC6LfwtSayhyFotTc",authDomain:"pixel-project-c0e5d.firebaseapp.com",databaseURL:"https://pixel-project-c0e5d-default-rtdb.firebaseio.com",projectId:"pixel-project-c0e5d",storageBucket:"pixel-project-c0e5d.firebasestorage.app",messagingSenderId:"1076126139897",appId:"1:1076126139897:web:7e56a6a40c8efc41a7b028"});
-var db=firebase.database();
-var auth=firebase.auth();
-
+var db=firebase.database();var auth=firebase.auth();
 var YOOMONEY_WALLET='ЗДЕСЬ_НОМЕР_КОШЕЛЬКА';
 var userSettings=JSON.parse(localStorage.getItem('px_settings')||'{"theme":"dark","fontSize":"1"}');
 var currentUser=null;
@@ -178,55 +175,26 @@ db.ref('users').on('value',function(s){users=s.val()||[];});
 auth.onAuthStateChanged(function(user){
     if(user){
         var found=users.find(function(u){return u.uid===user.uid;});
-        if(found){
-            currentUser={uid:user.uid,email:user.email,displayName:found.displayName||user.email.split('@')[0],role:found.role||'guest',visits:found.visits||0};
-        }else{
-            var isAdmin=(user.email==='admin@pixel.ru');
-            currentUser={uid:user.uid,email:user.email,displayName:user.email.split('@')[0],role:isAdmin?'admin':'guest',visits:0};
-        }
+        if(found){currentUser={uid:user.uid,email:user.email,displayName:found.displayName||user.email.split('@')[0],role:found.role||'guest',visits:found.visits||0};}
+        else{var isAdmin=(user.email==='admin@pixel.ru');currentUser={uid:user.uid,email:user.email,displayName:user.email.split('@')[0],role:isAdmin?'admin':'guest',visits:0};}
         checkAuth();
-    }else{
-        currentUser=null;
-        checkAuth();
-    }
+    }else{currentUser=null;checkAuth();}
 });
 
-function login(){
-    var email=document.getElementById('modalLoginEmail').value.trim();
-    var pass=document.getElementById('modalLoginPass').value.trim();
-    if(!email||!pass){alert("⚠️ ЗАПОЛНИТЕ ПОЛЯ");return;}
-    auth.signInWithEmailAndPassword(email,pass).catch(function(e){alert("❌ "+e.message);});
-}
-function reg(){
-    var email=document.getElementById('modalRegEmail').value.trim();
-    var login=document.getElementById('modalRegLogin').value.trim();
-    var pass=document.getElementById('modalRegPass').value.trim();
-    if(!email||!login||!pass){alert("⚠️ ЗАПОЛНИТЕ ВСЕ ПОЛЯ");return;}
-    if(login.toLowerCase()==='admin'){alert("⚠️ ЛОГИН ЗАРЕЗЕРВИРОВАН");return;}
-    auth.createUserWithEmailAndPassword(email,pass).then(function(result){
-        var uid=result.user.uid;
-        var isAdmin=(email==='admin@pixel.ru');
-        users.push({uid:uid,email:email,displayName:login.toUpperCase(),role:isAdmin?'admin':'guest',visits:0});
-        saveDB('users',users);
-        if(!isAdmin) result.user.sendEmailVerification();
-        alert("✅ АККАУНТ СОЗДАН! ПРОВЕРЬТЕ ПОЧТУ ДЛЯ ПОДТВЕРЖДЕНИЯ.");
-        document.getElementById('registerForm').style.display='none';
-        document.getElementById('loginForm').style.display='block';
-    }).catch(function(e){alert("❌ "+e.message);});
-}
+function login(){var email=document.getElementById('modalLoginEmail').value.trim();var pass=document.getElementById('modalLoginPass').value.trim();if(!email||!pass){alert("⚠️ ЗАПОЛНИТЕ ПОЛЯ");return;}auth.signInWithEmailAndPassword(email,pass).catch(function(e){alert("❌ "+e.message);});}
+function reg(){var email=document.getElementById('modalRegEmail').value.trim();var login=document.getElementById('modalRegLogin').value.trim();var pass=document.getElementById('modalRegPass').value.trim();if(!email||!login||!pass){alert("⚠️ ЗАПОЛНИТЕ ВСЕ ПОЛЯ");return;}if(login.toLowerCase()==='admin'){alert("⚠️ ЛОГИН ЗАРЕЗЕРВИРОВАН");return;}auth.createUserWithEmailAndPassword(email,pass).then(function(result){var uid=result.user.uid;var isAdmin=(email==='admin@pixel.ru');users.push({uid:uid,email:email,displayName:login.toUpperCase(),role:isAdmin?'admin':'guest',visits:0});saveDB('users',users);if(!isAdmin)result.user.sendEmailVerification();alert("✅ АККАУНТ СОЗДАН! ПРОВЕРЬТЕ ПОЧТУ ДЛЯ ПОДТВЕРЖДЕНИЯ.");document.getElementById('registerForm').style.display='none';document.getElementById('loginForm').style.display='block';}).catch(function(e){alert("❌ "+e.message);});}
 function logout(){auth.signOut();}
+
 function deleteAccount(){
     if(!currentUser){return;}
     if(currentUser.email==='admin@pixel.ru'){alert("⚠️ НЕЛЬЗЯ УДАЛИТЬ АДМИНА");return;}
     if(confirm("⚠️ УДАЛИТЬ АККАУНТ?")){
         if(confirm("⚠️⚠️ ПОСЛЕДНЕЕ ПОДТВЕРЖДЕНИЕ!")){
+            var pass=prompt("🔐 ВВЕДИТЕ ПАРОЛЬ ДЛЯ ПОДТВЕРЖДЕНИЯ:");
+            if(!pass){return;}
+            var credential=firebase.auth.EmailAuthProvider.credential(currentUser.email,pass);
             var user=auth.currentUser;
-            if(user) user.delete().then(function(){
-                users=users.filter(function(u){return u.uid!==currentUser.uid;});
-                saveDB('users',users);
-                document.getElementById('settingsModal').style.display='none';
-                alert("✅ АККАУНТ УДАЛЁН");
-            }).catch(function(e){alert("❌ "+e.message);});
+            if(user){user.reauthenticateWithCredential(credential).then(function(){user.delete().then(function(){users=users.filter(function(u){return u.uid!==currentUser.uid;});saveDB('users',users);document.getElementById('settingsModal').style.display='none';alert("✅ АККАУНТ УДАЛЁН");}).catch(function(e){alert("❌ "+e.message);});}).catch(function(e){alert("❌ НЕВЕРНЫЙ ПАРОЛЬ!");});}
         }
     }
 }
@@ -260,18 +228,7 @@ function showPage(p){var all=document.querySelectorAll('.page');for(var i=0;i<al
 
 function showProfile(){var all=document.querySelectorAll('.page');for(var i=0;i<all.length;i++)all[i].classList.remove('active-page');var pp=document.getElementById('profilePage');if(pp)pp.remove();pp=document.createElement('div');pp.id='profilePage';pp.className='page active-page';pp.innerHTML='<div style="text-align:center;margin-bottom:20px;"><h1>◢ PIXEL PROJECT ◣</h1></div><div class="profile-wrapper"><div class="profile-left"><div class="profile-container"><div class="profile-avatar" id="profileAvatarDisplay" title="НАЖМИ ЧТОБЫ СМЕНИТЬ">🎲</div><div style="font-size:0.5rem;color:var(--text-secondary);margin-bottom:15px;">👆 НАЖМИ НА АВАТАРКУ</div><div class="profile-stats"><p>👤 <b>ЛОГИН:</b> <span id="profName"></span></p><p>👣 <b>ПОСЕЩЕНИЙ:</b> <span id="profVis"></span></p><p>🎁 <b>СКИДКА:</b> <span id="profDisc"></span>%</p><div class="profile-progress"><p>📈 <b>ПРОГРЕСС:</b></p><div class="progress-bar-container"><div class="progress-bar" id="profBar"></div></div><p id="profNext" style="margin-top:8px;font-size:0.55rem;"></p></div></div></div></div><div class="profile-right"><h3>📜 ТАБЛИЦА ЗВАНИЙ</h3><table class="ranks-table"><thead><tr><th>ЗВАНИЕ</th><th>ПОСЕЩЕНИЙ</th><th>СКИДКА</th></tr></thead><tbody id="ranksBody"></tbody></table><div class="profile-chat-section"><h3>💬 ОБЩИЙ ЧАТ</h3><div class="chat-window" id="globalChatMessages"></div><textarea id="chatMsg" rows="2" placeholder="СООБЩЕНИЕ..."></textarea><button id="sendGlobalMsg" class="pixel-btn">📨 ОТПРАВИТЬ</button></div></div></div>';document.getElementById('mainContent').appendChild(pp);document.getElementById('profileAvatarDisplay').onclick=openAvatarPicker;document.getElementById('sendGlobalMsg').onclick=sendChat;if(currentUser){var v=currentUser.visits||0,d2=disc(v),r=getRank(v);document.getElementById('profName').innerText=currentUser.displayName;document.getElementById('profVis').innerText=v;document.getElementById('profDisc').innerText=d2;var pv=0,nt='';if(currentUser.role=='admin'){pv=100;nt='👑 АДМИНИСТРАТОР';}else if(r.n){var nd=r.n.vn-(r.c.vn||0),ac=v-(r.c.vn||0);pv=nd>0?(ac/nd)*100:100;nt='🔼 ДАЛЕЕ: '+r.n.name+' ('+(r.n.vn-v)+' ПОС.)';}else{pv=100;nt='🎉 МАКСИМУМ!';}document.getElementById('profBar').style.width=pv+'%';document.getElementById('profNext').innerHTML=nt;var tb=document.getElementById('ranksBody');if(tb){tb.innerHTML='';RANKS.forEach(function(rk){var row=document.createElement('tr');if(currentUser.role!='admin'&&r.c&&r.c.name==rk.name)row.className='current-rank-row';row.innerHTML='<td>'+rk.name+'</td><td>'+rk.vn+'</td><td>'+rk.d+'%</td>';tb.appendChild(row);});}var pad=document.getElementById('profileAvatarDisplay');if(pad){var av=getAvatar(currentUser.uid);if(av&&av.startsWith('data:image'))pad.innerHTML='<img src="'+av+'" style="width:80px;height:80px;object-fit:cover;border-radius:16px;">';else pad.innerHTML=av||'🎲';}}renderChat();}
 
-function checkAuth(){
-    if(currentUser){
-        document.getElementById('authModal').style.display='none';
-        document.getElementById('mainContent').style.display='block';
-        document.getElementById('currentUserName').innerText=currentUser.displayName;
-        document.getElementById('userRankTop').innerHTML=rn();
-        showPage('home');
-    }else{
-        document.getElementById('authModal').style.display='flex';
-        document.getElementById('mainContent').style.display='none';
-    }
-}
+function checkAuth(){if(currentUser){document.getElementById('authModal').style.display='none';document.getElementById('mainContent').style.display='block';document.getElementById('currentUserName').innerText=currentUser.displayName;document.getElementById('userRankTop').innerHTML=rn();showPage('home');}else{document.getElementById('authModal').style.display='flex';document.getElementById('mainContent').style.display='none';}}
 
 applySettings();
 setTimeout(function(){
