@@ -33,6 +33,7 @@
         .cart-btn-top { background:var(--btn-bg); border:none; font-family:inherit; font-size:calc(0.6rem * var(--font-size-multiplier)); padding:5px 8px; color:#FFF; cursor:pointer; box-shadow:2px 2px 0 var(--btn-shadow); border-radius:8px; position:relative; }
         .cart-count { position:absolute; top:-6px; right:-6px; background:#f44; color:#fff; font-size:calc(0.35rem * var(--font-size-multiplier)); padding:2px 5px; border-radius:10px; font-weight:bold; min-width:16px; text-align:center; }
         .settings-btn { background:var(--btn-bg); border:none; font-family:inherit; font-size:calc(0.6rem * var(--font-size-multiplier)); padding:5px 8px; color:#FFF; cursor:pointer; box-shadow:2px 2px 0 var(--btn-shadow); border-radius:8px; }
+        .admin-chat-top-btn { background:#2a6a3a; border:none; font-family:inherit; font-size:calc(0.6rem * var(--font-size-multiplier)); padding:5px 8px; color:#FFF; cursor:pointer; box-shadow:2px 2px 0 #1a4a2a; border-radius:8px; display:none; }
         .nav-horizontal { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-bottom:15px; padding-bottom:10px; border-bottom:3px solid var(--border-color); }
         .nav-btn { background:var(--btn-bg); border:none; font-family:inherit; font-size:calc(0.45rem * var(--font-size-multiplier)); font-weight:bold; padding:8px 10px; color:#FFF; cursor:pointer; box-shadow:3px 3px 0 var(--btn-shadow); border-radius:10px; text-transform:uppercase; }
         .pixel-btn { background:var(--btn-bg); border:none; font-family:inherit; font-size:calc(0.5rem * var(--font-size-multiplier)); font-weight:bold; padding:10px 14px; margin:4px; color:#FFF; cursor:pointer; box-shadow:3px 3px 0 var(--btn-shadow); border-radius:10px; text-transform:uppercase; }
@@ -119,48 +120,6 @@
         .btn-cart.added { background:#2a7a3a; }
         .toast { position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#2a7a3a; color:#fff; padding:10px 20px; border-radius:10px; border:2px solid #4aff6a; z-index:9999; font-family:'Press Start 2P',monospace; font-size:0.45rem; animation:toastIn 0.3s ease; max-width:90%; text-align:center; }
         @keyframes toastIn { from{opacity:0;transform:translateX(-50%) translateY(-20px);} to{opacity:1;transform:translateX(-50%) translateY(0);} }
-
-        /* ============ МОБИЛЬНАЯ АДАПТАЦИЯ ============ */
-        @media (max-width: 768px) {
-            body { font-size:calc(0.55rem * var(--font-size-multiplier)); }
-            .container { margin:5px; padding:10px; border-radius:14px; }
-            .top-bar { flex-direction:column; align-items:stretch; gap:8px; }
-            .site-title h1 { font-size:calc(0.7rem * var(--font-size-multiplier)); text-align:center; }
-            .user-panel-right { justify-content:center; padding:5px; }
-            .nav-horizontal { gap:4px; }
-            .nav-btn { font-size:calc(0.35rem * var(--font-size-multiplier)); padding:6px 8px; }
-            .grid-cards { gap:10px; }
-            .card { width:calc(50% - 10px); min-width:140px; padding:10px; font-size:calc(0.4rem * var(--font-size-multiplier)); }
-            .card-img { font-size:2rem; }
-            .card-name { font-size:0.45rem; }
-            .card-price { font-size:0.35rem; }
-            .btn-rent,.btn-cart,.btn-delete { font-size:0.35rem; padding:5px 8px; }
-            .calendar-grid { gap:1px; padding:4px; }
-            .calendar-day-header { font-size:calc(0.25rem * var(--font-size-multiplier)); padding:2px 0; }
-            .calendar-day { font-size:calc(0.3rem * var(--font-size-multiplier)); padding:2px 0; min-height:28px; }
-            .profile-wrapper { flex-direction:column; }
-            .profile-left,.profile-right { min-width:100%; }
-            .ranks-table { font-size:calc(0.3rem * var(--font-size-multiplier)); }
-            .ranks-table th,.ranks-table td { padding:4px; }
-            .auth-card,.settings-card,.password-card,.add-item-card { max-width:95%; padding:15px; }
-            .auth-card h2,.add-item-card h2 { font-size:calc(0.7rem * var(--font-size-multiplier)); }
-            textarea,input,select { font-size:calc(0.5rem * var(--font-size-multiplier)); padding:10px; }
-            input[type="password"] { font-size:calc(0.5rem * var(--font-size-multiplier)); }
-            .switch-auth { font-size:calc(0.45rem * var(--font-size-multiplier)); }
-            .pixel-btn { font-size:calc(0.45rem * var(--font-size-multiplier)); padding:8px 12px; }
-            .chat-window { height:150px; font-size:calc(0.35rem * var(--font-size-multiplier)); }
-            .cart-item { font-size:calc(0.4rem * var(--font-size-multiplier)); }
-            .verify-bar { font-size:0.35rem; padding:6px 10px; }
-            .verify-bar .verify-btn { font-size:0.35rem; padding:5px 10px; }
-            .add-item-card label { font-size:calc(0.35rem * var(--font-size-multiplier)); }
-            .add-item-card .custom-photo-btn { font-size:0.35rem; }
-        }
-
-        @media (max-width: 400px) {
-            .card { width:100%; }
-            .nav-btn { font-size:calc(0.3rem * var(--font-size-multiplier)); padding:5px 6px; }
-            .site-title h1 { font-size:calc(0.6rem * var(--font-size-multiplier)); }
-        }
     </style>
 </head>
 <body>
@@ -200,7 +159,7 @@
 <div id="adminChatModal" class="admin-chat-modal" style="display:none;"><div class="admin-chat-card"><div style="text-align:right;cursor:pointer;font-size:20px;color:var(--border-color);margin-bottom:5px;" id="closeAdminChat">✖</div><h3>🛎️ ЧАТ С АДМИНОМ</h3><div class="chat-window" id="adminChatMessages" style="height:220px;"></div><div id="adminReplyArea"></div></div></div>
 
 <div id="mainContent" class="container" style="display:none;">
-    <div class="top-bar"><div class="site-title"><h1>◢ PIXEL PROJECT ◣</h1></div><div class="user-panel-right"><span class="user-name" id="profileLinkText">👤 <span id="currentUserName"></span></span><span class="user-rank" id="userRankTop">🏅</span><button id="cartTopBtn" class="cart-btn-top">🛍️<span id="cartCountTop" class="cart-count" style="display:none;">0</span></button><button id="settingsBtn" class="settings-btn">⚙️</button><button class="pixel-btn" id="logoutBtn">🚪 ВЫХОД</button></div></div>
+    <div class="top-bar"><div class="site-title"><h1>◢ PIXEL PROJECT ◣</h1></div><div class="user-panel-right"><span class="user-name" id="profileLinkText">👤 <span id="currentUserName"></span></span><span class="user-rank" id="userRankTop">🏅</span><button id="cartTopBtn" class="cart-btn-top">🛍️<span id="cartCountTop" class="cart-count" style="display:none;">0</span></button><button id="settingsBtn" class="settings-btn">⚙️</button><button id="adminChatTopBtn" class="admin-chat-top-btn" title="Чат с пользователями">💬</button><button class="pixel-btn" id="logoutBtn">🚪 ВЫХОД</button></div></div>
     <div class="verify-bar" id="verifyBar"><span>📧 ПОДТВЕРДИТЕ ПОЧТУ</span><button class="verify-btn" id="verifyBarCheckBtn">✅ Я ПОДТВЕРДИЛ</button><button class="resend-btn" id="verifyBarResendBtn">📨 ОТПРАВИТЬ ЕЩЁ РАЗ</button><span class="timer-text" id="verifyBarTimer"></span></div>
     <div class="nav-horizontal">
         <button class="nav-btn" data-page="home">🏠 ГЛАВНАЯ</button>
@@ -256,6 +215,7 @@ function fdk(y,m,d){return y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padSt
 function updateCartCount(){var c=0;for(var k in cart)c+=cart[k];var el=document.getElementById('cartCountTop');if(el){el.style.display=c>0?'inline-block':'none';if(c>0)el.innerText=c;}}
 function addUserToDB(uid,email,name,role){db.ref('users').once('value',function(s){var all=s.val()||[];var found=false;for(var i=0;i<all.length;i++){if(all[i].uid===uid){found=true;break;}}if(!found){all.push({uid:uid,email:email,displayName:name,role:role,visits:0});db.ref('users').set(all);}});}
 function updateVerifyBar(){var bar=document.getElementById('verifyBar');if(currentUser&&!isVerified()){bar.classList.add('show');}else{bar.classList.remove('show');}}
+function updateAdminChatBtn(){var btn=document.getElementById('adminChatTopBtn');var contactBtn=document.getElementById('openAdminChatBtn');if(currentUser&&currentUser.role==='admin'){btn.style.display='inline-block';if(contactBtn)contactBtn.style.display='none';}else{btn.style.display='none';if(contactBtn)contactBtn.style.display='inline-block';}}
 function showAuthModal(){document.getElementById('authModal').style.display='flex';document.getElementById('mainContent').style.display='none';}
 function showMainContent(){document.getElementById('authModal').style.display='none';document.getElementById('mainContent').style.display='block';}
 
@@ -270,7 +230,7 @@ db.ref('adminChat').on('value',function(s){adminChat=s.val()||[];renderAdminChat
 db.ref('users').on('value',function(s){users=s.val()||[];});
 
 auth.onAuthStateChanged(function(user){
-    if(user){if(isRegistering)return;db.ref('users').once('value',function(snapshot){var allUsers=snapshot.val()||[];var found=allUsers.find(function(u){return u.uid===user.uid;});if(found){currentUser={uid:user.uid,email:user.email,displayName:found.displayName||'USER',role:found.role||'guest',visits:found.visits||0,emailVerified:user.emailVerified};}else{var isAdmin=(user.email==='admin@pixel.ru');var dn=isAdmin?'ADMIN':(user.email?user.email.split('@')[0].toUpperCase():'USER');currentUser={uid:user.uid,email:user.email,displayName:dn,role:isAdmin?'admin':'guest',visits:0,emailVerified:user.emailVerified};addUserToDB(user.uid,user.email,dn,isAdmin?'admin':'guest');}localStorage.setItem('px_last_user',JSON.stringify({name:currentUser.displayName}));showMainContent();document.getElementById('currentUserName').innerText=currentUser.displayName;document.getElementById('userRankTop').innerHTML=rn();showPage('home');updateVerifyBar();document.getElementById('loadingScreen').classList.add('done');});}
+    if(user){if(isRegistering)return;db.ref('users').once('value',function(snapshot){var allUsers=snapshot.val()||[];var found=allUsers.find(function(u){return u.uid===user.uid;});if(found){currentUser={uid:user.uid,email:user.email,displayName:found.displayName||'USER',role:found.role||'guest',visits:found.visits||0,emailVerified:user.emailVerified};}else{var isAdmin=(user.email==='admin@pixel.ru');var dn=isAdmin?'ADMIN':(user.email?user.email.split('@')[0].toUpperCase():'USER');currentUser={uid:user.uid,email:user.email,displayName:dn,role:isAdmin?'admin':'guest',visits:0,emailVerified:user.emailVerified};addUserToDB(user.uid,user.email,dn,isAdmin?'admin':'guest');}localStorage.setItem('px_last_user',JSON.stringify({name:currentUser.displayName}));showMainContent();document.getElementById('currentUserName').innerText=currentUser.displayName;document.getElementById('userRankTop').innerHTML=rn();showPage('home');updateVerifyBar();updateAdminChatBtn();document.getElementById('loadingScreen').classList.add('done');});}
     else{currentUser=null;localStorage.removeItem('px_last_user');showAuthModal();document.getElementById('loadingScreen').classList.add('done');}
 });
 
@@ -313,8 +273,8 @@ function renderAdminReplyArea(){var a=document.getElementById('adminReplyArea');
 
 function updAdmin(){var ia=currentUser&&currentUser.role=='admin';document.getElementById('adminBtns1').innerHTML=ia?'<button class="pixel-btn" onclick="openAddItemModal(\'game\')">➕ ДОБАВИТЬ ИГРУ</button>':'';document.getElementById('adminBtns2').innerHTML=ia?'<button class="pixel-btn" onclick="openAddItemModal(\'product\')">➕ ДОБАВИТЬ ТОВАР</button>':'';}
 
-function showPage(p){var all=document.querySelectorAll('.page');for(var i=0;i<all.length;i++)all[i].classList.remove('active-page');var pp=document.getElementById('profilePage');if(pp)pp.remove();var t=document.getElementById(p);if(t)t.classList.add('active-page');updateVerifyBar();if(p==='catalog'){updAdmin();renderGames();}if(p==='shop'){updAdmin();renderStore();}if(p==='cart')renderCart();if(p==='rentals')renderCalendar();}
-function showProfile(){var all=document.querySelectorAll('.page');for(var i=0;i<all.length;i++)all[i].classList.remove('active-page');var pp=document.getElementById('profilePage');if(pp)pp.remove();pp=document.createElement('div');pp.id='profilePage';pp.className='page active-page';pp.innerHTML='<div class="profile-wrapper"><div class="profile-left"><div class="profile-container"><div class="profile-avatar" id="profileAvatarDisplay">🎲</div><div style="font-size:0.5rem;color:var(--text-secondary);margin-bottom:10px;">👆 НАЖМИ НА АВАТАРКУ</div><div class="profile-stats"><p>👤 <b>ЛОГИН:</b> <span id="profName"></span></p><p>👣 <b>ПОСЕЩЕНИЙ:</b> <span id="profVis"></span></p><p>🎁 <b>СКИДКА:</b> <span id="profDisc"></span>%</p><div class="profile-progress"><p>📈 <b>ПРОГРЕСС:</b></p><div class="progress-bar-container"><div class="progress-bar" id="profBar"></div></div><p id="profNext" style="margin-top:6px;font-size:0.5rem;"></p></div></div></div></div><div class="profile-right"><h3>📜 ЗВАНИЯ</h3><table class="ranks-table"><thead><tr><th>ЗВАНИЕ</th><th>ПОСЕЩЕНИЙ</th><th>СКИДКА</th></tr></thead><tbody id="ranksBody"></tbody></table><div class="profile-chat-section"><h3>💬 ЧАТ</h3><div class="chat-window" id="globalChatMessages"></div><textarea id="chatMsg" rows="2" placeholder="СООБЩЕНИЕ..."></textarea><button id="sendGlobalMsg" class="pixel-btn">📨</button></div></div></div>';document.getElementById('mainContent').appendChild(pp);document.getElementById('profileAvatarDisplay').onclick=openAvatarPicker;document.getElementById('sendGlobalMsg').onclick=sendChat;if(currentUser){var v=currentUser.visits||0,d2=disc(v),r=getRank(v);document.getElementById('profName').innerText=currentUser.displayName;document.getElementById('profVis').innerText=v;document.getElementById('profDisc').innerText=d2;var pv=0,nt='';if(currentUser.role=='admin'){pv=100;nt='👑 АДМИНИСТРАТОР';}else if(r.n){var nd=r.n.vn-(r.c.vn||0),ac=v-(r.c.vn||0);pv=nd>0?(ac/nd)*100:100;nt='🔼 '+r.n.name+' ('+(r.n.vn-v)+' ПОС.)';}else{pv=100;nt='🎉 МАКСИМУМ!';}document.getElementById('profBar').style.width=pv+'%';document.getElementById('profNext').innerHTML=nt;var tb=document.getElementById('ranksBody');if(tb){tb.innerHTML='';RANKS.forEach(function(rk){var row=document.createElement('tr');if(currentUser.role!='admin'&&r.c&&r.c.name==rk.name)row.className='current-rank-row';row.innerHTML='<td>'+rk.name+'</td><td>'+rk.vn+'</td><td>'+rk.d+'%</td>';tb.appendChild(row);});}var pad=document.getElementById('profileAvatarDisplay');if(pad){var av=getAvatar(currentUser.uid);if(av&&av.startsWith('data:image'))pad.innerHTML='<img src="'+av+'" style="width:60px;height:60px;object-fit:cover;border-radius:12px;">';else pad.innerHTML=av||'🎲';}}renderChat();}
+function showPage(p){var all=document.querySelectorAll('.page');for(var i=0;i<all.length;i++)all[i].classList.remove('active-page');var pp=document.getElementById('profilePage');if(pp)pp.remove();var t=document.getElementById(p);if(t)t.classList.add('active-page');updateVerifyBar();updateAdminChatBtn();if(p==='catalog'){updAdmin();renderGames();}if(p==='shop'){updAdmin();renderStore();}if(p==='cart')renderCart();if(p==='rentals')renderCalendar();}
+function showProfile(){var all=document.querySelectorAll('.page');for(var i=0;i<all.length;i++)all[i].classList.remove('active-page');var pp=document.getElementById('profilePage');if(pp)pp.remove();pp=document.createElement('div');pp.id='profilePage';pp.className='page active-page';pp.innerHTML='<div class="profile-wrapper"><div class="profile-left"><div class="profile-container"><div class="profile-avatar" id="profileAvatarDisplay">🎲</div><div style="font-size:0.5rem;color:var(--text-secondary);margin-bottom:10px;">👆 НАЖМИ НА АВАТАРКУ</div><div class="profile-stats"><p>👤 <b>ЛОГИН:</b> <span id="profName"></span></p><p>👣 <b>ПОСЕЩЕНИЙ:</b> <span id="profVis"></span></p><p>🎁 <b>СКИДКА:</b> <span id="profDisc"></span>%</p><div class="profile-progress"><p>📈 <b>ПРОГРЕСС:</b></p><div class="progress-bar-container"><div class="progress-bar" id="profBar"></div></div><p id="profNext" style="margin-top:6px;font-size:0.5rem;"></p></div></div></div></div><div class="profile-right"><h3>📜 ЗВАНИЯ</h3><table class="ranks-table"><thead><tr><th>ЗВАНИЕ</th><th>ПОСЕЩЕНИЙ</th><th>СКИДКА</th></tr></thead><tbody id="ranksBody"></tbody></table><div class="profile-chat-section"><h3>💬 ЧАТ</h3><div class="chat-window" id="globalChatMessages"></div><textarea id="chatMsg" rows="2" placeholder="СООБЩЕНИЕ..."></textarea><button id="sendGlobalMsg" class="pixel-btn">📨</button></div></div></div>';document.getElementById('mainContent').appendChild(pp);document.getElementById('profileAvatarDisplay').onclick=openAvatarPicker;document.getElementById('sendGlobalMsg').onclick=sendChat;if(currentUser){var v=currentUser.visits||0,d2=disc(v),r=getRank(v);document.getElementById('profName').innerText=currentUser.displayName;document.getElementById('profVis').innerText=v;document.getElementById('profDisc').innerText=d2;var pv=0,nt='';if(currentUser.role=='admin'){pv=100;nt='👑 АДМИНИСТРАТОР';}else if(r.n){var nd=r.n.vn-(r.c.vn||0),ac=v-(r.c.vn||0);pv=nd>0?(ac/nd)*100:100;nt='🔼 '+r.n.name+' ('+(r.n.vn-v)+' ПОС.)';}else{pv=100;nt='🎉 МАКСИМУМ!';}document.getElementById('profBar').style.width=pv+'%';document.getElementById('profNext').innerHTML=nt;var tb=document.getElementById('ranksBody');if(tb){tb.innerHTML='';RANKS.forEach(function(rk){var row=document.createElement('tr');if(currentUser.role!='admin'&&r.c&&r.c.name==rk.name)row.className='current-rank-row';row.innerHTML='<td>'+rk.name+'</td><td>'+rk.vn+'</td><td>'+rk.d+'%</td>';tb.appendChild(row);});}var pad=document.getElementById('profileAvatarDisplay');if(pad){var av=getAvatar(currentUser.uid);if(av&&av.startsWith('data:image'))pad.innerHTML='<img src="'+av+'" style="width:60px;height:60px;object-fit:cover;border-radius:12px;">';else pad.innerHTML=av||'🎲';}}renderChat();updateAdminChatBtn();}
 
 function openAvatarPicker(){if(!currentUser)return;selectedAvatar=getAvatar(currentUser.uid);var sel=document.getElementById('avatarSelector');sel.innerHTML='';for(var i=0;i<AVATARS.length;i++){(function(a){var d=document.createElement('div');d.className='avatar-option';d.textContent=a;if(a===selectedAvatar&&!selectedAvatar.startsWith('data:image'))d.classList.add('selected');d.onclick=function(){var all=sel.querySelectorAll('.avatar-option');for(var j=0;j<all.length;j++)all[j].classList.remove('selected');d.classList.add('selected');selectedAvatar=a;};sel.appendChild(d);})(AVATARS[i]);}var up=document.createElement('div');up.className='avatar-option';up.textContent='📷';up.onclick=function(){var inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){selectedAvatar=ev.target.result;up.classList.add('selected');};r.readAsDataURL(f);};inp.click();};if(selectedAvatar&&selectedAvatar.startsWith('data:image'))up.classList.add('selected');sel.appendChild(up);document.getElementById('avatarPickerModal').style.display='flex';}
 function closeAvatarPicker(){document.getElementById('avatarPickerModal').style.display='none';}
@@ -326,6 +286,7 @@ setTimeout(function(){
     document.getElementById('profileLinkText').onclick=showProfile;document.getElementById('logoutBtn').onclick=logout;
     document.getElementById('cartTopBtn').onclick=function(){showPage('cart');};document.getElementById('settingsBtn').onclick=openSettings;
     document.getElementById('openAdminChatBtn').onclick=openAdminChat;
+    document.getElementById('adminChatTopBtn').onclick=openAdminChat;
     document.getElementById('modalLoginBtn').onclick=login;document.getElementById('modalRegisterBtn').onclick=reg;
     document.getElementById('verifyBarCheckBtn').onclick=checkVerificationFromBar;document.getElementById('verifyBarResendBtn').onclick=resendVerificationFromBar;
     document.getElementById('deleteAccountBtn').onclick=openPasswordModal;document.getElementById('confirmDeleteBtn').onclick=confirmDelete;
@@ -344,7 +305,7 @@ setTimeout(function(){
     document.getElementById('modalRegLogin').addEventListener('input',function(){this.classList.remove('input-error','input-success');});
     document.getElementById('modalRegPass').addEventListener('input',function(){this.classList.remove('input-error','input-success');});
     document.getElementById('modalRegPassConfirm').addEventListener('input',function(){this.classList.remove('input-error','input-success');});
-    updateCartCount();renderCalendar();renderGames();renderStore();
+    updateCartCount();renderCalendar();renderGames();renderStore();updateAdminChatBtn();
 },200);
 
 function checkVerificationFromBar(){var user=auth.currentUser;if(!user)return;var btn=document.getElementById('verifyBarCheckBtn');btn.disabled=true;btn.innerHTML='<span class="loading-spinner"></span>';user.reload().then(function(){user.getIdToken(true).then(function(){if(user.emailVerified){if(currentUser)currentUser.emailVerified=true;updateVerifyBar();showToast("✅ ПОЧТА ПОДТВЕРЖДЕНА!");}else{btn.disabled=false;btn.innerHTML='✅ Я ПОДТВЕРДИЛ';showToast("❌ ПОЧТА ЕЩЁ НЕ ПОДТВЕРЖДЕНА");}});});}
