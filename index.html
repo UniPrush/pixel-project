@@ -124,6 +124,50 @@
         .btn-cart.added { background:#2a7a3a; }
         .toast { position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#2a7a3a; color:#fff; padding:10px 20px; border-radius:10px; border:2px solid #4aff6a; z-index:9999; font-family:'Press Start 2P',monospace; font-size:0.45rem; animation:toastIn 0.3s ease; max-width:90%; text-align:center; }
         @keyframes toastIn { from{opacity:0;transform:translateX(-50%) translateY(-20px);} to{opacity:1;transform:translateX(-50%) translateY(0);} }
+
+        @media (max-width: 768px) {
+            .container { margin:5px; padding:10px; border-radius:15px; }
+            .top-bar { flex-direction:column; align-items:stretch; gap:8px; }
+            .site-title h1 { font-size:calc(0.7rem * var(--font-size-multiplier)); text-align:center; }
+            .user-panel-right { justify-content:center; padding:8px; flex-wrap:wrap; }
+            .nav-horizontal { gap:5px; }
+            .nav-btn { font-size:calc(0.35rem * var(--font-size-multiplier)); padding:6px 8px; }
+            .grid-cards { gap:10px; }
+            .card { width:calc(50% - 15px); min-width:140px; padding:8px; }
+            .card-img { font-size:2rem; }
+            .card-img img { width:40px; height:40px; }
+            .card-name { font-size:0.4rem; }
+            .card-price { font-size:0.35rem; }
+            .btn-rent, .btn-delete, .btn-cart { font-size:0.35rem; padding:5px 8px; }
+            .profile-wrapper { flex-direction:column; }
+            .profile-left, .profile-right { min-width:100%; }
+            .profile-avatar { font-size:45px; }
+            .ranks-table { font-size:calc(0.3rem * var(--font-size-multiplier)); }
+            .ranks-table th, .ranks-table td { padding:4px 2px; }
+            .chat-window { height:150px; }
+            .calendar-grid { gap:2px; padding:5px; }
+            .calendar-day { min-height:30px; font-size:calc(0.35rem * var(--font-size-multiplier)); }
+            .calendar-day-header { font-size:calc(0.3rem * var(--font-size-multiplier)); }
+            .auth-card, .settings-card, .password-card, .reset-card, .add-item-card, .avatar-card, .admin-chat-card { max-width:95%; padding:15px; }
+            .avatar-option { font-size:1.5rem; padding:6px; }
+            h1 { font-size:calc(1rem * var(--font-size-multiplier)); }
+            h2 { font-size:calc(0.7rem * var(--font-size-multiplier)); }
+            h3 { font-size:calc(0.6rem * var(--font-size-multiplier)); }
+        }
+
+        @media (max-width: 480px) {
+            .card { width:100%; max-width:280px; }
+            .nav-btn { font-size:calc(0.3rem * var(--font-size-multiplier)); padding:5px 6px; }
+            .calendar-day { min-height:28px; font-size:calc(0.3rem * var(--font-size-multiplier)); padding:2px; }
+            .calendar-day-header { font-size:calc(0.25rem * var(--font-size-multiplier)); padding:2px; }
+            .user-panel-right { gap:4px; padding:5px 8px; }
+            .user-name { font-size:calc(0.35rem * var(--font-size-multiplier)); }
+            .cart-btn-top, .settings-btn, .admin-chat-top-btn { font-size:calc(0.5rem * var(--font-size-multiplier)); padding:4px 6px; }
+            .pixel-btn { font-size:calc(0.4rem * var(--font-size-multiplier)); padding:8px 10px; }
+            textarea, input, select { font-size:calc(0.5rem * var(--font-size-multiplier)); padding:10px; }
+            .chat-avatar { width:20px; height:20px; font-size:1rem; }
+            .avatar-option { font-size:1.3rem; padding:5px; }
+        }
     </style>
 </head>
 <body>
@@ -183,7 +227,7 @@ firebase.initializeApp({apiKey:"AIzaSyDwEsUN9--Gf7r5drvC6LfwtSayhyFotTc",authDom
 var db=firebase.database();var auth=firebase.auth();
 var YOOMONEY_WALLET='ЗДЕСЬ_НОМЕР_КОШЕЛЬКА';
 var userSettings=JSON.parse(localStorage.getItem('px_settings')||'{"theme":"dark","fontSize":"1"}');
-var currentUser=null;var users=[],bookings={},games=[],store=[],globalChat=[],adminChat=[];
+var currentUser=null;var users=[],bookings={},games=[],store=[],globalChat=[],adminChat=[],avatarsDB={};
 var cart=JSON.parse(localStorage.getItem('px_cart')||'{}');
 var userAvatars=JSON.parse(localStorage.getItem('px_avatars')||'{}'),selectedAvatar=null;
 var AVATARS=['🎲','🎮','🧙‍♂️','🐉','🎯','👾','🦊','🐱','🦄','🤖','👻','🎪','🎭','🎨','🃏','👑'];
@@ -199,7 +243,20 @@ function isVerified(){return currentUser&&(currentUser.emailVerified||currentUse
 function applySettings(){document.documentElement.style.setProperty('--font-size-multiplier',userSettings.fontSize);document.body.classList.toggle('theme-light',userSettings.theme==='light');var ts=document.getElementById('themeSelect');if(ts)ts.value=userSettings.theme;document.querySelectorAll('.font-size-btns button').forEach(function(b){b.classList.remove('active');});var ab=document.querySelector('.font-size-btns button[data-size="'+userSettings.fontSize+'"]');if(ab)ab.classList.add('active');}
 function saveSettings(){localStorage.setItem('px_settings',JSON.stringify(userSettings));applySettings();}
 function saveDB(k,v){db.ref(k).set(v);}
-function getAvatar(uid){return(userAvatars[uid]&&userAvatars[uid].startsWith('data:image'))?userAvatars[uid]:(userAvatars[uid]||'🎲');}
+
+// Получение аватарки из Firebase + localStorage
+function getAvatar(uid){
+    // Сначала проверяем Firebase
+    if(avatarsDB[uid]){
+        return avatarsDB[uid];
+    }
+    // Затем localStorage
+    if(userAvatars[uid]){
+        return userAvatars[uid];
+    }
+    return '🎲';
+}
+
 function getAvatarHTML(uid,displayName){
     var avatar = getAvatar(uid);
     if(avatar.startsWith('data:image')){
@@ -208,6 +265,7 @@ function getAvatarHTML(uid,displayName){
         return '<span class="chat-avatar">'+avatar+'</span>';
     }
 }
+
 function getRank(v){var c=RANKS[0],n=null;for(var i=0;i<RANKS.length;i++){if(v>=RANKS[i].vn){c=RANKS[i];n=(i+1<RANKS.length)?RANKS[i+1]:null;}else{if(!n&&i>0)n=RANKS[i];break;}}return{c:c,n:n};}
 function disc(v){var d=0;for(var i=0;i<RANKS.length;i++){if(v>=RANKS[i].vn)d=RANKS[i].d;}return d;}
 function rn(){if(!currentUser)return"🏅";if(currentUser.email==='admin@pixel.ru')return"👑 КОРОЛЬ НАСТОЛОК";return getRank(currentUser.visits||0).c.name;}
@@ -246,6 +304,21 @@ function showMainContent(){document.getElementById('authModal').style.display='n
 
 var savedUser=localStorage.getItem('px_last_user');
 if(savedUser){try{var u=JSON.parse(savedUser);document.getElementById('currentUserName').innerText=u.name||'...';}catch(e){}}
+
+// Синхронизация аватарок из Firebase
+db.ref('avatars').on('value',function(s){
+    avatarsDB=s.val()||{};
+    // Обновляем localStorage для совместимости
+    localStorage.setItem('px_avatars',JSON.stringify(avatarsDB));
+    userAvatars=avatarsDB;
+    // Перерисовываем чаты если открыты
+    if(document.getElementById('profilePage')){
+        renderChat();
+        if(document.getElementById('adminChatModal').style.display=='flex'){
+            renderAdminChat();
+        }
+    }
+});
 
 db.ref('bookings').on('value',function(s){bookings=s.val()||{};renderCalendar();});
 db.ref('games').on('value',function(s){games=s.val()||[];renderGames();});
@@ -496,7 +569,18 @@ function openAvatarPicker(){
 }
 
 function closeAvatarPicker(){document.getElementById('avatarPickerModal').style.display='none';}
-function saveAvatar(){if(!currentUser||!selectedAvatar)return;userAvatars[currentUser.uid]=selectedAvatar;localStorage.setItem('px_avatars',JSON.stringify(userAvatars));closeAvatarPicker();showProfile();}
+
+// Сохранение аватарки в Firebase
+function saveAvatar(){
+    if(!currentUser||!selectedAvatar)return;
+    userAvatars[currentUser.uid]=selectedAvatar;
+    // Сохраняем в Firebase для синхронизации
+    saveDB('avatars',userAvatars);
+    // И в localStorage для быстрого доступа
+    localStorage.setItem('px_avatars',JSON.stringify(userAvatars));
+    closeAvatarPicker();
+    showProfile();
+}
 
 applySettings();
 setTimeout(function(){
