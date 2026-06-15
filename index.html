@@ -66,8 +66,11 @@
         .error-text.show { display:block; }
         .success-text-green { color:#4aff6a; font-size:calc(0.4rem * var(--font-size-multiplier)); margin-top:4px; text-align:center; display:none; }
         .success-text-green.show { display:block; }
-        .auth-modal,.settings-modal,.password-modal,.reset-modal,.add-item-modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:100; display:none; justify-content:center; align-items:center; padding:10px; }
-        .auth-card,.settings-card,.password-card,.reset-card,.add-item-card { background:var(--bg-primary); border:3px solid var(--border-color); border-radius:20px; padding:20px; width:100%; max-width:400px; color:var(--text-color); }
+        .auth-modal,.settings-modal,.password-modal,.reset-modal,.add-item-modal,.booking-modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:100; display:none; justify-content:center; align-items:center; padding:10px; }
+        .auth-card,.settings-card,.password-card,.reset-card,.add-item-card,.booking-card { background:var(--bg-primary); border:3px solid var(--border-color); border-radius:20px; padding:20px; width:100%; max-width:450px; color:var(--text-color); }
+        .booking-card h2 { font-size:calc(0.7rem * var(--font-size-multiplier)); margin-bottom:15px; }
+        .booking-info { background:var(--bg-secondary); border:2px solid var(--border-color); border-radius:12px; padding:12px; margin:10px 0; font-size:calc(0.4rem * var(--font-size-multiplier)); }
+        .booking-info p { margin:6px 0; }
         .add-item-card h2,.auth-card h2 { font-size:calc(0.8rem * var(--font-size-multiplier)); margin-bottom:10px; }
         .add-item-card label { font-size:calc(0.4rem * var(--font-size-multiplier)); display:block; margin-top:10px; }
         .add-item-card .btn-row { display:flex; gap:10px; justify-content:center; margin-top:15px; flex-wrap:wrap; }
@@ -96,6 +99,7 @@
         .cart-total { background:var(--bg-secondary); border:2px solid var(--border-color); padding:12px; margin-top:15px; border-radius:12px; text-align:right; font-weight:bold; color:var(--text-color); font-size:calc(0.5rem * var(--font-size-multiplier)); }
         .total-price { color:var(--border-color); font-size:calc(0.7rem * var(--font-size-multiplier)); }
         .pay-btn { background:#2a7a3a; border:none; font-family:inherit; font-size:calc(0.5rem * var(--font-size-multiplier)); font-weight:bold; padding:10px 25px; color:#FFF; cursor:pointer; box-shadow:3px 3px 0 #1a4a2a; border-radius:12px; margin-top:8px; }
+        .pay-btn-sbp { background:#2a2a6a; border:none; font-family:inherit; font-size:calc(0.5rem * var(--font-size-multiplier)); font-weight:bold; padding:10px 25px; color:#FFF; cursor:pointer; box-shadow:3px 3px 0 #1a1a3a; border-radius:12px; margin-top:8px; }
         .avatar-modal,.admin-chat-modal,.image-viewer-modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:300; display:none; justify-content:center; align-items:center; padding:10px; }
         .avatar-card,.admin-chat-card { background:var(--bg-primary); border:3px solid var(--border-color); border-radius:20px; padding:20px; width:100%; max-width:600px; color:var(--text-color); max-height:90vh; overflow-y:auto; }
         .image-viewer-content { position:relative; display:flex; flex-direction:column; align-items:center; }
@@ -104,10 +108,11 @@
         .image-viewer-content img { max-width:90vw; max-height:80vh; object-fit:contain; border-radius:15px; border:3px solid var(--border-color); }
         .card-img img { cursor:pointer; }
         .avatar-selector { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:10px 0; }
-        .avatar-option { font-size:2rem; padding:8px; border:3px solid transparent; border-radius:12px; cursor:pointer; background:var(--bg-card); }
+        .avatar-option { font-size:2rem; padding:8px; border:3px solid transparent; border-radius:12px; cursor:pointer; background:var(--bg-card); position:relative; }
         .avatar-option.selected { border-color:var(--border-color); background:var(--border-color); }
         .avatar-option.locked { opacity:0.3; cursor:not-allowed; filter:grayscale(100%); position:relative; }
         .avatar-option.locked::after { content:'🔒'; position:absolute; font-size:0.8rem; bottom:2px; right:2px; }
+        .avatar-option.locked:hover::before { content:attr(data-tooltip); position:absolute; bottom:110%; left:50%; transform:translateX(-50%); background:#1a1a2e; color:#ffaa66; padding:5px 10px; border-radius:8px; font-size:0.6rem; white-space:nowrap; border:2px solid var(--border-color); z-index:10; pointer-events:none; }
         .profile-chat-section { margin-top:15px; }
         .contacts-info { margin-bottom:15px; }
         .refresh-bottom { margin-top:20px; text-align:center; }
@@ -167,7 +172,7 @@
             .calendar-grid { gap:2px; padding:5px; }
             .calendar-day { min-height:30px; font-size:calc(0.35rem * var(--font-size-multiplier)); }
             .calendar-day-header { font-size:calc(0.3rem * var(--font-size-multiplier)); }
-            .auth-card, .settings-card, .password-card, .reset-card, .add-item-card, .avatar-card, .admin-chat-card { max-width:95%; padding:15px; }
+            .auth-card, .settings-card, .password-card, .reset-card, .add-item-card, .booking-card, .avatar-card, .admin-chat-card { max-width:95%; padding:15px; }
             .avatar-option { font-size:1.5rem; padding:6px; }
             h1 { font-size:calc(1rem * var(--font-size-multiplier)); }
             h2 { font-size:calc(0.7rem * var(--font-size-multiplier)); }
@@ -202,6 +207,19 @@
     <div class="image-viewer-content" onclick="event.stopPropagation()">
         <span class="image-viewer-close" onclick="closeImageViewer()">✖</span>
         <img id="imageViewerImg" src="" alt="Просмотр фото">
+    </div>
+</div>
+
+<div id="bookingModal" class="booking-modal">
+    <div class="booking-card">
+        <div style="text-align:right;cursor:pointer;font-size:20px;color:var(--border-color);margin-bottom:5px;" onclick="closeBookingModal()">✖</div>
+        <h2>📅 БРОНИРОВАНИЕ</h2>
+        <div class="booking-info" id="bookingInfoContent"></div>
+        <p style="text-align:center;font-size:calc(0.4rem * var(--font-size-multiplier));margin:10px 0;">💳 ОПЛАТА ЧЕРЕЗ ЮMONEY</p>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+            <button id="bookingPayBtn" class="pay-btn-sbp">🏦 ОПЛАТИТЬ</button>
+            <button class="pixel-btn" onclick="closeBookingModal()">❌ ОТМЕНА</button>
+        </div>
     </div>
 </div>
 
@@ -253,9 +271,91 @@ function closeImageViewer(){
     document.getElementById('imageViewerModal').style.display='none';
 }
 
+var pendingBooking=null;
+var pendingBookingDate=null;
+var selectedGameForRent=null;
+
+var YOOMONEY_WALLET='4100110940637220'; // ← ТВОЙ НОМЕР КОШЕЛЬКА!
+
+function openBookingModal(dk){
+    if(!currentUser){alert("🔒 ВОЙДИТЕ!");return;}
+    if(!isVerified()){alert("⚠️ ПОДТВЕРДИТЕ ПОЧТУ!");return;}
+    
+    if(!selectedGameForRent){
+        alert("⚠️ СНАЧАЛА ВЫБЕРИТЕ ИГРУ В КАТАЛОГЕ!");
+        showPage('catalog');
+        return;
+    }
+    
+    pendingBookingDate=dk;
+    
+    var parts=dk.split('-');
+    var dateStr=parts[2]+' '+MONTHS[parseInt(parts[1])-1].substring(0,3)+' '+parts[0];
+    
+    var infoHTML='<p>📅 <b>ДАТА:</b> '+dateStr+'</p>';
+    infoHTML+='<p>🎲 <b>ИГРА:</b> '+selectedGameForRent.name+'</p>';
+    infoHTML+='<p>👤 <b>ПОЛЬЗОВАТЕЛЬ:</b> '+currentUser.displayName+'</p>';
+    infoHTML+='<p>💰 <b>СТОИМОСТЬ:</b> '+selectedGameForRent.price+'₽</p>';
+    infoHTML+='<p style="font-size:calc(0.35rem * var(--font-size-multiplier));color:var(--text-secondary);">⚠️ БРОНЬ БУДЕТ ОТПРАВЛЕНА НА ПОДТВЕРЖДЕНИЕ ПОСЛЕ ОПЛАТЫ</p>';
+    
+    document.getElementById('bookingInfoContent').innerHTML=infoHTML;
+    document.getElementById('bookingModal').style.display='flex';
+}
+
+function closeBookingModal(){
+    document.getElementById('bookingModal').style.display='none';
+    pendingBooking=null;
+    pendingBookingDate=null;
+}
+
+function processBookingPayment(){
+    if(!pendingBookingDate)return;
+    if(!selectedGameForRent)return;
+    
+    var dk=pendingBookingDate;
+    var amount=selectedGameForRent.price;
+    var gameName=selectedGameForRent.name;
+    
+    var yooLink='https://yoomoney.ru/quickpay/confirm.xml?receiver='+YOOMONEY_WALLET+
+        '&sum='+amount+
+        '&label=rent_'+dk+'_'+gameName.replace(/ /g,'_')+
+        '&quickpay-form=button'+
+        '&paymentType=SB';
+    
+    if(confirm('🏦 ОПЛАТИТЬ '+amount+'₽?\n\n🎲 ИГРА: '+gameName+'\n📅 ДАТА: '+dk+'\n\nОТКРОЕТСЯ СТРАНИЦА ОПЛАТЫ ЮMONEY')){
+        bookings[dk]={u:currentUser.displayName,cf:false,game:gameName,price:amount};
+        saveDB('bookings',bookings);
+        selectedGameForRent=null;
+        closeBookingModal();
+        window.open(yooLink,'_blank');
+        showToast("✅ ПЕРЕХОД НА ОПЛАТУ...");
+    }
+}
+
+function isMobile(){
+    return window.innerWidth <= 768;
+}
+
+function getDefaultFontSize(){
+    var saved=localStorage.getItem('px_settings');
+    if(saved){
+        try{
+            var s=JSON.parse(saved);
+            return s.fontSize || (isMobile()?'1.3':'1');
+        }catch(e){}
+    }
+    return isMobile()?'1.3':'1';
+}
+
 var customPhotoData=null;var addItemMode='game';
 var lastReadAdminMsg=JSON.parse(localStorage.getItem('px_admin_read')||'{}');
 var selectedAdminChatUser=null;
+
+var defaultFontSize=getDefaultFontSize();
+if(!localStorage.getItem('px_settings')){
+    localStorage.setItem('px_settings',JSON.stringify({theme:'dark',fontSize:defaultFontSize}));
+}
+
 function openAddItemModal(mode){addItemMode=mode;customPhotoData=null;document.getElementById('addItemModal').style.display='flex';document.getElementById('addItemTitle').textContent=mode==='game'?'🎲 ДОБАВИТЬ ИГРУ':'🏪 ДОБАВИТЬ ТОВАР';document.getElementById('addItemName').value='';document.getElementById('addItemPrice').value=mode==='game'?'200':'500';document.getElementById('addItemIcon').value='🎲';}
 function closeAddItemModal(){document.getElementById('addItemModal').style.display='none';}
 function addCustomPhoto(){var inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){customPhotoData=ev.target.result;showToast("📷 ФОТО ВЫБРАНО!");};r.readAsDataURL(f);};inp.click();}
@@ -264,7 +364,6 @@ function confirmAddItem(){var n=document.getElementById('addItemName').value.tri
 setTimeout(function(){var ls=document.getElementById('loadingScreen');if(ls)ls.classList.add('done');},500);
 firebase.initializeApp({apiKey:"AIzaSyDwEsUN9--Gf7r5drvC6LfwtSayhyFotTc",authDomain:"pixel-project-c0e5d.firebaseapp.com",databaseURL:"https://pixel-project-c0e5d-default-rtdb.firebaseio.com",projectId:"pixel-project-c0e5d",storageBucket:"pixel-project-c0e5d.firebasestorage.app",messagingSenderId:"1076126139897",appId:"1:1076126139897:web:7e56a6a40c8efc41a7b028"});
 var db=firebase.database();var auth=firebase.auth();
-var YOOMONEY_WALLET='ЗДЕСЬ_НОМЕР_КОШЕЛЬКА';
 var userSettings=JSON.parse(localStorage.getItem('px_settings')||'{"theme":"dark","fontSize":"1"}');
 var currentUser=null;var users=[],bookings={},games=[],store=[],globalChat=[],adminChat=[],avatarsDB={};
 var cart=JSON.parse(localStorage.getItem('px_cart')||'{}');
@@ -297,7 +396,15 @@ var tempRegLogin='',isRegistering=false;
 
 function showToast(msg){var t=document.querySelector('.toast');if(t)t.remove();t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(function(){if(t)t.remove();},2000);}
 function isVerified(){return currentUser&&(currentUser.emailVerified||currentUser.email==='admin@pixel.ru');}
-function applySettings(){document.documentElement.style.setProperty('--font-size-multiplier',userSettings.fontSize);document.body.classList.toggle('theme-light',userSettings.theme==='light');var ts=document.getElementById('themeSelect');if(ts)ts.value=userSettings.theme;document.querySelectorAll('.font-size-btns button').forEach(function(b){b.classList.remove('active');});var ab=document.querySelector('.font-size-btns button[data-size="'+userSettings.fontSize+'"]');if(ab)ab.classList.add('active');}
+function applySettings(){
+    document.documentElement.style.setProperty('--font-size-multiplier',userSettings.fontSize);
+    document.body.classList.toggle('theme-light',userSettings.theme==='light');
+    var ts=document.getElementById('themeSelect');
+    if(ts)ts.value=userSettings.theme;
+    document.querySelectorAll('.font-size-btns button').forEach(function(b){b.classList.remove('active');});
+    var ab=document.querySelector('.font-size-btns button[data-size="'+userSettings.fontSize+'"]');
+    if(ab)ab.classList.add('active');
+}
 function saveSettings(){localStorage.setItem('px_settings',JSON.stringify(userSettings));applySettings();}
 function saveDB(k,v){db.ref(k).set(v);}
 
@@ -417,7 +524,80 @@ document.getElementById('addItemConfirmBtn').onclick=confirmAddItem;
 function login(){var nameInp=document.getElementById('modalLoginName');var passInp=document.getElementById('modalLoginPass');var nameErr=document.getElementById('loginNameError');var passErr=document.getElementById('loginPassError');var succ=document.getElementById('loginSuccessText');var name=nameInp.value.trim();var pass=passInp.value.trim();nameInp.classList.remove('input-error','input-success');passInp.classList.remove('input-error','input-success');nameErr.classList.remove('show');passErr.classList.remove('show');succ.classList.remove('show');if(!name||!pass){if(!name){nameInp.classList.add('input-error');nameErr.textContent='⚠️ ВВЕДИТЕ EMAIL ИЛИ ЛОГИН';nameErr.classList.add('show');}if(!pass){passInp.classList.add('input-error');passErr.textContent='⚠️ ВВЕДИТЕ ПАРОЛЬ';passErr.classList.add('show');}return;}var isEmail=name.indexOf('@')!==-1;if(isEmail){attemptLogin(name,pass,nameInp,passInp,nameErr,passErr,succ);return;}var loginName=name.toUpperCase();db.ref('users').once('value',function(snapshot){var allUsers=snapshot.val()||[];var found=null;for(var i=0;i<allUsers.length;i++){if(allUsers[i].displayName&&allUsers[i].displayName.toUpperCase()===loginName){found=allUsers[i];break;}}if(!found){nameInp.classList.add('input-error');nameErr.textContent='❌ ЛОГИН НЕ НАЙДЕН';nameErr.classList.add('show');return;}attemptLogin(found.email,pass,nameInp,passInp,nameErr,passErr,succ);});}
 function attemptLogin(email,pass,nameInp,passInp,nameErr,passErr,succ){auth.signInWithEmailAndPassword(email,pass).then(function(){nameInp.classList.add('input-success');passInp.classList.add('input-success');succ.textContent='✅ ВХОД ВЫПОЛНЕН!';succ.classList.add('show');}).catch(function(e){if(e.code==='auth/wrong-password'||e.code==='auth/invalid-login-credentials'){passInp.classList.add('input-error');passErr.textContent='❌ НЕВЕРНЫЙ ПАРОЛЬ!';passErr.classList.add('show');passInp.value='';passInp.focus();}else if(e.code==='auth/user-not-found'){nameInp.classList.add('input-error');nameErr.textContent='❌ ПОЛЬЗОВАТЕЛЬ НЕ НАЙДЕН';nameErr.classList.add('show');}else{nameInp.classList.add('input-error');nameErr.textContent='❌ '+e.message;nameErr.classList.add('show');}});}
 
-function reg(){var emailInp=document.getElementById('modalRegEmail');var loginInp=document.getElementById('modalRegLogin');var passInp=document.getElementById('modalRegPass');var passConfInp=document.getElementById('modalRegPassConfirm');var emailErr=document.getElementById('regEmailError');var loginErr=document.getElementById('regLoginError');var passErr=document.getElementById('regPassError');var passConfErr=document.getElementById('regPassConfirmError');var succ=document.getElementById('regSuccessText');var email=emailInp.value.trim().toLowerCase();var login=loginInp.value.trim();var pass=passInp.value.trim();var passConfirm=passConfInp.value.trim();[emailInp,loginInp,passInp,passConfInp].forEach(function(el){el.classList.remove('input-error','input-success');});[emailErr,loginErr,passErr,passConfErr,succ].forEach(function(el){el.classList.remove('show');});var hasError=false;if(!email){emailInp.classList.add('input-error');emailErr.textContent='⚠️ ВВЕДИТЕ EMAIL';emailErr.classList.add('show');hasError=true;}if(!login){loginInp.classList.add('input-error');loginErr.textContent='⚠️ ВВЕДИТЕ ЛОГИН';loginErr.classList.add('show');hasError=true;}if(!pass){passInp.classList.add('input-error');passErr.textContent='⚠️ ВВЕДИТЕ ПАРОЛЬ';passErr.classList.add('show');hasError=true;}if(!passConfirm){passConfInp.classList.add('input-error');passConfErr.textContent='⚠️ ПОВТОРИТЕ ПАРОЛЬ';passConfErr.classList.add('show');hasError=true;}if(hasError)return;if(login.toLowerCase()==='admin'&&email!=='admin@pixel.ru'){loginInp.classList.add('input-error');loginErr.textContent='⚠️ ЛОГИН ЗАРЕЗЕРВИРОВАН';loginErr.classList.add('show');return;}if(pass!==passConfirm){passInp.classList.add('input-error');passConfInp.classList.add('input-error');passConfErr.textContent='❌ ПАРОЛИ НЕ СОВПАДАЮТ!';passConfErr.classList.add('show');passConfInp.value='';passConfInp.focus();return;}if(pass.length<6){passInp.classList.add('input-error');passErr.textContent='⚠️ МИНИМУМ 6 СИМВОЛОВ';passErr.classList.add('show');return;}var savedLogin=login.toUpperCase();isRegistering=true;var userRole=(email==='admin@pixel.ru')?'admin':'guest';auth.createUserWithEmailAndPassword(email,pass).then(function(result){var uid=result.user.uid;addUserToDB(uid,email,savedLogin,userRole);result.user.sendEmailVerification();[emailInp,loginInp,passInp,passConfInp].forEach(function(el){el.classList.add('input-success');});succ.textContent='✅ АККАУНТ СОЗДАН!';succ.classList.add('show');setTimeout(function(){auth.signOut();document.getElementById('registerForm').style.display='none';document.getElementById('loginForm').style.display='block';document.getElementById('modalLoginName').value=savedLogin;isRegistering=false;showAuthModal();},1500);}).catch(function(e){isRegistering=false;if(e.code==='auth/email-already-in-use'){emailInp.classList.add('input-error');emailErr.textContent='❌ EMAIL УЖЕ ЗАНЯТ!';emailErr.classList.add('show');}else{emailInp.classList.add('input-error');emailErr.textContent='❌ '+e.message;emailErr.classList.add('show');}});}
+function reg(){
+    var emailInp=document.getElementById('modalRegEmail');
+    var loginInp=document.getElementById('modalRegLogin');
+    var passInp=document.getElementById('modalRegPass');
+    var passConfInp=document.getElementById('modalRegPassConfirm');
+    var emailErr=document.getElementById('regEmailError');
+    var loginErr=document.getElementById('regLoginError');
+    var passErr=document.getElementById('regPassError');
+    var passConfErr=document.getElementById('regPassConfirmError');
+    var succ=document.getElementById('regSuccessText');
+    var email=emailInp.value.trim().toLowerCase();
+    var login=loginInp.value.trim();
+    var pass=passInp.value.trim();
+    var passConfirm=passConfInp.value.trim();
+    
+    [emailInp,loginInp,passInp,passConfInp].forEach(function(el){el.classList.remove('input-error','input-success');});
+    [emailErr,loginErr,passErr,passConfErr,succ].forEach(function(el){el.classList.remove('show');});
+    
+    var hasError=false;
+    if(!email){emailInp.classList.add('input-error');emailErr.textContent='⚠️ ВВЕДИТЕ EMAIL';emailErr.classList.add('show');hasError=true;}
+    if(!login){loginInp.classList.add('input-error');loginErr.textContent='⚠️ ВВЕДИТЕ ЛОГИН';loginErr.classList.add('show');hasError=true;}
+    if(!pass){passInp.classList.add('input-error');passErr.textContent='⚠️ ВВЕДИТЕ ПАРОЛЬ';passErr.classList.add('show');hasError=true;}
+    if(!passConfirm){passConfInp.classList.add('input-error');passConfErr.textContent='⚠️ ПОВТОРИТЕ ПАРОЛЬ';passConfErr.classList.add('show');hasError=true;}
+    if(hasError)return;
+    
+    var emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!emailRegex.test(email)){
+        emailInp.classList.add('input-error');
+        emailErr.textContent='❌ ПОЧТА УКАЗАНА НЕВЕРНО';
+        emailErr.classList.add('show');
+        return;
+    }
+    
+    if(login.toLowerCase()==='admin'&&email!=='admin@pixel.ru'){loginInp.classList.add('input-error');loginErr.textContent='⚠️ ЛОГИН ЗАРЕЗЕРВИРОВАН';loginErr.classList.add('show');return;}
+    if(pass!==passConfirm){passInp.classList.add('input-error');passConfInp.classList.add('input-error');passConfErr.textContent='❌ ПАРОЛИ НЕ СОВПАДАЮТ!';passConfErr.classList.add('show');passConfInp.value='';passConfInp.focus();return;}
+    if(pass.length<6){passInp.classList.add('input-error');passErr.textContent='⚠️ МИНИМУМ 6 СИМВОЛОВ';passErr.classList.add('show');return;}
+    
+    var savedLogin=login.toUpperCase();
+    isRegistering=true;
+    var userRole=(email==='admin@pixel.ru')?'admin':'guest';
+    
+    auth.createUserWithEmailAndPassword(email,pass).then(function(result){
+        var uid=result.user.uid;
+        addUserToDB(uid,email,savedLogin,userRole);
+        result.user.sendEmailVerification();
+        [emailInp,loginInp,passInp,passConfInp].forEach(function(el){el.classList.add('input-success');});
+        succ.textContent='✅ АККАУНТ СОЗДАН!';
+        succ.classList.add('show');
+        setTimeout(function(){
+            auth.signOut();
+            document.getElementById('registerForm').style.display='none';
+            document.getElementById('loginForm').style.display='block';
+            document.getElementById('modalLoginName').value=savedLogin;
+            isRegistering=false;
+            showAuthModal();
+        },1500);
+    }).catch(function(e){
+        isRegistering=false;
+        if(e.code==='auth/email-already-in-use'){
+            emailInp.classList.add('input-error');
+            emailErr.textContent='❌ ПОЛЬЗОВАТЕЛЬ УЖЕ ЗАНЯТ';
+            emailErr.classList.add('show');
+        }else if(e.code==='auth/invalid-email'){
+            emailInp.classList.add('input-error');
+            emailErr.textContent='❌ ПОЧТА УКАЗАНА НЕВЕРНО';
+            emailErr.classList.add('show');
+        }else{
+            emailInp.classList.add('input-error');
+            emailErr.textContent='❌ ПОЧТА УКАЗАНА НЕВЕРНО';
+            emailErr.classList.add('show');
+        }
+    });
+}
+
 function logout(){auth.signOut();localStorage.removeItem('px_last_user');}
 
 function openResetPassword(){document.getElementById('resetPasswordModal').style.display='flex';}
@@ -644,13 +824,8 @@ function renderCalendar(){
     
     c.querySelectorAll('.calendar-day.free').forEach(function(e){
         e.onclick=function(){
-            if(!currentUser){alert("🔒 ВОЙДИТЕ!");return;}
-            if(!isVerified()){alert("⚠️ ПОДТВЕРДИТЕ ПОЧТУ!");return;}
             var dk=this.getAttribute('data-dk');
-            if(confirm('📅 ЗАБРОНИРОВАТЬ '+dk+'?')){
-                bookings[dk]={u:currentUser.displayName,cf:false};
-                saveDB('bookings',bookings);
-            }
+            openBookingModal(dk);
         };
     });
     
@@ -678,9 +853,56 @@ function renderCalendar(){
 function chM(d){cm+=d;if(cm>11){cm=0;cy++;}if(cm<0){cm=11;cy--;}if(cy<2026){cm=new Date().getMonth();cy=2026;}if(cy==2026&&cm<new Date().getMonth()){cm=new Date().getMonth();}renderCalendar();}
 function resetAll(){if(!currentUser||currentUser.role!='admin')return;if(confirm('⚠️ СБРОСИТЬ ВСЕ БРОНИ?')){bookings={};saveDB('bookings',bookings);}}
 
-function renderGames(){var c=document.getElementById('gamesList');if(!c)return;c.innerHTML='';var ia=currentUser&&currentUser.role=='admin';games.forEach(function(g){var d=document.createElement('div');d.className='card'+(g.inStock?'':' out-of-stock');var h='';if(!g.inStock)h+='<div class="stock-badge">📦 НЕТ</div>';h+='<div class="card-img">'+(g.img&&g.img.startsWith('data:image')?'<img src="'+g.img+'" onclick="openImageViewer(\''+g.img+'\')">':g.img||'🎲')+'</div>';h+='<div class="card-name">'+g.name+'</div>';h+='<div class="card-price">💰 '+g.pricePerDay+'₽/СУТ</div>';h+='<button class="btn-rent" data-rid="'+g.id+'">📅 АРЕНДОВАТЬ</button>';if(ia)h+='<button class="btn-delete" data-dg="'+g.id+'">🗑️ УДАЛИТЬ</button>';d.innerHTML=h;c.appendChild(d);});c.querySelectorAll('.btn-rent').forEach(function(b){b.onclick=function(){if(!currentUser){alert("🔒 ВОЙДИТЕ!");return;}showPage('rentals');};});if(ia){c.querySelectorAll('.btn-delete').forEach(function(b){b.onclick=function(){if(confirm('🗑️ УДАЛИТЬ ИГРУ?')){games=games.filter(function(g){return g.id!=parseInt(this.getAttribute('data-dg'));});saveDB('games',games);}};});}}
+function renderGames(){var c=document.getElementById('gamesList');if(!c)return;c.innerHTML='';var ia=currentUser&&currentUser.role=='admin';games.forEach(function(g){var d=document.createElement('div');d.className='card'+(g.inStock?'':' out-of-stock');var h='';if(!g.inStock)h+='<div class="stock-badge">📦 НЕТ</div>';h+='<div class="card-img">'+(g.img&&g.img.startsWith('data:image')?'<img src="'+g.img+'" onclick="openImageViewer(\''+g.img+'\')">':g.img||'🎲')+'</div>';h+='<div class="card-name">'+g.name+'</div>';h+='<div class="card-price">💰 '+g.pricePerDay+'₽/СУТ</div>';h+='<button class="btn-rent" data-rid="'+g.id+'" data-rname="'+g.name+'" data-rprice="'+g.pricePerDay+'">📅 АРЕНДОВАТЬ</button>';if(ia)h+='<button class="btn-delete" data-dg="'+g.id+'">🗑️ УДАЛИТЬ</button>';d.innerHTML=h;c.appendChild(d);});c.querySelectorAll('.btn-rent').forEach(function(b){b.onclick=function(){if(!currentUser){alert("🔒 ВОЙДИТЕ!");return;}if(!isVerified()){alert("⚠️ ПОДТВЕРДИТЕ ПОЧТУ!");return;}selectedGameForRent={name:this.getAttribute('data-rname'),price:parseInt(this.getAttribute('data-rprice'))};showToast("🎲 ВЫБРАНО: "+selectedGameForRent.name+" ("+selectedGameForRent.price+"₽)");showPage('rentals');};});if(ia){c.querySelectorAll('.btn-delete').forEach(function(b){b.onclick=function(){if(confirm('🗑️ УДАЛИТЬ ИГРУ?')){games=games.filter(function(g){return g.id!=parseInt(this.getAttribute('data-dg'));});saveDB('games',games);}};});}}
 function renderStore(){var c=document.getElementById('storeItems');if(!c)return;c.innerHTML='';var ia=currentUser&&currentUser.role=='admin';store.forEach(function(p){var d=document.createElement('div');d.className='card'+(p.inStock?'':' out-of-stock');var h='';if(!p.inStock)h+='<div class="stock-badge">📦 НЕТ</div>';h+='<div class="card-img">'+(p.img&&p.img.startsWith('data:image')?'<img src="'+p.img+'" onclick="openImageViewer(\''+p.img+'\')">':p.img||'🧢')+'</div>';h+='<div class="card-name">'+p.name+'</div>';h+='<div class="card-price">💰 '+p.price+'₽</div>';h+='<button class="btn-cart" data-ac="'+p.id+'" '+(isVerified()?'':'disabled')+'>🛒 В КОРЗИНУ</button>';if(ia)h+='<button class="btn-delete" data-dp="'+p.id+'">🗑️ УДАЛИТЬ</button>';d.innerHTML=h;c.appendChild(d);});c.querySelectorAll('.btn-cart').forEach(function(b){b.onclick=function(){if(!currentUser){alert("🔒 ВОЙДИТЕ!");return;}if(!isVerified()){alert("⚠️ ПОДТВЕРДИТЕ ПОЧТУ!");return;}var id=parseInt(this.getAttribute('data-ac'));cart[id]=(cart[id]||0)+1;localStorage.setItem('px_cart',JSON.stringify(cart));updateCartCount();this.classList.add('added');this.textContent='✅ В КОРЗИНЕ';setTimeout(function(){this.classList.remove('added');this.textContent='🛒 В КОРЗИНУ';}.bind(this),1000);};});if(ia){c.querySelectorAll('.btn-delete').forEach(function(b){b.onclick=function(){if(confirm('🗑️ УДАЛИТЬ ТОВАР?')){store=store.filter(function(p){return p.id!=parseInt(this.getAttribute('data-dp'));});saveDB('store',store);}};});}}
-function renderCart(){var c=document.getElementById('cartItemsContainer'),tc=document.getElementById('cartTotalContainer');if(!c||!tc)return;var items=[];for(var pid in cart){var p=store.find(function(x){return x.id==parseInt(pid);});if(p)items.push({id:p.id,name:p.name,price:p.price,img:p.img,q:cart[pid]});}if(!items.length){c.innerHTML='<p style="text-align:center;padding:30px;">🛍️ КОРЗИНА ПУСТА</p>';tc.innerHTML='';return;}c.innerHTML='';var t=0;items.forEach(function(it){var s=it.price*it.q;t+=s;var d=document.createElement('div');d.className='cart-item';d.innerHTML='<div><strong>'+it.name+'</strong> x'+it.q+'</div><div><b>'+s+'₽</b> <button class="btn-delete" data-ri="'+it.id+'">✖</button></div>';c.appendChild(d);});tc.innerHTML='<div class="cart-total"><div>💰 ИТОГО: <span class="total-price">'+t+'₽</span></div><button id="payBtn" class="pay-btn">💳 ОПЛАТИТЬ (ЮMONEY)</button></div>';c.querySelectorAll('.btn-delete').forEach(function(b){b.onclick=function(){delete cart[parseInt(this.getAttribute('data-ri'))];localStorage.setItem('px_cart',JSON.stringify(cart));updateCartCount();renderCart();};});document.getElementById('payBtn').onclick=function(){if(confirm('💳 ПЕРЕЙТИ К ОПЛАТЕ '+t+'₽?')){window.open('https://yoomoney.ru/quickpay/confirm?receiver='+YOOMONEY_WALLET+'&sum='+t,'_blank');cart={};localStorage.setItem('px_cart','{}');updateCartCount();renderCart();}};}
+
+function renderCart(){
+    var c=document.getElementById('cartItemsContainer'),tc=document.getElementById('cartTotalContainer');
+    if(!c||!tc)return;
+    var items=[];
+    for(var pid in cart){
+        var p=store.find(function(x){return x.id==parseInt(pid);});
+        if(p)items.push({id:p.id,name:p.name,price:p.price,img:p.img,q:cart[pid]});
+    }
+    if(!items.length){c.innerHTML='<p style="text-align:center;padding:30px;">🛍️ КОРЗИНА ПУСТА</p>';tc.innerHTML='';return;}
+    c.innerHTML='';
+    var t=0;
+    items.forEach(function(it){
+        var s=it.price*it.q;
+        t+=s;
+        var d=document.createElement('div');
+        d.className='cart-item';
+        d.innerHTML='<div><strong>'+it.name+'</strong> x'+it.q+'</div><div><b>'+s+'₽</b> <button class="btn-delete" data-ri="'+it.id+'">✖</button></div>';
+        c.appendChild(d);
+    });
+    
+    tc.innerHTML='<div class="cart-total"><div>💰 ИТОГО: <span class="total-price">'+t+'₽</span></div>'+
+        '<div style="margin-top:15px;text-align:center;">'+
+        '<button id="paySBPBtn" class="pay-btn-sbp" style="margin:5px;">🏦 ОПЛАТИТЬ</button>'+
+        '</div></div>';
+    
+    c.querySelectorAll('.btn-delete').forEach(function(b){
+        b.onclick=function(){
+            delete cart[parseInt(this.getAttribute('data-ri'))];
+            localStorage.setItem('px_cart',JSON.stringify(cart));
+            updateCartCount();renderCart();
+        };
+    });
+    
+    document.getElementById('paySBPBtn').onclick=function(){
+        var yooLink='https://yoomoney.ru/quickpay/confirm.xml?receiver='+YOOMONEY_WALLET+
+            '&sum='+t+
+            '&label=shop_order'+
+            '&quickpay-form=button'+
+            '&paymentType=SB';
+        
+        if(confirm('🏦 ОПЛАТИТЬ '+t+'₽?\n\nОТКРОЕТСЯ СТРАНИЦА ОПЛАТЫ ЮMONEY')){
+            window.open(yooLink,'_blank');
+            showToast("✅ ПЕРЕХОД НА ОПЛАТУ...");
+            cart={};localStorage.setItem('px_cart','{}');updateCartCount();renderCart();
+        }
+    };
+}
 
 function renderChat(){
     var w=document.getElementById('globalChatMessages');
@@ -792,13 +1014,18 @@ function openAvatarPicker(){
     var sel=document.getElementById('avatarSelector');
     sel.innerHTML='';
     var isKingUser=isKing();
+    var kingRank=RANKS[RANKS.length-1];
+    
     for(var i=0;i<AVATARS.length;i++){
         (function(a){
             var isCrown=(a==='👑');
             var locked=isCrown&&!isKingUser;
             var d=document.createElement('div');
             d.className='avatar-option';
-            if(locked)d.classList.add('locked');
+            if(locked){
+                d.classList.add('locked');
+                d.setAttribute('data-tooltip','👑 ДОСТУПНО С РАНГА:\n'+kingRank.name+' ('+kingRank.vn+' ПОС.)');
+            }
             d.textContent=a;
             if(a===selectedAvatar&&!selectedAvatar.startsWith('data:image'))d.classList.add('selected');
             if(!locked){
@@ -808,8 +1035,6 @@ function openAvatarPicker(){
                     d.classList.add('selected');
                     selectedAvatar=a;
                 };
-            } else {
-                d.title='🔒 ДОСТУПНО ТОЛЬКО КОРОЛЮ НАСТОЛОК';
             }
             sel.appendChild(d);
         })(AVATARS[i]);
@@ -869,6 +1094,9 @@ setTimeout(function(){
     document.getElementById('modalRegLogin').addEventListener('input',function(){this.classList.remove('input-error','input-success');});
     document.getElementById('modalRegPass').addEventListener('input',function(){this.classList.remove('input-error','input-success');});
     document.getElementById('modalRegPassConfirm').addEventListener('input',function(){this.classList.remove('input-error','input-success');});
+    
+    document.getElementById('bookingPayBtn').onclick=processBookingPayment;
+    
     updateCartCount();renderCalendar();renderGames();renderStore();updateAdminChatBtn();
 },200);
 
