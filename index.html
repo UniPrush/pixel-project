@@ -66,8 +66,8 @@
         .error-text.show { display:block; }
         .success-text-green { color:#4aff6a; font-size:calc(0.4rem * var(--font-size-multiplier)); margin-top:4px; text-align:center; display:none; }
         .success-text-green.show { display:block; }
-        .auth-modal,.settings-modal,.password-modal,.reset-modal,.add-item-modal,.booking-modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:100; display:none; justify-content:center; align-items:center; padding:10px; }
-        .auth-card,.settings-card,.password-card,.reset-card,.add-item-card,.booking-card { background:var(--bg-primary); border:3px solid var(--border-color); border-radius:20px; padding:20px; width:100%; max-width:450px; color:var(--text-color); }
+        .auth-modal,.settings-modal,.password-modal,.reset-modal,.add-item-modal,.booking-modal,.custom-modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:100; display:none; justify-content:center; align-items:center; padding:10px; }
+        .auth-card,.settings-card,.password-card,.reset-card,.add-item-card,.booking-card,.custom-modal-card { background:var(--bg-primary); border:3px solid var(--border-color); border-radius:20px; padding:20px; width:100%; max-width:450px; color:var(--text-color); }
         .booking-card h2 { font-size:calc(0.7rem * var(--font-size-multiplier)); margin-bottom:15px; }
         .booking-info { background:var(--bg-secondary); border:2px solid var(--border-color); border-radius:12px; padding:12px; margin:10px 0; font-size:calc(0.4rem * var(--font-size-multiplier)); }
         .booking-info p { margin:6px 0; }
@@ -149,6 +149,9 @@
         .admin-chat-right .chat-input-area textarea { margin-top:0; flex:1; }
         .admin-chat-right .chat-input-area button { white-space:nowrap; }
 
+        .custom-modal-card { text-align:center; }
+        .custom-modal-card p { margin:15px 0; font-size:calc(0.45rem * var(--font-size-multiplier)); line-height:2; }
+
         @media (max-width: 768px) {
             .container { margin:5px; padding:10px; border-radius:15px; }
             .top-bar { flex-direction:column; align-items:stretch; gap:8px; }
@@ -172,7 +175,7 @@
             .calendar-grid { gap:2px; padding:5px; }
             .calendar-day { min-height:30px; font-size:calc(0.35rem * var(--font-size-multiplier)); }
             .calendar-day-header { font-size:calc(0.3rem * var(--font-size-multiplier)); }
-            .auth-card, .settings-card, .password-card, .reset-card, .add-item-card, .booking-card, .avatar-card, .admin-chat-card { max-width:95%; padding:15px; }
+            .auth-card, .settings-card, .password-card, .reset-card, .add-item-card, .booking-card, .avatar-card, .admin-chat-card, .custom-modal-card { max-width:95%; padding:15px; }
             .avatar-option { font-size:1.5rem; padding:6px; }
             h1 { font-size:calc(1rem * var(--font-size-multiplier)); }
             h2 { font-size:calc(0.7rem * var(--font-size-multiplier)); }
@@ -207,6 +210,20 @@
     <div class="image-viewer-content" onclick="event.stopPropagation()">
         <span class="image-viewer-close" onclick="closeImageViewer()">✖</span>
         <img id="imageViewerImg" src="" alt="Просмотр фото">
+    </div>
+</div>
+
+<!-- Модальное окно "Нет игры" -->
+<div id="noGameModal" class="custom-modal">
+    <div class="custom-modal-card">
+        <div style="text-align:right;cursor:pointer;font-size:20px;color:var(--border-color);margin-bottom:5px;" onclick="closeNoGameModal()">✖</div>
+        <h2>⚠️ ВНИМАНИЕ</h2>
+        <p id="noGameText">СНАЧАЛА ВЫБЕРИТЕ ИГРУ В КАТАЛОГЕ!</p>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:15px;">
+            <button id="noGameGoCatalogBtn" class="pixel-btn" style="background:#3a6a4a;">🎲 В КАТАЛОГ</button>
+            <button id="noGameContactAdminBtn" class="pixel-btn" style="background:#2a2a6a;">💬 СВЯЗАТЬСЯ С АДМИНОМ</button>
+            <button class="pixel-btn" onclick="closeNoGameModal()">❌ ЗАКРЫТЬ</button>
+        </div>
     </div>
 </div>
 
@@ -274,16 +291,44 @@ function closeImageViewer(){
 var pendingBooking=null;
 var pendingBookingDate=null;
 var selectedGameForRent=null;
+var noGameTargetDate=null;
 
-var YOOMONEY_WALLET='4100110940637220'; // ← ТВОЙ НОМЕР КОШЕЛЬКА!
+var YOOMONEY_WALLET='4100110940637220';
+
+// Функции для модального окна "Нет игры"
+function openNoGameModal(dk){
+    noGameTargetDate=dk;
+    var parts=dk.split('-');
+    var dateStr=parts[2]+' '+MONTHS[parseInt(parts[1])-1].substring(0,3)+' '+parts[0];
+    document.getElementById('noGameText').innerHTML='⚠️ ВЫ НЕ ВЫБРАЛИ ИГРУ!<br><br>📅 ХОТИТЕ ЗАБРОНИРОВАТЬ: <b>'+dateStr+'</b><br><br>ВЫБЕРИТЕ ИГРУ В КАТАЛОГЕ ИЛИ СВЯЖИТЕСЬ С АДМИНОМ';
+    document.getElementById('noGameModal').style.display='flex';
+}
+function closeNoGameModal(){
+    document.getElementById('noGameModal').style.display='none';
+    noGameTargetDate=null;
+}
+document.getElementById('noGameGoCatalogBtn').onclick=function(){
+    closeNoGameModal();
+    showPage('catalog');
+};
+document.getElementById('noGameContactAdminBtn').onclick=function(){
+    if(!currentUser){closeNoGameModal();alert("🔒 ВОЙДИТЕ!");return;}
+    var parts=noGameTargetDate.split('-');
+    var dateStr=parts[2]+' '+MONTHS[parseInt(parts[1])-1].substring(0,3)+' '+parts[0];
+    var msg='📅 ХОЧУ ЗАБРОНИРОВАТЬ ДЕНЬ: '+dateStr+'\n🎲 ИГРА: НЕ ВЫБРАНА\n💬 НУЖНА ПОМОЩЬ С ПОДБОРОМ ИГРЫ';
+    adminChat.push({u:currentUser.displayName,t:msg,time:Date.now()});
+    saveDB('adminChat',adminChat);
+    closeNoGameModal();
+    openAdminChat();
+    showToast("✅ АДМИН ПОЛУЧИЛ ЗАПРОС!");
+};
 
 function openBookingModal(dk){
     if(!currentUser){alert("🔒 ВОЙДИТЕ!");return;}
     if(!isVerified()){alert("⚠️ ПОДТВЕРДИТЕ ПОЧТУ!");return;}
     
     if(!selectedGameForRent){
-        alert("⚠️ СНАЧАЛА ВЫБЕРИТЕ ИГРУ В КАТАЛОГЕ!");
-        showPage('catalog');
+        openNoGameModal(dk);
         return;
     }
     
@@ -296,7 +341,7 @@ function openBookingModal(dk){
     infoHTML+='<p>🎲 <b>ИГРА:</b> '+selectedGameForRent.name+'</p>';
     infoHTML+='<p>👤 <b>ПОЛЬЗОВАТЕЛЬ:</b> '+currentUser.displayName+'</p>';
     infoHTML+='<p>💰 <b>СТОИМОСТЬ:</b> '+selectedGameForRent.price+'₽</p>';
-    infoHTML+='<p style="font-size:calc(0.35rem * var(--font-size-multiplier));color:var(--text-secondary);">⚠️ БРОНЬ БУДЕТ ОТПРАВЛЕНА НА ПОДТВЕРЖДЕНИЕ ПОСЛЕ ОПЛАТЫ</p>';
+    infoHTML+='<p style="font-size:calc(0.35rem * var(--font-size-multiplier));color:var(--text-secondary);">⚠️ ПРИ НАЖАТИИ "ОПЛАТИТЬ" ОТКРОЕТСЯ ЮMONEY</p>';
     
     document.getElementById('bookingInfoContent').innerHTML=infoHTML;
     document.getElementById('bookingModal').style.display='flex';
@@ -322,14 +367,13 @@ function processBookingPayment(){
         '&quickpay-form=button'+
         '&paymentType=SB';
     
-    if(confirm('🏦 ОПЛАТИТЬ '+amount+'₽?\n\n🎲 ИГРА: '+gameName+'\n📅 ДАТА: '+dk+'\n\nОТКРОЕТСЯ СТРАНИЦА ОПЛАТЫ ЮMONEY')){
-        bookings[dk]={u:currentUser.displayName,cf:false,game:gameName,price:amount};
-        saveDB('bookings',bookings);
-        selectedGameForRent=null;
-        closeBookingModal();
-        window.open(yooLink,'_blank');
-        showToast("✅ ПЕРЕХОД НА ОПЛАТУ...");
-    }
+    // Сразу сохраняем бронь и кидаем на оплату
+    bookings[dk]={u:currentUser.displayName,cf:false,game:gameName,price:amount};
+    saveDB('bookings',bookings);
+    selectedGameForRent=null;
+    closeBookingModal();
+    window.open(yooLink,'_blank');
+    showToast("✅ ПЕРЕХОД НА ОПЛАТУ...");
 }
 
 function isMobile(){
@@ -895,12 +939,9 @@ function renderCart(){
             '&label=shop_order'+
             '&quickpay-form=button'+
             '&paymentType=SB';
-        
-        if(confirm('🏦 ОПЛАТИТЬ '+t+'₽?\n\nОТКРОЕТСЯ СТРАНИЦА ОПЛАТЫ ЮMONEY')){
-            window.open(yooLink,'_blank');
-            showToast("✅ ПЕРЕХОД НА ОПЛАТУ...");
-            cart={};localStorage.setItem('px_cart','{}');updateCartCount();renderCart();
-        }
+        window.open(yooLink,'_blank');
+        showToast("✅ ПЕРЕХОД НА ОПЛАТУ...");
+        cart={};localStorage.setItem('px_cart','{}');updateCartCount();renderCart();
     };
 }
 
