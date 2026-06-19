@@ -1718,6 +1718,19 @@
             </div>
         </div>
     </div>
+    
+    <!-- Модальное окно подтверждения удаления пользователя (для админа) -->
+    <div id="deleteUserModal" class="custom-modal" style="display:none;">
+        <div class="custom-modal-card" style="max-width:400px;">
+            <div style="text-align:right;cursor:pointer;font-size:20px;color:var(--border-color);margin-bottom:10px;" onclick="closeDeleteUserModal()">✖</div>
+            <h2>🗑️ УДАЛИТЬ ПОЛЬЗОВАТЕЛЯ</h2>
+            <p id="deleteUserText" style="font-size:0.45rem;text-align:center;margin:15px 0;">ВЫ УВЕРЕНЫ?</p>
+            <div style="display:flex;gap:10px;justify-content:center;margin-top:15px;">
+                <button id="confirmDeleteUserBtn" class="pixel-btn" style="background:#8a2a2a;">🗑️ УДАЛИТЬ</button>
+                <button class="pixel-btn" onclick="closeDeleteUserModal()">❌ ОТМЕНА</button>
+            </div>
+        </div>
+    </div>
 
     <div id="mainContent" class="container" style="display:none;">
         <div class="top-bar">
@@ -3226,6 +3239,69 @@
             showProfile();
         }
 
+        // Переменная для временного хранения ID удаляемого пользователя
+        var deleteTargetUid = null;
+        var deleteTargetName = null;
+
+        function openDeleteUserModal(uid, name) {
+            if (!currentUser || currentUser.role !== 'admin') return;
+            // Не даём удалить самого себя
+            if (currentUser.uid === uid) {
+                showToast("⚠️ НЕЛЬЗЯ УДАЛИТЬ САМОГО СЕБЯ!");
+                return;
+            }
+            deleteTargetUid = uid;
+            deleteTargetName = name || 'ПОЛЬЗОВАТЕЛЬ';
+            document.getElementById('deleteUserText').innerHTML = 'ВЫ ТОЧНО ХОТИТЕ УДАЛИТЬ ПОЛЬЗОВАТЕЛЯ <b>' + deleteTargetName + '</b>?<br><span style="font-size:0.35rem;color:var(--text-secondary);">ЭТО ДЕЙСТВИЕ НЕОБРАТИМО</span>';
+            document.getElementById('deleteUserModal').style.display = 'flex';
+        }
+
+        function closeDeleteUserModal() {
+            document.getElementById('deleteUserModal').style.display = 'none';
+            deleteTargetUid = null;
+            deleteTargetName = null;
+        }
+
+        // Удаление пользователя из Firebase
+        function confirmDeleteUser() {
+            if (!deleteTargetUid) {
+                showToast("⚠️ ОШИБКА: ПОЛЬЗОВАТЕЛЬ НЕ ВЫБРАН!");
+                return;
+            }
+            var btn = document.getElementById('confirmDeleteUserBtn');
+            btn.disabled = true;
+            btn.innerHTML = '⏳...';
+
+            // 1. Удаляем из Firebase Database (users)
+            db.ref('users').once('value', function(snapshot) {
+                var currentUsers = snapshot.val() || [];
+                // Фильтруем массив, убирая удаляемого пользователя
+                var updatedUsers = currentUsers.filter(function(u) {
+                    return u.uid !== deleteTargetUid;
+                });
+                db.ref('users').set(updatedUsers).then(function() {
+                    // 2. Удаляем из Firebase Auth (через Admin SDK нельзя из клиента, но мы можем удалить аккаунт самого пользователя, если это он)
+                    // Так как у нас нет Admin SDK, мы можем удалить пользователя из Auth только если это он сам.
+                    // Но админ может удалить другого пользователя только через Admin SDK.
+                    // В данном случае мы удаляем из Database, а из Auth удаляем только если это сам пользователь.
+                    // Для полного удаления из Auth нужно использовать Admin SDK на сервере.
+                    // В данном случае мы удаляем из Database и помечаем, что аккаунт удалён.
+                    showToast("✅ ПОЛЬЗОВАТЕЛЬ УДАЛЁН ИЗ БАЗЫ ДАННЫХ!");
+                    btn.disabled = false;
+                    btn.innerHTML = '🗑️ УДАЛИТЬ';
+                    closeDeleteUserModal();
+                    // Обновляем таблицу
+                    renderAdminUserListUnderAvatar();
+                }).catch(function(err) {
+                    showToast("❌ ОШИБКА ПРИ УДАЛЕНИИ: " + err.message);
+                    btn.disabled = false;
+                    btn.innerHTML = '🗑️ УДАЛИТЬ';
+                });
+            });
+        }
+
+        document.getElementById('confirmDeleteUserBtn').onclick = confirmDeleteUser;
+
         // НОВЫЕ ФУНКЦИИ ДЛЯ АДМИНА (СПИСОК ПОЛЬЗОВАТЕЛЕЙ ПОД АВАТАРКОЙ)
         function renderAdminUserListUnderAvatar() {
             var profileContainer = document.querySelector('.profile-container');
@@ -3293,33 +3369,44 @@
                 actionCell.style.gap = '5px';
 
                 if (u.role !== 'admin') {
-                    // Кнопка добавить посещение (+)
+                    // ----- Кнопка ➕ (светлая) -----
                     var btnAdd = document.createElement('button');
                     btnAdd.textContent = '➕';
-                    btnAdd.className = 'pixel-btn';
                     btnAdd.style.padding = '2px 6px';
                     btnAdd.style.fontSize = 'calc(0.4rem * var(--scale-factor))';
-                    btnAdd.style.background = '#2a6a3a';
+                    btnAdd.style.background = '#2a7a3a'; // Яркий зелёный
+                    btnAdd.style.color = '#fff';         // Белый текст
+                    btnAdd.style.border = '1px solid #4aff6a';
                     btnAdd.onclick = (function(userId) {
-                        return function() {
-                            adminAddVisit(userId);
-                        };
+                        return function() { adminAddVisit(userId); };
                     })(u.uid);
                     actionCell.appendChild(btnAdd);
 
-                    // Кнопка снять посещение (-)
+                    // ----- Кнопка ➖ (светлая) -----
                     var btnRemove = document.createElement('button');
                     btnRemove.textContent = '➖';
-                    btnRemove.className = 'pixel-btn';
                     btnRemove.style.padding = '2px 6px';
                     btnRemove.style.fontSize = 'calc(0.4rem * var(--scale-factor))';
-                    btnRemove.style.background = '#8a3a3a';
+                    btnRemove.style.background = '#8a3a3a'; // Яркий красный
+                    btnRemove.style.color = '#fff';         // Белый текст
+                    btnRemove.style.border = '1px solid #ff4444';
                     btnRemove.onclick = (function(userId) {
-                        return function() {
-                            adminRemoveVisit(userId);
-                        };
+                        return function() { adminRemoveVisit(userId); };
                     })(u.uid);
                     actionCell.appendChild(btnRemove);
+
+                    // ----- Кнопка 🗑️ УДАЛИТЬ (светлая) -----
+                    var btnDelete = document.createElement('button');
+                    btnDelete.textContent = '🗑️';
+                    btnDelete.style.padding = '2px 6px';
+                    btnDelete.style.fontSize = 'calc(0.4rem * var(--scale-factor))';
+                    btnDelete.style.background = '#6a2a2a'; // Тёмно-красный, но светлый
+                    btnDelete.style.color = '#fff';
+                    btnDelete.style.border = '1px solid #ff6666';
+                    btnDelete.onclick = (function(userId, userName) {
+                        return function() { openDeleteUserModal(userId, userName); };
+                    })(u.uid, u.displayName);
+                    actionCell.appendChild(btnDelete);
                 } else {
                     actionCell.textContent = '👑 АДМИН';
                     actionCell.style.fontSize = 'calc(0.3rem * var(--scale-factor))';
