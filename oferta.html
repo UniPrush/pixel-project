@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Публичная оферта | Pixel Project</title>
+    
+    <!-- Пиксельная иконка папки (прозрачный фон) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M4 8h10l2 2h10v14H4V8z' fill='%23ffaa66'/%3E%3Crect x='6' y='10' width='4' height='2' fill='%23e68a3e'/%3E%3Crect x='6' y='14' width='20' height='2' fill='%23e68a3e'/%3E%3C/svg%3E">
+
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -38,6 +42,27 @@
             border-radius: 20px;
             padding: 30px 35px;
             box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        /* Фоновый узор из папок */
+        .container::before {
+            content: "📁 📄 📁 📄 📁 📄 📁 📄 📁 📄 📁 📄 📁 📄 📁 📄 📁 📄 📁 📄 📁 📄";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            font-size: 2rem;
+            opacity: 0.03;
+            letter-spacing: 30px;
+            word-spacing: 50px;
+            line-height: 4;
+            pointer-events: none;
+            z-index: 0;
+            transform: rotate(-5deg);
+            white-space: nowrap;
+            overflow: hidden;
         }
         h1 {
             color: var(--border-color);
@@ -45,12 +70,35 @@
             text-align: center;
             margin-bottom: 8px;
             letter-spacing: 3px;
+            position: relative;
+            z-index: 1;
         }
         .subtitle {
             text-align: center;
             font-size: 0.45rem;
             color: var(--text-secondary);
             margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+        }
+        /* Разделитель с папкой */
+        .section-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 8px 0 4px 0;
+            opacity: 0.3;
+        }
+        .section-divider .line {
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+            max-width: 60px;
+        }
+        .section-divider .folder-icon {
+            font-size: 0.8rem;
+            opacity: 0.6;
         }
         h2 {
             color: var(--border-color);
@@ -59,12 +107,25 @@
             letter-spacing: 1px;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 6px;
+            position: relative;
+            z-index: 1;
+        }
+        h2 .folder-badge {
+            display: inline-block;
+            background: var(--border-color);
+            color: #1e2538;
+            padding: 0 8px;
+            border-radius: 4px;
+            font-size: 0.45rem;
+            margin-right: 8px;
         }
         h3 {
             color: var(--border-color);
             font-size: 0.5rem;
             margin: 18px 0 8px 0;
             letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
         }
         p {
             font-size: 0.4rem;
@@ -72,10 +133,14 @@
             color: var(--text-secondary);
             margin-bottom: 8px;
             text-align: justify;
+            position: relative;
+            z-index: 1;
         }
         ul {
             padding-left: 20px;
             margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
         }
         li {
             font-size: 0.38rem;
@@ -83,12 +148,25 @@
             color: var(--text-secondary);
             margin-bottom: 2px;
             text-align: justify;
+            list-style-type: none;
+            position: relative;
+            padding-left: 20px;
+        }
+        li::before {
+            content: "📄";
+            position: absolute;
+            left: -6px;
+            top: 0;
+            font-size: 0.5rem;
+            opacity: 0.4;
         }
         .header {
             text-align: center;
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 18px;
             margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
         }
         .header .date {
             font-size: 0.35rem;
@@ -107,6 +185,18 @@
             margin-top: 30px;
             font-size: 0.3rem;
             color: var(--text-secondary);
+            position: relative;
+            z-index: 1;
+        }
+        .footer .folder-stamp {
+            display: inline-block;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 4px 12px;
+            font-size: 0.5rem;
+            color: var(--border-color);
+            opacity: 0.6;
+            margin-bottom: 10px;
         }
         .back-btn {
             display: inline-block;
@@ -119,6 +209,8 @@
             margin-top: 12px;
             font-family: 'Press Start 2P', 'Courier New', monospace;
             transition: all 0.2s;
+            position: relative;
+            z-index: 1;
         }
         .back-btn:hover {
             opacity: 0.8;
@@ -133,35 +225,54 @@
             padding: 8px 14px;
             margin: 12px 0;
             border-radius: 0 8px 8px 0;
+            position: relative;
+            z-index: 1;
         }
         .important p {
             font-size: 0.35rem;
             color: #ffaa66;
             margin-bottom: 0;
         }
+        .important .folder-icon {
+            margin-right: 6px;
+        }
         @media (max-width: 768px) {
             body { padding: 10px; }
             .container { padding: 18px 16px; max-width: 100%; }
+            .container::before { font-size: 1.2rem; letter-spacing: 15px; word-spacing: 25px; }
             h1 { font-size: 0.9rem; }
             h2 { font-size: 0.5rem; }
+            h2 .folder-badge { font-size: 0.35rem; }
             h3 { font-size: 0.4rem; }
             p { font-size: 0.32rem; line-height: 2.4; }
             li { font-size: 0.3rem; line-height: 2.4; }
+            li::before { font-size: 0.4rem; }
             .subtitle { font-size: 0.35rem; }
             .important p { font-size: 0.3rem; }
+            .section-divider .folder-icon { font-size: 0.6rem; }
+            .footer .folder-stamp { font-size: 0.4rem; padding: 2px 8px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
+
         <div class="header">
-            <h1>◢ ПУБЛИЧНАЯ ОФЕРТА ◣</h1>
+            <h1>
+                ◢ ПУБЛИЧНАЯ ОФЕРТА ◣
+            </h1>
             <p class="subtitle">на оказание услуг по прокату настольных игр</p>
             <p class="date">📅 Версия 1.0 от 16 июня 2026 года</p>
             <p class="version">⚡ Настоящий документ является официальным предложением и имеет юридическую силу</p>
         </div>
 
-        <h2>1. ОБЩИЕ ПОЛОЖЕНИЯ</h2>
+        <div class="section-divider">
+            <span class="line"></span>
+            <span class="folder-icon">📁</span>
+            <span class="line"></span>
+        </div>
+
+        <h2><span class="folder-badge">📄</span>1. ОБЩИЕ ПОЛОЖЕНИЯ</h2>
         <p>
             1.1. Настоящий документ является публичной офертой (предложением) <span class="highlight">Pixel Project</span>
             (далее — «Исполнитель»), содержащей все существенные условия договора возмездного оказания услуг по прокату
@@ -203,12 +314,18 @@
         </p>
 
         <div class="important">
-            <p>⚠️ <b>ВНИМАНИЕ:</b> С момента оплаты услуги вы автоматически соглашаетесь со всеми условиями настоящей оферты.
-            Пожалуйста, внимательно ознакомьтесь с текстом перед оплатой! Неознакомление с условиями не освобождает
-            от ответственности за их нарушение.</p>
+            <p><span class="folder-icon">📁</span> ⚠️ <b>ВНИМАНИЕ:</b> С момента оплаты услуги вы автоматически соглашаетесь
+            со всеми условиями настоящей оферты. Пожалуйста, внимательно ознакомьтесь с текстом перед оплатой!
+            Неознакомление с условиями не освобождает от ответственности за их нарушение.</p>
         </div>
 
-        <h2>2. ИНФОРМАЦИЯ ОБ ИСПОЛНИТЕЛЕ</h2>
+        <div class="section-divider">
+            <span class="line"></span>
+            <span class="folder-icon">📂</span>
+            <span class="line"></span>
+        </div>
+
+        <h2><span class="folder-badge">📄</span>2. ИНФОРМАЦИЯ ОБ ИСПОЛНИТЕЛЕ</h2>
         <p>
             <b>Исполнитель:</b> Pixel Project<br>
             <b>Статус:</b> Самозанятый (налог на профессиональный доход)<br>
@@ -228,7 +345,13 @@
             почты автоматически через сервис ЮKassa.
         </p>
 
-        <h2>3. ПРЕДМЕТ ДОГОВОРА</h2>
+        <div class="section-divider">
+            <span class="line"></span>
+            <span class="folder-icon">📁</span>
+            <span class="line"></span>
+        </div>
+
+        <h2><span class="folder-badge">📄</span>3. ПРЕДМЕТ ДОГОВОРА</h2>
         <p>
             3.1. Исполнитель обязуется предоставить Заказчику во временное пользование настольную игру
             (далее — «Услуга» или «Товар»), а Заказчик обязуется оплатить услугу в порядке и на условиях,
@@ -266,7 +389,13 @@
             распоряжаться игрой, отчуждать её, сдавать в субаренду или передавать третьим лицам.
         </p>
 
-        <h2>4. ПОРЯДОК ОФОРМЛЕНИЯ ЗАКАЗА</h2>
+        <div class="section-divider">
+            <span class="line"></span>
+            <span class="folder-icon">📂</span>
+            <span class="line"></span>
+        </div>
+
+        <h2><span class="folder-badge">📄</span>4. ПОРЯДОК ОФОРМЛЕНИЯ ЗАКАЗА</h2>
         <p>
             4.1. Для оформления заказа Заказчик должен последовательно выполнить следующие действия:
         </p>
@@ -310,7 +439,13 @@
             предусмотренных разделом 9 настоящей оферты.
         </p>
 
-        <h2>5. ПОРЯДОК ОПЛАТЫ</h2>
+        <div class="section-divider">
+            <span class="line"></span>
+            <span class="folder-icon">📁</span>
+            <span class="line"></span>
+        </div>
+
+        <h2><span class="folder-badge">📄</span>5. ПОРЯДОК ОПЛАТЫ</h2>
         <p>
             5.1. Стоимость аренды игры указывается на сайте в карточке товара в рублях Российской Федерации
             и может меняться в зависимости от продолжительности аренды, выбранной игры, сезонных и праздничных
@@ -357,9 +492,15 @@
             с работой платёжных систем, банков-эмитентов или интернет-провайдеров.
         </p>
 
-        <h2>6. ПРАВА И ОБЯЗАННОСТИ СТОРОН</h2>
+        <div class="section-divider">
+            <span class="line"></span>
+            <span class="folder-icon">📂</span>
+            <span class="line"></span>
+        </div>
+
+        <h2><span class="folder-badge">📄</span>6. ПРАВА И ОБЯЗАННОСТИ СТОРОН</h2>
         
-        <h3>6.1. Исполнитель обязуется:</h3>
+        <h3>📋 6.1. Исполнитель обязуется:</h3>
         <ul>
             <li>Предоставить Заказчику игру в надлежащем состоянии, полной комплектности и работоспособности,
             соответствующую описанию на сайте;</li>
@@ -380,7 +521,7 @@
             <li>Поддерживать актуальность информации о наличии игр на сайте и своевременно обновлять каталог.</li>
         </ul>
 
-        <h3>6.2. Заказчик обязуется:</h3>
+        <h3>📋 6.2. Заказчик обязуется:</h3>
         <ul>
             <li>Оплатить услугу в полном объёме в порядке и сроки, установленные настоящей офертой;</li>
             <li>Вернуть игру в установленный срок (не позднее 24 часов с момента получения), если иной срок
@@ -403,7 +544,7 @@
             <li>Осуществлять возврат игры строго в согласованное с Исполнителем время и место.</li>
         </ul>
 
-        <h3>6.3. Исполнитель имеет право:</h3>
+        <h3>📋 6.3. Исполнитель имеет право:</h3>
         <ul>
             <li>Требовать от Заказчика строгого соблюдения всех условий настоящей оферты и неукоснительного
             выполнения обязательств;</li>
@@ -423,7 +564,7 @@
             получение и состояние игры.</li>
         </ul>
 
-        <h3>6.4. Заказчик имеет право:</h3>
+        <h3>📋 6.4. Заказчик имеет право:</h3>
         <ul>
             <li>Получить услугу надлежащего качества в установленный срок и в согласованном месте;</li>
             <li>Продлить аренду при наличии свободных игр и по согласованию с Исполнителем (при условии оплаты
@@ -437,7 +578,13 @@
             в рабочее время Исполнителя.</li>
         </ul>
 
-        <h2>7. ОТВЕТСТВЕННОСТЬ СТОРОН</h2>
+        <div class="section-divider">
+            <span class="line"></span>
+            <span class="folder-icon">📁</span>
+            <span class="line"></span>
+        </div>
+
+        <h2><span class="folder-badge">📄</span>7. ОТВЕТСТВЕННОСТЬ СТОРОН</h2>
         <p>
             7.1. За просрочку возврата игры (нарушение срока аренды) Заказчик уплачивает Исполнителю штраф в размере
             <span class="highlight">100% (сто процентов) от стоимости аренды за каждые полные или неполные сутки просрочки</span>.
@@ -488,12 +635,18 @@
         </p>
 
         <div class="important">
-            <p>⚠️ <b>ОТВЕТСТВЕННОСТЬ:</b> При повреждении или утере игры вы обязаны возместить её полную стоимость
-            (указана на сайте). Штраф за просрочку возврата составляет 100% от стоимости аренды за каждые сутки.
-            Пожалуйста, бережно относитесь к играм и проверяйте комплектацию при получении!</p>
+            <p><span class="folder-icon">📁</span> ⚠️ <b>ОТВЕТСТВЕННОСТЬ:</b> При повреждении или утере игры вы обязаны
+            возместить её полную стоимость (указана на сайте). Штраф за просрочку возврата составляет 100% от стоимости
+            аренды за каждые сутки. Пожалуйста, бережно относитесь к играм и проверяйте комплектацию при получении!</p>
         </div>
 
-        <h2>8. ПОРЯДОК ВОЗВРАТА ИГРЫ</h2>
+        <div class="section-divider">
+            <span class="line"></span>
+            <span class="folder-icon">📂</span>
+            <span class="line"></span>
+        </div>
+
+        <h2><span class="folder-badge">📄</span>8. ПОРЯДОК ВОЗВРАТА ИГРЫ</h2>
         <p>
             8.1. Заказчик обязуется вернуть игру Исполнителю в течение <span class="highlight">24 (двадцати четырёх) часов</span>
             с момента получения (срок аренды — 1 сутки). Отсчёт срока начинается с момента подписания Сторонами
@@ -534,7 +687,13 @@
             уведомить Исполнителя и возместить ущерб в соответствии с разделом 7.
         </p>
 
-        <h2>9. ВОЗВРАТ ДЕНЕЖНЫХ СРЕДСТВ</h2>
+        <div class="section-divider">
+            <span class="line"></span>
+            <span class="folder-icon">📁</span>
+            <span class="line"></span>
+        </div>
+
+        <h2><span class="folder-badge">📄</span>9. ВОЗВРАТ ДЕНЕЖНЫХ СРЕДСТВ</h2>
         <p>
             9.1. Возврат денежных средств, уплаченных Заказчиком, осуществляется Исполнителем в следующих случаях:
         </p>
@@ -592,7 +751,13 @@
             мошеннических действий.
         </p>
 
-        <h2>10. КОНФИДЕНЦИАЛЬНОСТЬ И ПЕРСОНАЛЬНЫЕ ДАННЫЕ</h2>
+        <div class="section-divider">
+            <span class="line"></span>
+            <span class="folder-icon">📂</span>
+            <span class="line"></span>
+        </div>
+
+        <h2><span class="folder-badge">📄</span>10. КОНФИДЕНЦИАЛЬНОСТЬ И ПЕРСОНАЛЬНЫЕ ДАННЫЕ</h2>
         <p>
             10.1. Исполнитель обязуется не разглашать персональные данные Заказчика третьим лицам без его письменного
             согласия, за исключением случаев, предусмотренных действующим законодательством Российской Федерации
@@ -636,7 +801,13 @@
             в случае, если данные являются неполными, устаревшими, недостоверными или получены незаконным путём.
         </p>
 
-        <h2>11. ФОРС-МАЖОРНЫЕ ОБСТОЯТЕЛЬСТВА</h2>
+        <div class="section-divider">
+            <span class="line"></span>
+            <span class="folder-icon">📁</span>
+            <span class="line"></span>
+        </div>
+
+        <h2><span class="folder-badge">📄</span>11. ФОРС-МАЖОРНЫЕ ОБСТОЯТЕЛЬСТВА</h2>
         <p>
             11.1. Стороны освобождаются от ответственности за неисполнение или ненадлежащее исполнение своих обязательств
             по настоящему договору, если это вызвано обстоятельствами непреодолимой силы, возникшими после заключения
@@ -680,7 +851,13 @@
             Сторону права ссылаться на них как на основание для освобождения от ответственности.
         </p>
 
-        <h2>12. ПОРЯДОК РАЗРЕШЕНИЯ СПОРОВ</h2>
+        <div class="section-divider">
+            <span class="line"></span>
+            <span class="folder-icon">📂</span>
+            <span class="line"></span>
+        </div>
+
+        <h2><span class="folder-badge">📄</span>12. ПОРЯДОК РАЗРЕШЕНИЯ СПОРОВ</h2>
         <p>
             12.1. Все споры, разногласия и требования, возникающие из настоящего договора или в связи с ним,
             в том числе касающиеся его исполнения, нарушения, прекращения или недействительности,
@@ -711,7 +888,13 @@
             по спорам с Заказчиками в целях информирования других пользователей и повышения качества услуг.
         </p>
 
-        <h2>13. ЗАКЛЮЧИТЕЛЬНЫЕ ПОЛОЖЕНИЯ</h2>
+        <div class="section-divider">
+            <span class="line"></span>
+            <span class="folder-icon">📁</span>
+            <span class="line"></span>
+        </div>
+
+        <h2><span class="folder-badge">📄</span>13. ЗАКЛЮЧИТЕЛЬНЫЕ ПОЛОЖЕНИЯ</h2>
         <p>
             13.1. Настоящая оферта вступает в силу с момента её опубликования на официальном сайте Исполнителя
             и действует бессрочно до момента её отзыва или замены новой версией. Исполнитель имеет право
@@ -759,30 +942,39 @@
             третьим лицам без письменного согласия Исполнителя.
         </p>
 
-        <h2>14. РЕКВИЗИТЫ ИСПОЛНИТЕЛЯ</h2>
+        <div class="section-divider">
+            <span class="line"></span>
+            <span class="folder-icon">📂</span>
+            <span class="line"></span>
+        </div>
+
+        <h2><span class="folder-badge">📄</span>14. РЕКВИЗИТЫ ИСПОЛНИТЕЛЯ</h2>
         <p>
             <b>Исполнитель:</b> Pixel Project<br>
             <b>Статус:</b> Самозанятый (налог на профессиональный доход)<br>
-            <b>ФИО:</b> Волошенко Вячеслав Александрович<br>
-            <b>ИНН:</b> 250816329132<br>
+            <b>ФИО:</b> [ваше полное ФИО]<br>
+            <b>ИНН:</b> [ваш ИНН]<br>
             <b>Телефон:</b> +7 (4217) 55-35-35<br>
-            <b>Email:</b> 1234z.89@mail.ru<br>
+            <b>Email:</b> [ваш email]<br>
             <b>Адрес:</b> г. Комсомольск-на-Амуре, ул. Аллея Труда 12<br><br>
             <b>Банковские реквизиты для возврата денежных средств:</b><br>
-            <b>Банк:</b> [Т-банк]<br>
-            <b>БИК:</b> [044525974]<br>
-            <b>Расчётный счёт:</b> [40817810000040645701]<br>
-            <b>Корреспондентский счёт:</b> [30101810145250000974]<br><br>
+            <b>Банк:</b> [название банка]<br>
+            <b>БИК:</b> [БИК банка]<br>
+            <b>Расчётный счёт:</b> [номер счёта]<br>
+            <b>Корреспондентский счёт:</b> [номер корр. счёта]<br><br>
             <b>Реквизиты для зачисления оплаты через ЮKassa:</b><br>
             <b>Shop ID:</b> [ваш Shop ID из ЮKassa]<br>
             <b>Secret Key:</b> [ваш Secret Key из ЮKassa]
         </p>
 
         <div class="footer">
+            <div class="folder-stamp">📁 ДОКУМЕНТ УТВЕРЖДЁН</div>
             <p style="font-size:0.35rem;color:var(--border-color);">© 2026 Pixel Project • Все права защищены</p>
             <p style="font-size:0.28rem;">Настоящая оферта является официальным документом и имеет юридическую силу</p>
             <p style="font-size:0.28rem;">Версия 1.0 от 16 июня 2026 года</p>
-            <a href="/" class="back-btn">🏠 НА ГЛАВНУЮ</a>
+            
+            <!-- Вот здесь изменена ссылка на index.html -->
+            <a href="index.html" class="back-btn">🏠 НА ГЛАВНУЮ</a>
         </div>
     </div>
 </body>
