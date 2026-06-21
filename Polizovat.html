@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Публичная оферта | Pixel Project</title>
+    
+    <!-- Пиксельная иконка папки (прозрачный фон) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M4 8h10l2 2h10v14H4V8z' fill='%23ffaa66'/%3E%3Crect x='6' y='10' width='4' height='2' fill='%23e68a3e'/%3E%3Crect x='6' y='14' width='20' height='2' fill='%23e68a3e'/%3E%3C/svg%3E">
+
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        /* --- ТОЧНО ТАКИЕ ЖЕ ПЕРЕМЕННЫЕ, КАК В ГЛАВНОМ САЙТЕ --- */
+        :root {
+            --bg-primary: #1e2538;
+            --bg-secondary: #151c2c;
+            --bg-card: #2c334a;
+            --bg-input: #2a2f40;
+            --bg-chat: #1a1e2c;
+            --border-color: #ffaa66;
+            --text-color: #FFFFFF;
+            --text-secondary: #aaa;
+            --btn-bg: #5e4a3a;
+            --btn-shadow: #2a1e14;
+            --card-shadow: #121624;
+            --font-size-multiplier: 1;
+            --scale-factor: 1;
+        }
+        
+        /* ТА ЖЕ СВЕТЛАЯ ТЕМА, ЕСЛИ НУЖНА */
+        .theme-light {
+            --bg-primary: #f0e6d3;
+            --bg-secondary: #e8dcc8;
+            --bg-card: #fff8ee;
+            --bg-input: #ffffff;
+            --bg-chat: #f5efe0;
+            --border-color: #8B5E3C;
+            --text-color: #3a2a1a;
+            --text-secondary: #6a5a4a;
+            --btn-bg: #8B5E3C;
+            --btn-shadow: #5a3a1e;
+            --card-shadow: #c0b090;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Press Start 2P', 'Courier New', monospace;
+            background: #2a1a3a; /* Тот же фон, что у основного сайта */
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-size: calc(0.5rem * var(--font-size-multiplier) * var(--scale-factor));
+            line-height: 2.2;
+            color: var(--text-color);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            padding: calc(20px * var(--scale-factor));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            background: var(--bg-primary);
+            border-radius: calc(20px * var(--scale-factor));
+            border: calc(3px * var(--scale-factor)) solid var(--border-color);
+            box-shadow: 0 calc(15px * var(--scale-factor)) calc(30px * var(--scale-factor)) rgba(0, 0, 0, 0.5);
+            padding: calc(30px * var(--scale-factor)) calc(35px * var(--scale-factor));
+            transition: all 0.2s ease;
+        }
+
+        h1 {
+            font-size: calc(1.2rem * var(--font-size-multiplier) * var(--scale-factor));
+            letter-spacing: calc(2px * var(--scale-factor));
+            line-height: 2;
+            color: var(--border-color);
+            text-align: center;
+            margin-bottom: calc(5px * var(--scale-factor));
+        }
+        h2 {
+            font-size: calc(0.85rem * var(--font-size-multiplier) * var(--scale-factor));
+            letter-spacing: calc(1px * var(--scale-factor));
+            line-height: 2;
+            color: var(--border-color);
+            margin: calc(25px * var(--scale-factor)) 0 calc(15px * var(--scale-factor)) 0;
+            border-bottom: calc(2px * var(--scale-factor)) solid var(--border-color);
+            padding-bottom: calc(6px * var(--scale-factor));
+        }
+        h3 {
+            font-size: calc(0.7rem * var(--font-size-multiplier) * var(--scale-factor));
+            letter-spacing: calc(1px * var(--scale-factor));
+            line-height: 2;
+            color: var(--border-color);
+            margin: calc(18px * var(--scale-factor)) 0 calc(8px * var(--scale-factor)) 0;
+        }
+        p {
+            font-size: calc(0.45rem * var(--font-size-multiplier) * var(--scale-factor));
+            line-height: 2.2;
+            color: var(--text-color);
+            margin-bottom: calc(10px * var(--scale-factor));
+            text-align: justify;
+        }
+        ul {
+            padding-left: calc(25px * var(--scale-factor));
+            margin-bottom: calc(15px * var(--scale-factor));
+        }
+        li {
+            font-size: calc(0.4rem * var(--font-size-multiplier) * var(--scale-factor));
+            line-height: 2.2;
+            color: var(--text-secondary);
+            margin-bottom: calc(4px * var(--scale-factor));
+            text-align: justify;
+            list-style-type: none;
+            position: relative;
+        }
+        li::before {
+            content: "📄 ";
+            font-size: calc(0.5rem * var(--scale-factor));
+            opacity: 0.6;
+            margin-right: calc(6px * var(--scale-factor));
+        }
+        .subtitle {
+            text-align: center;
+            font-size: calc(0.4rem * var(--font-size-multiplier) * var(--scale-factor));
+            color: var(--text-secondary);
+            margin-bottom: calc(20px * var(--scale-factor));
+        }
+        .header {
+            border-bottom: calc(2px * var(--scale-factor)) solid var(--border-color);
+            padding-bottom: calc(18px * var(--scale-factor));
+            margin-bottom: calc(25px * var(--scale-factor));
+        }
+        .header .date {
+            font-size: calc(0.35rem * var(--font-size-multiplier) * var(--scale-factor));
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: calc(8px * var(--scale-factor));
+        }
+        .footer {
+            text-align: center;
+            border-top: calc(2px * var(--scale-factor)) solid var(--border-color);
+            padding-top: calc(20px * var(--scale-factor));
+            margin-top: calc(30px * var(--scale-factor));
+            font-size: calc(0.3rem * var(--font-size-multiplier) * var(--scale-factor));
+            color: var(--text-secondary);
+        }
+        .highlight {
+            color: var(--border-color);
+            font-weight: bold;
+        }
+        .important-box {
+            background: rgba(255, 170, 102, 0.08);
+            border-left: calc(3px * var(--scale-factor)) solid var(--border-color);
+            padding: calc(10px * var(--scale-factor)) calc(15px * var(--scale-factor));
+            margin: calc(15px * var(--scale-factor)) 0;
+            border-radius: 0 calc(8px * var(--scale-factor)) calc(8px * var(--scale-factor)) 0;
+        }
+        .important-box p {
+            font-size: calc(0.4rem * var(--font-size-multiplier) * var(--scale-factor));
+            color: var(--border-color);
+            margin-bottom: 0;
+        }
+        
+        /* КНОПКА НА ГЛАВНУЮ, КАК НА САЙТЕ */
+        .pixel-btn {
+            display: inline-block;
+            background: var(--btn-bg);
+            border: none;
+            font-family: 'Press Start 2P', 'Courier New', monospace;
+            font-size: calc(0.5rem * var(--font-size-multiplier) * var(--scale-factor));
+            font-weight: bold;
+            padding: calc(10px * var(--scale-factor)) calc(20px * var(--scale-factor));
+            color: #FFF;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: calc(3px * var(--scale-factor)) calc(3px * var(--scale-factor)) 0 var(--btn-shadow);
+            border-radius: calc(10px * var(--scale-factor));
+            text-transform: uppercase;
+            transition: all 0.15s ease;
+            margin-top: calc(15px * var(--scale-factor));
+        }
+        .pixel-btn:hover {
+            transform: scale(1.03);
+            box-shadow: calc(4px * var(--scale-factor)) calc(4px * var(--scale-factor)) 0 var(--btn-shadow);
+        }
+        .pixel-btn:active {
+            transform: scale(0.95);
+            box-shadow: calc(2px * var(--scale-factor)) calc(2px * var(--scale-factor)) 0 var(--btn-shadow);
+        }
+
+        @media (max-width: 768px) {
+            body { padding: calc(10px * var(--scale-factor)); }
+            .container { padding: calc(18px * var(--scale-factor)) calc(16px * var(--scale-factor)); }
+            h1 { font-size: calc(0.9rem * var(--font-size-multiplier) * var(--scale-factor)); }
+            h2 { font-size: calc(0.7rem * var(--font-size-multiplier) * var(--scale-factor)); }
+            h3 { font-size: calc(0.6rem * var(--font-size-multiplier) * var(--scale-factor)); }
+            p { font-size: calc(0.35rem * var(--font-size-multiplier) * var(--scale-factor)); line-height: 2; }
+            li { font-size: calc(0.32rem * var(--font-size-multiplier) * var(--scale-factor)); line-height: 2; }
+            .subtitle { font-size: calc(0.35rem * var(--font-size-multiplier) * var(--scale-factor)); }
+        }
+        @media (max-width: 480px) {
+            body { padding: calc(8px * var(--scale-factor)); }
+            .container { padding: calc(12px * var(--scale-factor)) calc(10px * var(--scale-factor)); }
+            h1 { font-size: calc(0.7rem * var(--font-size-multiplier) * var(--scale-factor)); }
+            p { font-size: calc(0.3rem * var(--font-size-multiplier) * var(--scale-factor)); }
+            li { font-size: calc(0.28rem * var(--font-size-multiplier) * var(--scale-factor)); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>◢ ПУБЛИЧНАЯ ОФЕРТА ◣</h1>
+            <p class="subtitle">на оказание услуг по прокату настольных игр</p>
+            <p class="date">📅 Версия 1.0 от 20 июня 2026 года</p>
+        </div>
+
+        <h2>1. ОБЩИЕ ПОЛОЖЕНИЯ</h2>
+        <p>
+            1.1. Настоящий документ является публичной офертой (предложением) <span class="highlight">Pixel Project</span>
+            (далее — «Исполнитель»), содержащей все существенные условия договора возмездного оказания услуг по прокату
+            настольных игр, и адресован неопределённому кругу лиц.
+        </p>
+        <p>
+            1.2. Публичная оферта адресована исключительно физическим лицам, достигшим 18-летнего возраста,
+            обладающим полной дееспособностью и желающим получить услуги по прокату настольных игр (далее — «Заказчик»).
+        </p>
+        <p>
+            1.3. Акцептом (принятием) настоящей оферты является факт оплаты Заказчиком услуги в полном объёме.
+            С этого момента договор считается заключённым в письменной форме в соответствии со ст. 438
+            Гражданского кодекса Российской Федерации, и стороны принимают на себя все права и обязанности,
+            предусмотренные настоящей офертой.
+        </p>
+        <p>
+            1.4. Исполнитель оставляет за собой право вносить изменения в настоящую оферту в одностороннем порядке
+            без предварительного уведомления Заказчика. Изменения вступают в силу с момента их публикации
+            на официальном сайте Исполнителя.
+        </p>
+        <div class="important-box">
+            <p>⚠️ <b>ВНИМАНИЕ:</b> С момента оплаты вы автоматически соглашаетесь со всеми условиями оферты.</p>
+        </div>
+
+        <h2>2. ИНФОРМАЦИЯ ОБ ИСПОЛНИТЕЛЕ</h2>
+        <p>
+            <b>Исполнитель:</b> Pixel Project<br>
+            <b>Статус:</b> Самозанятый (налог на профессиональный доход)<br>
+            <b>ИНН:</b> [ваш ИНН]<br>
+            <b>Телефон:</b> +7 (4217) 55-35-35<br>
+            <b>Email:</b> [ваш email]<br>
+            <b>Адрес:</b> г. Комсомольск-на-Амуре, ул. Аллея Труда 12
+        </p>
+
+        <h2>3. ПРЕДМЕТ ДОГОВОРА</h2>
+        <p>
+            3.1. Исполнитель обязуется предоставить Заказчику во временное пользование настольную игру
+            (далее — «Услуга» или «Товар»), а Заказчик обязуется оплатить услугу в порядке и на условиях,
+            предусмотренных настоящим договором, и вернуть игру в установленный срок в надлежащем состоянии,
+            полной комплектности и без повреждений.
+        </p>
+        <p>
+            3.2. Перечень доступных для аренды игр, их стоимость за сутки аренды, сроки аренды и иные условия
+            размещены на официальном сайте Исполнителя в разделе «Каталог».
+        </p>
+
+        <h2>4. ПОРЯДОК ОФОРМЛЕНИЯ ЗАКАЗА</h2>
+        <p>4.1. Для оформления заказа Заказчик должен последовательно выполнить следующие действия:</p>
+        <ul>
+            <li>Выбрать интересующую игру на сайте Исполнителя из актуального каталога;</li>
+            <li>Выбрать желаемую дату начала аренды в календаре бронирования;</li>
+            <li>Нажать кнопку «Арендовать» или «Забронировать» на странице выбранной игры;</li>
+            <li>Оплатить услугу в полном объёме через защищённый платёжный сервис.</li>
+        </ul>
+        <p>
+            4.2. Бронирование считается подтверждённым только после получения Исполнителем денежных средств
+            в полном объёме и отсутствия форс-мажорных обстоятельств.
+        </p>
+
+        <h2>5. ПОРЯДОК ОПЛАТЫ</h2>
+        <p>
+            5.1. Стоимость аренды игры указывается на сайте в карточке товара в рублях Российской Федерации.
+        </p>
+        <p>
+            5.2. Минимальный срок аренды составляет 1 (одни) сутки (24 часа). Максимальный срок аренды составляет
+            7 (семь) суток, если иное не согласовано Сторонами дополнительно.
+        </p>
+        <p>
+            5.3. Оплата производится 100% предоплатой через платёжный сервис <span class="highlight">ЮKassa</span>
+            с использованием банковских карт или через систему быстрых платежей (СБП).
+        </p>
+
+        <h2>6. ПРАВА И ОБЯЗАННОСТИ СТОРОН</h2>
+        <h3>📋 6.1. Исполнитель обязуется:</h3>
+        <ul>
+            <li>Предоставить Заказчику игру в надлежащем состоянии, полной комплектности и работоспособности;</li>
+            <li>Обеспечить конфиденциальность персональных данных Заказчика в соответствии с ФЗ № 152-ФЗ;</li>
+            <li>Рассматривать все претензии Заказчика в установленном порядке.</li>
+        </ul>
+        <h3>📋 6.2. Заказчик обязуется:</h3>
+        <ul>
+            <li>Оплатить услугу в полном объёме в установленный срок;</li>
+            <li>Вернуть игру в установленный срок в полной комплектности и сохранности;</li>
+            <li>Не передавать игру третьим лицам без письменного согласия Исполнителя;</li>
+            <li>Бережно относиться к игре и избегать механических повреждений.</li>
+        </ul>
+
+        <h2>7. ОТВЕТСТВЕННОСТЬ СТОРОН</h2>
+        <p>
+            7.1. За просрочку возврата игры Заказчик уплачивает Исполнителю штраф в размере
+            <span class="highlight">100% от стоимости аренды за каждые полные или неполные сутки просрочки</span>.
+        </p>
+        <p>
+            7.2. В случае повреждения игры Заказчик возмещает <span class="highlight">полную стоимость игры</span> в размере,
+            указанном на сайте Исполнителя.
+        </p>
+        <div class="important-box">
+            <p>⚠️ <b>ОТВЕТСТВЕННОСТЬ:</b> При повреждении или утере игры вы обязаны возместить её полную стоимость.</p>
+        </div>
+
+        <h2>8. ПОРЯДОК ВОЗВРАТА ИГРЫ</h2>
+        <p>
+            8.1. Заказчик обязуется вернуть игру Исполнителю в течение <span class="highlight">24 часов</span>
+            с момента получения. Отсчёт срока начинается с момента подписания акта приёма-передачи.
+        </p>
+        <p>
+            8.2. Возврат игры осуществляется по адресу: г. Комсомольск-на-Амуре, ул. Аллея Труда 12.
+        </p>
+
+        <h2>9. ВОЗВРАТ ДЕНЕЖНЫХ СРЕДСТВ</h2>
+        <p>9.1. Возврат денежных средств осуществляется Исполнителем в следующих случаях:</p>
+        <ul>
+            <li>Отказ Исполнителя от предоставления услуги до её начала;</li>
+            <li>Невозможность предоставления заказанной игры по вине Исполнителя;</li>
+            <li>Отмена бронирования Заказчиком за 24 часа до начала аренды (полный возврат);</li>
+            <li>Техническая ошибка при оплате.</li>
+        </ul>
+        <p>
+            9.2. Возврат осуществляется на ту же карту в течение <span class="highlight">10 рабочих дней</span>.
+        </p>
+
+        <h2>10. КОНФИДЕНЦИАЛЬНОСТЬ</h2>
+        <p>
+            10.1. Исполнитель обязуется не разглашать персональные данные Заказчика третьим лицам без его согласия.
+        </p>
+        <p>
+            10.2. Исполнитель обрабатывает персональные данные в строгом соответствии с ФЗ № 152-ФЗ «О персональных данных».
+        </p>
+
+        <h2>11. ФОРС-МАЖОР</h2>
+        <p>
+            11.1. Стороны освобождаются от ответственности за неисполнение обязательств в случае наступления обстоятельств
+            непреодолимой силы (пожар, наводнение, военные действия, изменения в законодательстве и т.д.).
+        </p>
+
+        <h2>12. ПОРЯДОК РАЗРЕШЕНИЯ СПОРОВ</h2>
+        <p>
+            12.1. Все споры решаются путём переговоров. При недостижении согласия спор передаётся на рассмотрение
+            в суд по месту нахождения Исполнителя (г. Комсомольск-на-Амуре).
+        </p>
+
+        <h2>13. ЗАКЛЮЧИТЕЛЬНЫЕ ПОЛОЖЕНИЯ</h2>
+        <p>
+            13.1. Настоящая оферта вступает в силу с момента её опубликования и действует бессрочно.
+        </p>
+        <p>
+            13.2. Акцептом (принятием) оферты считается факт оплаты Заказчиком услуги.
+        </p>
+
+        <h2>14. РЕКВИЗИТЫ ИСПОЛНИТЕЛЯ</h2>
+        <p>
+            <b>Исполнитель:</b> Pixel Project<br>
+            <b>Статус:</b> Самозанятый (налог на профессиональный доход)<br>
+            <b>ФИО:</b> [ваше полное ФИО]<br>
+            <b>ИНН:</b> [ваш ИНН]<br>
+            <b>Телефон:</b> +7 (4217) 55-35-35<br>
+            <b>Email:</b> [ваш email]<br>
+            <b>Адрес:</b> г. Комсомольск-на-Амуре, ул. Аллея Труда 12
+        </p>
+
+        <div class="footer">
+            <p style="font-size:0.35rem;color:var(--border-color);margin-bottom:5px;">© 2026 Pixel Project • Все права защищены</p>
+            <p style="font-size:0.28rem;margin-bottom:10px;">Версия 1.0 от 20 июня 2026 года</p>
+            <a href="index.html" class="pixel-btn">🏠 НА ГЛАВНУЮ</a>
+        </div>
+    </div>
+</body>
+</html>
