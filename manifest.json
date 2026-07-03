@@ -2,7 +2,7 @@
   "name": "Pixel Project",
   "short_name": "Pixel",
   "description": "Прокат настольных игр в Комсомольске-на-Амуре",
-"start_url": "/pixel-project/",
+  "start_url": "/pixel-project/",
   "display": "standalone",
   "background_color": "#2a1a3a",
   "theme_color": "#2a1a3a",
