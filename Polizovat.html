@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Пользовательское соглашение | Pixel Project</title>
+    
+    <!-- Пиксельная иконка папки (прозрачный фон) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M4 8h10l2 2h10v14H4V8z' fill='%23ffaa66'/%3E%3Crect x='6' y='10' width='4' height='2' fill='%23e68a3e'/%3E%3Crect x='6' y='14' width='20' height='2' fill='%23e68a3e'/%3E%3C/svg%3E">
+
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #1e2538;
+            --bg-secondary: #151c2c;
+            --bg-card: #2c334a;
+            --bg-input: #2a2f40;
+            --bg-chat: #1a1e2c;
+            --border-color: #ffaa66;
+            --text-color: #FFFFFF;
+            --text-secondary: #aaa;
+            --btn-bg: #5e4a3a;
+            --btn-shadow: #2a1e14;
+            --card-shadow: #121624;
+            --font-size-multiplier: 1;
+            --scale-factor: 1;
+        }
+        
+        .theme-light {
+            --bg-primary: #f0e6d3;
+            --bg-secondary: #e8dcc8;
+            --bg-card: #fff8ee;
+            --bg-input: #ffffff;
+            --bg-chat: #f5efe0;
+            --border-color: #8B5E3C;
+            --text-color: #3a2a1a;
+            --text-secondary: #6a5a4a;
+            --btn-bg: #8B5E3C;
+            --btn-shadow: #5a3a1e;
+            --card-shadow: #c0b090;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Press Start 2P', 'Courier New', monospace;
+            background: #2a1a3a;
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-size: calc(0.5rem * var(--font-size-multiplier) * var(--scale-factor));
+            line-height: 2.2;
+            color: var(--text-color);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            padding: calc(20px * var(--scale-factor));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            background: var(--bg-primary);
+            border-radius: calc(20px * var(--scale-factor));
+            border: calc(3px * var(--scale-factor)) solid var(--border-color);
+            box-shadow: 0 calc(15px * var(--scale-factor)) calc(30px * var(--scale-factor)) rgba(0, 0, 0, 0.5);
+            padding: calc(30px * var(--scale-factor)) calc(35px * var(--scale-factor));
+            transition: all 0.2s ease;
+        }
+
+        h1 {
+            font-size: calc(1.2rem * var(--font-size-multiplier) * var(--scale-factor));
+            letter-spacing: calc(2px * var(--scale-factor));
+            line-height: 2;
+            color: var(--border-color);
+            text-align: center;
+            margin-bottom: calc(5px * var(--scale-factor));
+        }
+        h2 {
+            font-size: calc(0.85rem * var(--font-size-multiplier) * var(--scale-factor));
+            letter-spacing: calc(1px * var(--scale-factor));
+            line-height: 2;
+            color: var(--border-color);
+            margin: calc(25px * var(--scale-factor)) 0 calc(15px * var(--scale-factor)) 0;
+            border-bottom: calc(2px * var(--scale-factor)) solid var(--border-color);
+            padding-bottom: calc(6px * var(--scale-factor));
+        }
+        h3 {
+            font-size: calc(0.7rem * var(--font-size-multiplier) * var(--scale-factor));
+            letter-spacing: calc(1px * var(--scale-factor));
+            line-height: 2;
+            color: var(--border-color);
+            margin: calc(18px * var(--scale-factor)) 0 calc(8px * var(--scale-factor)) 0;
+        }
+        p {
+            font-size: calc(0.45rem * var(--font-size-multiplier) * var(--scale-factor));
+            line-height: 2.2;
+            color: var(--text-color);
+            margin-bottom: calc(10px * var(--scale-factor));
+            text-align: justify;
+        }
+        ul {
+            padding-left: calc(25px * var(--scale-factor));
+            margin-bottom: calc(15px * var(--scale-factor));
+        }
+        li {
+            font-size: calc(0.4rem * var(--font-size-multiplier) * var(--scale-factor));
+            line-height: 2.2;
+            color: var(--text-secondary);
+            margin-bottom: calc(4px * var(--scale-factor));
+            text-align: justify;
+            list-style-type: none;
+            position: relative;
+        }
+        li::before {
+            content: "📄 ";
+            font-size: calc(0.5rem * var(--scale-factor));
+            opacity: 0.6;
+            margin-right: calc(6px * var(--scale-factor));
+        }
+        .subtitle {
+            text-align: center;
+            font-size: calc(0.4rem * var(--font-size-multiplier) * var(--scale-factor));
+            color: var(--text-secondary);
+            margin-bottom: calc(20px * var(--scale-factor));
+        }
+        .header {
+            border-bottom: calc(2px * var(--scale-factor)) solid var(--border-color);
+            padding-bottom: calc(18px * var(--scale-factor));
+            margin-bottom: calc(25px * var(--scale-factor));
+        }
+        .header .date {
+            font-size: calc(0.35rem * var(--font-size-multiplier) * var(--scale-factor));
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: calc(8px * var(--scale-factor));
+        }
+        .footer {
+            text-align: center;
+            border-top: calc(2px * var(--scale-factor)) solid var(--border-color);
+            padding-top: calc(20px * var(--scale-factor));
+            margin-top: calc(30px * var(--scale-factor));
+            font-size: calc(0.3rem * var(--font-size-multiplier) * var(--scale-factor));
+            color: var(--text-secondary);
+        }
+        .highlight {
+            color: var(--border-color);
+            font-weight: bold;
+        }
+        .important-box {
+            background: rgba(255, 170, 102, 0.08);
+            border-left: calc(3px * var(--scale-factor)) solid var(--border-color);
+            padding: calc(10px * var(--scale-factor)) calc(15px * var(--scale-factor));
+            margin: calc(15px * var(--scale-factor)) 0;
+            border-radius: 0 calc(8px * var(--scale-factor)) calc(8px * var(--scale-factor)) 0;
+        }
+        .important-box p {
+            font-size: calc(0.4rem * var(--font-size-multiplier) * var(--scale-factor));
+            color: var(--border-color);
+            margin-bottom: 0;
+        }
+        
+        .pixel-btn {
+            display: inline-block;
+            background: var(--btn-bg);
+            border: none;
+            font-family: 'Press Start 2P', 'Courier New', monospace;
+            font-size: calc(0.5rem * var(--font-size-multiplier) * var(--scale-factor));
+            font-weight: bold;
+            padding: calc(10px * var(--scale-factor)) calc(20px * var(--scale-factor));
+            color: #FFF;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: calc(3px * var(--scale-factor)) calc(3px * var(--scale-factor)) 0 var(--btn-shadow);
+            border-radius: calc(10px * var(--scale-factor));
+            text-transform: uppercase;
+            transition: all 0.15s ease;
+            margin-top: calc(15px * var(--scale-factor));
+        }
+        .pixel-btn:hover {
+            transform: scale(1.03);
+            box-shadow: calc(4px * var(--scale-factor)) calc(4px * var(--scale-factor)) 0 var(--btn-shadow);
+        }
+        .pixel-btn:active {
+            transform: scale(0.95);
+            box-shadow: calc(2px * var(--scale-factor)) calc(2px * var(--scale-factor)) 0 var(--btn-shadow);
+        }
+
+        @media (max-width: 768px) {
+            body { padding: calc(10px * var(--scale-factor)); }
+            .container { padding: calc(18px * var(--scale-factor)) calc(16px * var(--scale-factor)); }
+            h1 { font-size: calc(0.9rem * var(--font-size-multiplier) * var(--scale-factor)); }
+            h2 { font-size: calc(0.7rem * var(--font-size-multiplier) * var(--scale-factor)); }
+            h3 { font-size: calc(0.6rem * var(--font-size-multiplier) * var(--scale-factor)); }
+            p { font-size: calc(0.35rem * var(--font-size-multiplier) * var(--scale-factor)); line-height: 2; }
+            li { font-size: calc(0.32rem * var(--font-size-multiplier) * var(--scale-factor)); line-height: 2; }
+            .subtitle { font-size: calc(0.35rem * var(--font-size-multiplier) * var(--scale-factor)); }
+        }
+        @media (max-width: 480px) {
+            body { padding: calc(8px * var(--scale-factor)); }
+            .container { padding: calc(12px * var(--scale-factor)) calc(10px * var(--scale-factor)); }
+            h1 { font-size: calc(0.7rem * var(--font-size-multiplier) * var(--scale-factor)); }
+            p { font-size: calc(0.3rem * var(--font-size-multiplier) * var(--scale-factor)); }
+            li { font-size: calc(0.28rem * var(--font-size-multiplier) * var(--scale-factor)); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>◢ ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ ◣</h1>
+            <p class="subtitle">сервиса проката настольных игр Pixel Project</p>
+            <p class="date">📅 Версия 1.0 от 20 июня 2026 года</p>
+        </div>
+
+        <h2>1. ОБЩИЕ ПОЛОЖЕНИЯ</h2>
+        <p>
+            1.1. Настоящее Пользовательское соглашение (далее — «Соглашение») регулирует отношения между
+            <span class="highlight">Pixel Project</span> (далее — «Администрация») и физическим лицом
+            (далее — «Пользователь»), возникающие при использовании сайта, мобильной версии сайта
+            и всех связанных с ним сервисов.
+        </p>
+        <p>
+            1.2. Использование сайта означает полное и безоговорочное согласие Пользователя с условиями
+            настоящего Соглашения. Если Пользователь не согласен с условиями Соглашения, он обязан
+            немедленно прекратить использование сайта.
+        </p>
+        <p>
+            1.3. Администрация оставляет за собой право изменять настоящее Соглашение в любое время
+            без предварительного уведомления Пользователя. Изменения вступают в силу с момента
+            их публикации на сайте.
+        </p>
+        <div class="important-box">
+            <p>⚠️ <b>ВНИМАНИЕ:</b> Регистрируясь на сайте, вы принимаете все условия настоящего Соглашения.</p>
+        </div>
+
+        <h2>2. ТЕРМИНЫ И ОПРЕДЕЛЕНИЯ</h2>
+        <p>
+            <b>Сайт</b> — веб-сайт, расположенный по адресу <span class="highlight">https://pixel-project.github.io/</span>.<br>
+            <b>Пользователь</b> — физическое лицо, прошедшее регистрацию на Сайте и использующее его функциональные возможности.<br>
+            <b>Аккаунт</b> — учётная запись Пользователя, содержащая логин, пароль, адрес электронной почты и иные данные.<br>
+            <b>Контент</b> — любые материалы, размещаемые Пользователем на Сайте (сообщения, аватарки, изображения, текст).
+        </p>
+
+        <h2>3. РЕГИСТРАЦИЯ И АККАУНТ</h2>
+        <p>
+            3.1. Для получения доступа к полному функционалу Сайта Пользователь обязан пройти процедуру
+            регистрации путём заполнения регистрационной формы.
+        </p>
+        <p>
+            3.2. При регистрации Пользователь обязуется предоставить достоверную информацию о себе.
+            Администрация не несёт ответственности за последствия предоставления недостоверных данных.
+        </p>
+        <p>
+            3.3. Пользователь обязуется хранить в тайне логин и пароль от своего Аккаунта.
+            Все действия, совершённые под Аккаунтом Пользователя, считаются совершёнными лично Пользователем.
+        </p>
+        <p>
+            3.4. Запрещается создавать более одного Аккаунта на одного Пользователя, использовать
+            чужие персональные данные, а также передавать доступ к Аккаунту третьим лицам.
+        </p>
+        <p>
+            3.5. Администрация оставляет за собой право заблокировать или удалить Аккаунт Пользователя
+            без объяснения причин, в том числе при нарушении условий настоящего Соглашения.
+        </p>
+
+        <h2>4. ПРАВА И ОБЯЗАННОСТИ ПОЛЬЗОВАТЕЛЯ</h2>
+        <h3>📋 4.1. Пользователь имеет право:</h3>
+        <ul>
+            <li>Использовать функциональные возможности Сайта в соответствии с его назначением;</li>
+            <li>Просматривать каталог настольных игр и информацию о них;</li>
+            <li>Бронировать настольные игры на доступные даты;</li>
+            <li>Приобретать товары в магазине Сайта;</li>
+            <li>Общаться с другими Пользователями в общем чате;</li>
+            <li>Обращаться в службу поддержки через чат с Администрацией;</li>
+            <li>В любой момент удалить свой Аккаунт.</li>
+        </ul>
+        <h3>📋 4.2. Пользователь обязуется:</h3>
+        <ul>
+            <li>Соблюдать условия настоящего Соглашения и Публичной оферты;</li>
+            <li>Не нарушать законодательство Российской Федерации;</li>
+            <li>Не размещать Контент, нарушающий права третьих лиц;</li>
+            <li>Не использовать Сайт для распространения спама, рекламы без согласования с Администрацией;</li>
+            <li>Не публиковать оскорбительные, нецензурные, дискриминационные сообщения;</li>
+            <li>Не загружать изображения, содержащие запрещённый Контент (порнография, насилие, экстремизм);</li>
+            <li>Не пытаться взломать, модифицировать или иным образом нарушить работу Сайта;</li>
+            <li>Не использовать автоматизированные средства (боты, парсеры) для взаимодействия с Сайтом.</li>
+        </ul>
+
+        <h2>5. ПРАВА И ОБЯЗАННОСТИ АДМИНИСТРАЦИИ</h2>
+        <h3>📋 5.1. Администрация имеет право:</h3>
+        <ul>
+            <li>Модерировать Контент, размещаемый Пользователями;</li>
+            <li>Удалять любой Контент без объяснения причин;</li>
+            <li>Блокировать и удалять Аккаунты Пользователей, нарушающих Соглашение;</li>
+            <li>Изменять функциональность Сайта в любое время;</li>
+            <li>Ограничивать доступ к отдельным функциям Сайта;</li>
+            <li>Рассматривать и одобрять/отклонять загруженные Пользователями аватарки.</li>
+        </ul>
+        <h3>📋 5.2. Администрация обязуется:</h3>
+        <ul>
+            <li>Обеспечивать работоспособность Сайта в разумных пределах;</li>
+            <li>Хранить конфиденциальность персональных данных Пользователей;</li>
+            <li>Рассматривать обращения Пользователей в установленные сроки;</li>
+            <li>Уведомлять Пользователей о существенных изменениях в работе Сайта.</li>
+        </ul>
+
+        <h2>6. КОНФИДЕНЦИАЛЬНОСТЬ И ПЕРСОНАЛЬНЫЕ ДАННЫЕ</h2>
+        <p>
+            6.1. Администрация обрабатывает персональные данные Пользователей в соответствии
+            с Федеральным законом № 152-ФЗ «О персональных данных».
+        </p>
+        <p>
+            6.2. При регистрации Пользователь даёт согласие на обработку следующих персональных данных:
+            адрес электронной почты, логин, аватар.
+        </p>
+        <p>
+            6.3. Персональные данные используются исключительно для:
+        </p>
+        <ul>
+            <li>Идентификации Пользователя на Сайте;</li>
+            <li>Предоставления доступа к функционалу Сайта;</li>
+            <li>Связи с Пользователем по вопросам бронирования и заказов;</li>
+            <li>Направления уведомлений о статусе заказов.</li>
+        </ul>
+        <p>
+            6.4. Администрация не передаёт персональные данные третьим лицам без согласия Пользователя,
+            за исключением случаев, предусмотренных законодательством РФ.
+        </p>
+        <p>
+            6.5. Пользователь имеет право в любой момент отозвать согласие на обработку персональных данных
+            путём удаления Аккаунта.
+        </p>
+
+        <h2>7. ОТВЕТСТВЕННОСТЬ СТОРОН</h2>
+        <p>
+            7.1. Администрация не несёт ответственности за:
+        </p>
+        <ul>
+            <li>Содержание сообщений и иного Контента, размещаемого Пользователями;</li>
+            <li>Действия Пользователей, нарушающие настоящее Соглашение;</li>
+            <li>Убытки, возникшие у Пользователя в результате использования или невозможности использования Сайта;</li>
+            <li>Временные перебои в работе Сайта, вызванные техническими причинами;</li>
+            <li>Действия третьих лиц, получивших несанкционированный доступ к Аккаунту Пользователя.</li>
+        </ul>
+        <p>
+            7.2. Пользователь несёт полную ответственность за:
+        </p>
+        <ul>
+            <li>Действия, совершённые с использованием его Аккаунта;</li>
+            <li>Содержание размещаемого им Контента;</li>
+            <li>Соблюдение настоящего Соглашения и Публичной оферты.</li>
+        </ul>
+
+        <h2>8. РАЗРЕШЕНИЕ СПОРОВ</h2>
+        <p>
+            8.1. Все споры и разногласия, возникающие между Пользователем и Администрацией, решаются
+            путём переговоров через чат с Администрацией на Сайте.
+        </p>
+        <p>
+            8.2. При недостижении согласия спор передаётся на рассмотрение в суд по месту нахождения
+            Администрации (г. Комсомольск-на-Амуре) в соответствии с законодательством РФ.
+        </p>
+
+        <h2>9. ЗАКЛЮЧИТЕЛЬНЫЕ ПОЛОЖЕНИЯ</h2>
+        <p>
+            9.1. Настоящее Соглашение вступает в силу с момента его опубликования и действует бессрочно.
+        </p>
+        <p>
+            9.2. Признание судом какого-либо положения Соглашения недействительным не влечёт
+            недействительности остальных его положений.
+        </p>
+        <p>
+            9.3. Все вопросы, не урегулированные настоящим Соглашением, регулируются законодательством
+            Российской Федерации.
+        </p>
+
+        <h2>10. КОНТАКТНАЯ ИНФОРМАЦИЯ</h2>
+        <p>
+            <b>Администрация:</b> Pixel Project<br>
+            <b>Телефон:</b> +7 (4217) 55-35-35<br>
+            <b>Email:</b> 50pixelgames05@bk.ru<br>
+            <b>Адрес:</b> г. Комсомольск-на-Амуре, ул. Аллея Труда 12<br>
+            <b>Сайт:</b> https://pixel-project.github.io/
+        </p>
+
+        <div class="footer">
+            <p style="font-size:0.35rem;color:var(--border-color);margin-bottom:5px;">© 2026 Pixel Project • Все права защищены</p>
+            <p style="font-size:0.28rem;margin-bottom:10px;">Версия 1.0 от 20 июня 2026 года</p>
+            <a href="index.html" class="pixel-btn">🏠 НА ГЛАВНУЮ</a>
+        </div>
+    </div>
+</body>
+</html>
